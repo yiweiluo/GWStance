@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 disregard
 expose
 unmask
@@ -44,6 +43,3 @@ suppress
 deny
 verify
 learn
-=======
-
->>>>>>> 355632721a4d1177fdf654336ddef8e5809d0eaa
