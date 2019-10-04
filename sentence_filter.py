@@ -7,8 +7,9 @@ from nltk.tokenize import sent_tokenize, word_tokenize, MWETokenizer
 tokenizer = MWETokenizer()
 
 # SET TO LOCATION OF REPO
-HOME_DIR = '/Users/yiweiluo/scientific-debates/'
+HOME_DIR = '/Users/yiweiluo/scientific-debates-test/'
 
+# ASSUMES THAT YOU HAVE all_urls_meta_and_fulltext_df.pkl DOWNLOADED TO THE DATA_DIR
 DATA_DIR = HOME_DIR+'data/'
 os.mkdir(DATA_DIR+'filtered_sents/')
 FILTERED_DIR = DATA_DIR+'filtered_sents/'
@@ -24,7 +25,7 @@ all_url_to_fulltext = dict(zip(list(all_url_df['url']),list(all_url_df['fulltext
 all_url_df_is_bad_nyt = list(all_url_df['bad NYT'])
 all_url_to_topic = dict(zip(list(all_url_df['url']),list(all_url_df['topic'])))
 all_url_to_stance = dict(zip(list(all_url_df['url']),list(all_url_df['stance'])))
-    #print(len(all_urls))
+#print(len(all_urls))
 
 # Set lists of verbs to use for each category
 with open(HOME_DIR+'verb_noun_cats/factives.txt') as File_obj:
@@ -78,4 +79,4 @@ print(len(sents_with_complement_verbs['vax']['anti']))
 print(len(sents_with_complement_verbs['cc']['pro']))
 print(len(sents_with_complement_verbs['cc']['anti']))
 
-pickle.dump(sents_with_complement_verbs,open('sents_with_complement_verbs.pkl','wb'))
+pickle.dump(sents_with_complement_verbs,open(FILTERED_DIR+'sents_with_complement_verbs.pkl','wb'))
