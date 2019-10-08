@@ -18,8 +18,8 @@ HOME_DIR = '/Users/yiweiluo/scientific-debates-test/'
 
 # ASSUMES THAT YOU HAVE all_urls_meta_and_fulltext_df.pkl DOWNLOADED TO THE DATA_DIR
 DATA_DIR = HOME_DIR+'data/'
-os.mkdir(DATA_DIR+'filtered_sents/')
-FILTERED_DIR = DATA_DIR+'filtered_sents/'
+os.mkdir(DATA_DIR+'processed_sents/')
+PROCESSED_DIR = DATA_DIR+'processed_sents/'
 
 # Load urls and text
 all_url_df = pd.read_pickle(DATA_DIR+"all_urls_meta_and_fulltext_df.pkl")
@@ -48,45 +48,6 @@ def nltk_pipe(orig_sent):
     lemmatized_sent = ' '.join(lemmas)
     mwe_toks = tokenizer.tokenize(lemmatized_sent.split())
     return (mwe_toks,orig_sent)
-
-all_sents_mwe_tokenized = {'vax':{'pro':[],'anti':[]},'cc':{'pro':[],'anti':[]}}
-for ix,url in enumerate(all_urls):
-    is_bad = all_url_df_is_bad_nyt[ix]
-    if not is_bad:
-        ft = all_url_to_fulltext[url]
-        orig_url = url
-        #print('original url:',orig_url)
-        if ft is not None and len(ft) > 0:
-            tokenized_ft = sent_tokenize(ft)
-            url_topic = all_url_to_topic[url]
-            url_stance = all_url_to_stance[url]
-            for ix_sent,sent in enumerate(tokenized_ft):
-                #print('sentence token:',sent)
-                res = nltk_pipe(sent)
-                #print('nltk pipe result:',res)
-                all_sents_mwe_tokenized[url_topic][url_stance].append((res,'sent_no_{} of {}'.format(ix_sent,orig_url)))
-    if ix % 100 == 0:
-        print(ix)
-
-print(len(all_sents_mwe_tokenized['vax']['pro']))
-print(len(all_sents_mwe_tokenized['vax']['anti']))
-print(len(all_sents_mwe_tokenized['cc']['pro']))
-print(len(all_sents_mwe_tokenized['cc']['anti']))
-
-sents_with_complement_verbs = {'vax':{'pro':[],'anti':[]},'cc':{'pro':[],'anti':[]}}
-for topic in ['vax','cc']:
-    for stance in ['anti','pro']:
-        tokenized_sents = all_sents_mwe_tokenized[topic][stance]
-        for ix,s in enumerate(tokenized_sents):
-            s_toks = s[0][0]
-            s_toks_complement_verbs = [ix_t for ix_t,t in enumerate(s_toks) if t in COMPLEMENT_VERBS]
-            if len(s_toks_complement_verbs) > 0:
-                sents_with_complement_verbs[topic][stance].append((s,s_toks_complement_verbs))
-
-print(len(sents_with_complement_verbs['vax']['pro']))
-print(len(sents_with_complement_verbs['vax']['anti']))
-print(len(sents_with_complement_verbs['cc']['pro']))
-print(len(sents_with_complement_verbs['cc']['anti']))
 
 import spacy
 nlp = spacy.load('en_core_web_sm')
@@ -139,16 +100,62 @@ def spacy_dep_parse_pipe(sent):
 
     return verbs_and_ccs
 
-sents_with_complement_clauses = {'vax':{'pro':[],'anti':[]},'cc':{'pro':[],'anti':[]}}
-for topic in ['vax','cc']:
-    print('Doing '+topic)
-    for stance in ['pro','anti']:
-        print('Stance:{}'.format(stance))
-        for ix_sent in range(0,len(sents_with_complement_verbs[topic][stance])):#,sent in enumerate(sents_with_complement_verbs[topic][stance]):
-            sent = sents_with_complement_verbs[topic][stance][ix_sent]
-            sent_text = sent[0][0][1]
-            parsed_res = spacy_dep_parse_pipe(sent_text)
-            if len(parsed_res) > 0:
-                sents_with_complement_clauses[topic][stance].append((sent,parsed_res))
-            if ix_sent % 100 == 0:
-                print(ix_sent)
+def do_pipeline(all_data=True,data=all_urls):
+    if not all_data:
+        # Load existing data instead of initializing to empty predicted_results
+        all_sents_mwe_tokenized = pickle.load(open(PROCESSED_DIR+'all_sents_mwe_tokenized.pkl','rb'))
+        sents_with_complement_verbs = pickle.load(open(PROCESSED_DIR+'sents_with_complement_verbs.pkl','rb'))
+        sents_with_complement_clauses = pickle.load(open(PROCESSED_DIR+'sents_with_complement_clauses.pkl','rb'))
+    else:
+        all_sents_mwe_tokenized = {'vax':{'pro':[],'anti':[]},'cc':{'pro':[],'anti':[]}}
+        sents_with_complement_verbs = {'vax':{'pro':[],'anti':[]},'cc':{'pro':[],'anti':[]}}
+        sents_with_complement_clauses = {'vax':{'pro':[],'anti':[]},'cc':{'pro':[],'anti':[]}}
+
+    print('Tokenizing sentences, lemmatizing tokens, doing MWE...')
+    for ix,url in enumerate(all_urls):
+        is_bad = all_url_df_is_bad_nyt[ix]
+        if not is_bad:
+            ft = all_url_to_fulltext[url]
+            orig_url = url
+            #print('original url:',orig_url)
+            if ft is not None and len(ft) > 0:
+                tokenized_ft = sent_tokenize(ft)
+                url_topic = all_url_to_topic[url]
+                url_stance = all_url_to_stance[url]
+                for ix_sent,sent in enumerate(tokenized_ft):
+                    #print('sentence token:',sent)
+                    res = nltk_pipe(sent)
+                    #print('nltk pipe result:',res)
+                    all_sents_mwe_tokenized[url_topic][url_stance].append((res,'sent_no_{} of {}'.format(ix_sent,orig_url)))
+    for topic in ['vax','cc']:
+        for stance in ['anti','pro']:
+            print('Number of {}-{} sentences:'.format(stance,topic),len(all_sents_mwe_tokenized[topic][stance]))
+    pickle.dump(all_sents_mwe_tokenized,open(PROCESSED_DIR+'all_sents_mwe_tokenized.pkl','wb'))
+
+    print('Filtering to sentences with complement verbs...')
+    for topic in ['vax','cc']:
+        for stance in ['anti','pro']:
+            tokenized_sents = all_sents_mwe_tokenized[topic][stance]
+            for ix,s in enumerate(tokenized_sents):
+                s_toks = s[0][0]
+                s_toks_complement_verbs = [ix_t for ix_t,t in enumerate(s_toks) if t in COMPLEMENT_VERBS]
+                if len(s_toks_complement_verbs) > 0:
+                    sents_with_complement_verbs[topic][stance].append((s,s_toks_complement_verbs))
+            print('Number of filtered {}-{} sentences:'.format(stance,topic),len(sents_with_complement_verbs[topic][stance]))
+    pickle.dump(sents_with_complement_verbs,open(PROCESSED_DIR+'sents_with_complement_verbs.pkl','wb'))
+
+    print('Finding complement clauses to sentences...')
+    for topic in ['vax','cc']:
+        print('Doing '+topic)
+        for stance in ['pro','anti']:
+            print('Stance:{}'.format(stance))
+            for ix_sent in range(0,len(sents_with_complement_verbs[topic][stance])):#,sent in enumerate(sents_with_complement_verbs[topic][stance]):
+                sent = sents_with_complement_verbs[topic][stance][ix_sent]
+                sent_text = sent[0][0][1]
+                parsed_res = spacy_dep_parse_pipe(sent_text)
+                if len(parsed_res) > 0:
+                    sents_with_complement_clauses[topic][stance].append((sent,parsed_res))
+                if ix_sent % 100 == 0:
+                    print(ix_sent)
+            print('Number of {}-{} sentences w/ complement clauses:'.format(stance,topic),len(sents_with_complement_clauses[topic][stance]))
+    pickle.dump(sents_with_complement_clauses,open(PROCESSED_DIR+'sents_with_complement_clauses.pkl','wb'))
