@@ -20,6 +20,7 @@ HOME_DIR = '/Users/yiweiluo/scientific-debates-test/'
 DATA_DIR = HOME_DIR+'data/'
 os.mkdir(DATA_DIR+'processed_sents/')
 PROCESSED_DIR = DATA_DIR+'processed_sents/'
+TEMP_DIR = PROCESSED_DIR+'temp/'
 
 # Load urls and text
 all_url_df = pd.read_pickle(DATA_DIR+"all_urls_meta_and_fulltext_df.pkl")
@@ -101,15 +102,15 @@ def spacy_dep_parse_pipe(sent):
     return verbs_and_ccs
 
 def do_pipeline(all_data=True,data=all_urls):
-    if not all_data:
-        # Load existing data instead of initializing to empty predicted_results
-        all_sents_mwe_tokenized = pickle.load(open(PROCESSED_DIR+'all_sents_mwe_tokenized.pkl','rb'))
-        sents_with_complement_verbs = pickle.load(open(PROCESSED_DIR+'sents_with_complement_verbs.pkl','rb'))
-        sents_with_complement_clauses = pickle.load(open(PROCESSED_DIR+'sents_with_complement_clauses.pkl','rb'))
-    else:
-        all_sents_mwe_tokenized = {'vax':{'pro':[],'anti':[]},'cc':{'pro':[],'anti':[]}}
-        sents_with_complement_verbs = {'vax':{'pro':[],'anti':[]},'cc':{'pro':[],'anti':[]}}
-        sents_with_complement_clauses = {'vax':{'pro':[],'anti':[]},'cc':{'pro':[],'anti':[]}}
+    # if not all_data:
+    #     # Load existing data instead of initializing to empty predicted_results
+    #     all_sents_mwe_tokenized = pickle.load(open(PROCESSED_DIR+'all_sents_mwe_tokenized.pkl','rb'))
+    #     sents_with_complement_verbs = pickle.load(open(PROCESSED_DIR+'sents_with_complement_verbs.pkl','rb'))
+    #     sents_with_complement_clauses = pickle.load(open(PROCESSED_DIR+'sents_with_complement_clauses.pkl','rb'))
+    # else:
+    all_sents_mwe_tokenized = {'vax':{'pro':[],'anti':[]},'cc':{'pro':[],'anti':[]}}
+    sents_with_complement_verbs = {'vax':{'pro':[],'anti':[]},'cc':{'pro':[],'anti':[]}}
+    sents_with_complement_clauses = {'vax':{'pro':[],'anti':[]},'cc':{'pro':[],'anti':[]}}
 
     print('Tokenizing sentences, lemmatizing tokens, doing MWE...')
     for ix,url in enumerate(all_urls):
@@ -130,7 +131,12 @@ def do_pipeline(all_data=True,data=all_urls):
     for topic in ['vax','cc']:
         for stance in ['anti','pro']:
             print('Number of {}-{} sentences:'.format(stance,topic),len(all_sents_mwe_tokenized[topic][stance]))
-    pickle.dump(all_sents_mwe_tokenized,open(PROCESSED_DIR+'all_sents_mwe_tokenized.pkl','wb'))
+    pickle.dump(all_sents_mwe_tokenized,open(TEMP_DIR+'all_sents_mwe_tokenized.pkl','wb'))
+    old_all_sents_mwe_tokenized = pickle.load(open(PROCESSED_DIR+'all_sents_mwe_tokenized.pkl','rb'))
+    for topic in ['vax','cc']:
+        for stance in ['anti','pro']:
+            old_all_sents_mwe_tokenized[topic][stance].extend(all_sents_mwe_tokenized[topic][stance])
+    pickle.dump(old_all_sents_mwe_tokenized,open(PROCESSED_DIR+'all_sents_mwe_tokenized.pkl','wb'))
 
     print('Filtering to sentences with complement verbs...')
     for topic in ['vax','cc']:
@@ -142,7 +148,12 @@ def do_pipeline(all_data=True,data=all_urls):
                 if len(s_toks_complement_verbs) > 0:
                     sents_with_complement_verbs[topic][stance].append((s,s_toks_complement_verbs))
             print('Number of filtered {}-{} sentences:'.format(stance,topic),len(sents_with_complement_verbs[topic][stance]))
-    pickle.dump(sents_with_complement_verbs,open(PROCESSED_DIR+'sents_with_complement_verbs.pkl','wb'))
+    pickle.dump(sents_with_complement_verbs,open(TEMP_DIR+'sents_with_complement_verbs.pkl','wb'))
+    old_sents_with_complement_verbs = pickle.load(open(PROCESSED_DIR+'sents_with_complement_verbs.pkl','rb'))
+    for topic in ['vax','cc']:
+        for stance in ['anti','pro']:
+            old_sents_with_complement_verbs[topic][stance].extend(old_sents_with_complement_verbs[topic][stance])
+    pickle.dump(old_sents_with_complement_verbs,open(PROCESSED_DIR+'sents_with_complement_verbs.pkl','wb'))
 
     print('Finding complement clauses to sentences...')
     for topic in ['vax','cc']:
@@ -159,3 +170,8 @@ def do_pipeline(all_data=True,data=all_urls):
                     print(ix_sent)
             print('Number of {}-{} sentences w/ complement clauses:'.format(stance,topic),len(sents_with_complement_clauses[topic][stance]))
     pickle.dump(sents_with_complement_clauses,open(PROCESSED_DIR+'sents_with_complement_clauses.pkl','wb'))
+    old_sents_with_complement_clauses = pickle.load(open(PROCESSED_DIR+'sents_with_complement_clauses.pkl','rb'))
+    for topic in ['vax','cc']:
+        for stance in ['anti','pro']:
+            old_sents_with_complement_clauses[topic][stance].extend(old_sents_with_complement_clauses[topic][stance])
+    pickle.dump(old_sents_with_complement_clauses,open(PROCESSED_DIR+'sents_with_complement_clauses.pkl','wb'))
