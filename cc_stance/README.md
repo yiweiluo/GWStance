@@ -1,4 +1,4 @@
-# scientific-debates
+# Climate change stance classifier
 
 TODOs:
 
