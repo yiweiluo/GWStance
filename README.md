@@ -1,4 +1,5 @@
 # Climate change stance classifier
+<<<<<<< HEAD
 
 TODOs
 
@@ -11,3 +12,12 @@ TODOs
 - References:
    - https://towardsdatascience.com/transfer-learning-in-nlp-for-tweet-stance-classification-8ab014da8dde
 
+=======
+## TODOs:
+
+- [ ] Training and test data
+  - [ ] SemEval 2016 task 6
+
+## References:
+- https://towardsdatascience.com/transfer-learning-in-nlp-for-tweet-stance-classification-8ab014da8dde
+>>>>>>> 147f943609129b849a9f27a6f833450333e1d6ee
