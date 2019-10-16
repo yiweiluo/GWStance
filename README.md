@@ -13,7 +13,7 @@ TODOs
    - [ ] analyze annotator's demographics--may have effect, especially on more ambiguous sentences
 
 Mturk specifics:
-- Target: People should be worried about climate change 
+- Target: <b>People should be worried about climate change</b>
 - Demographic info: Age, gender, level of education, political ideology, gauge stance w/ smth like "do you think people should be worried about climate change"
 - Intersperse obvious sentences
 - Miscellaneous ideas:
