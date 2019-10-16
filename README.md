@@ -20,6 +20,6 @@ Mturk specifics:
 	- Track whether people decide to click for more context--signal of the ambiguity of the sentence (medium priority)
 	- Question mark button for more information about abbreviations? (Can we track whether someone's clicked on a question mark?)
 
-- References:
+References:
    - https://towardsdatascience.com/transfer-learning-in-nlp-for-tweet-stance-classification-8ab014da8dde
 
