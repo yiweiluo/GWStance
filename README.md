@@ -14,7 +14,7 @@ TODOs
 
 Mturk specifics:
 - Target: <b>People should be worried about climate change</b>
-- Demographic info: Age, gender, level of education, political ideology, gauge stance w/ smth like "do you think people should be worried about climate change"
+- Demographic info: Age, gender, level of education, political ideology, gauge stance w/ smth like "do you think people should be worried about climate change", rate how easy it was to judge sentences' stances
 - Intersperse obvious sentences
 - Miscellaneous ideas:
 	- Track whether people decide to click for more context--signal of the ambiguity of the sentence (medium priority)
