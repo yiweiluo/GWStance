@@ -12,13 +12,12 @@ TODOs
    - [ ] pilot, iterate with smaller subsample to check inter-annotator agreement
    - [ ] analyze annotator's demographics--may have effect, especially on more ambiguous sentences
 
-Mturk specifics:
-- Target: <b>People should be worried about climate change</b>
-- Demographic info: Age, gender, level of education, political ideology, gauge stance w/ smth like "do you think people should be worried about climate change", rate how easy it was to judge sentences' stances
-- Intersperse obvious sentences
+
 - Miscellaneous ideas:
 	- Track whether people decide to click for more context--signal of the ambiguity of the sentence (medium priority)
 	- Question mark button for more information about abbreviations? (Can we track whether someone's clicked on a question mark?)
+	- Future study in which I manipulate stance-taking verb
+            - How do you mix them? Across, within speaker thing?
 
 References:
    - https://towardsdatascience.com/transfer-learning-in-nlp-for-tweet-stance-classification-8ab014da8dde
