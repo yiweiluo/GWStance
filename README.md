@@ -9,7 +9,9 @@ TODOs
    - [ ] Dallas' annotated news data
    - [ ] Yiwei's news data--needs annotation
 - [ ] MTurk 
-   - [ ] pilot, iterate with smaller subsample to check inter-annotator agreement
+   - [x] pilot, iterate with smaller subsample to check inter-annotator agreement
+   - [ ] create pool of "good" Turkers--how big N?
+	- [ ] create "gold" labels for subsample? filter Turkers based on X% accuracy?
    - [ ] analyze annotator's demographics--may have effect, especially on more ambiguous sentences
 
 
