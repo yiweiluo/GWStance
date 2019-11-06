@@ -10,8 +10,18 @@ TODOs
    - [ ] Yiwei's news data--needs annotation
 - [ ] MTurk 
    - [x] pilot, iterate with smaller subsample to check inter-annotator agreement
-   - [ ] create pool of "good" Turkers--how big N?
+   - [ ] Round 1: 300 sentences annotated; 6 annotators per (need 60 annotators total)
 	- [ ] create "gold" labels for subsample? filter Turkers based on X% accuracy?
+        - [ ] within-annotator consistency
+        - [ ] 4-5 rounds w/ same set of sanity questions per round
+   - [ ] How to invite specific annotators?
+   - [ ] How to limit number of HITs per worker?
+   - [ ] Exclusion criteria:
+	- [ ] more than N% disagree from mode response
+	- [ ] perfectly random behavior when data is not balanced
+	- increase task size, check IRR b/w first and second half of exp (60)
+	- **looking at mean will end up being function of how many D vs. R raters--be careful
+	- 
    - [ ] analyze annotator's demographics--may have effect, especially on more ambiguous sentences
 
 
