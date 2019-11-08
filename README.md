@@ -13,7 +13,7 @@ TODOs
    - [ ] Lock down non-pilot specifics:
 	- [ ] Config settings: 97% minPercentPreviousHITsApproved, 1000 minNumPreviousHITsApproved, USonly = yes
 	- [ ] Collect 2,000 total annotations in 5 rounds: N=300, 400, 400, 450, 450
-	- [ ] 6 annotators per annotation item
+	- [ ] 8 annotators per annotation item
 	- [ ] Each HIT will have N/10 true items to annotate + 5 screen items (screen items differ b/w rounds, so need 25 total) (so Round 1 will have 35; Round 2, 45; Round 3, 50)
 	- [ ] N items/(N/10 items/HIT) = 10 HITs per round; multiply by 6 annotators = 60 annotators paid
 	- [ ] Payment (based on $12/hr MW in CA): $4, $5.14, $5.7 for Rounds 1, 2, 3, 4, 5; total cost = $4*60+$5.14*120+$5.7*120 = $1,540.8 USD
