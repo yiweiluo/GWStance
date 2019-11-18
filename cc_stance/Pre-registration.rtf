@@ -7,23 +7,14 @@
 \margl1440\margr1440\vieww13460\viewh9500\viewkind0
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\f0\b\fs24 \cf0 Title\
-\
-Authors\
-\
-Description\
-\
-Hypotheses\
-\
-DESIGN PLAN\
+\f0\b\fs24 \cf0 DESIGN PLAN\
 \
 Study type: 
 \f1\b0\fs28 \cf2 \cb3 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec2 Observational Study - Data is collected from study subjects that are not randomly assigned to a treatment. This includes surveys, \'93natural experiments,\'94 and regression discontinuity designs.\
+Observational Study - Data is collected from study subjects that are not randomly assigned to a treatment. This includes surveys, \'93natural experiments,\'94 and regression discontinuity designs.\
 \
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\f0\b\fs24 \cf0 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 Blinding: 
+\f0\b\fs24 \cf0 \cb1 \kerning1\expnd0\expndtw0 Blinding: 
 \b0 None (no different treatment groups)\
 \
 
@@ -57,14 +48,15 @@ Study type:
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
 \b \cf4 Indices
-\b0 : Mean stance per item: the mean of the labels (agrees=1, neutral=0, disagrees=-1) over all annotators for an item.\
-MACE competence/predictions.\
+\b0 : \
+- Mean stance per item: the mean of the labels (agrees=1, neutral=0, disagrees=-1) over all annotators for an item.\
+- MACE competence/predictions.\
 \pard\tx720\tx1440\pardeftab560\pardirnatural\partightenfactor0
 
-\f1\b \cf4  z-score each rater for their propensity to bias --wouldn't throw away annotators unless they're spam-- do this for every rater
+\f1\b \cf4 - z-score for each rater for their propensity to rate agrees vs. disagrees\
+\pard\tx720\tx1440\pardeftab560\pardirnatural\partightenfactor0
+
 \f0\b0 \cf0 \
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
-\cf0 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
 \b \cf4 Data exclusion
@@ -72,7 +64,7 @@ MACE competence/predictions.\
 Based on the results of the pilot rounds, we decide on the following exclusion criteria:\
 \'95 Turkers   who   choose   agrees/disagrees   on a  screen  question  for  which  the  authors have  determined  the  correct  answer  is  disagrees/agrees (the screen questions consist of made-up sentences for which the stance is obvious).\
 \'95 For  each  Turker,  we  calculate  the  %items for  which  all  the  other  5  Turkers  chose agrees/disagrees but they chose disagrees/agrees;  if  this  percentage  is  greater than 10%, we exclude them.\
-\'95 Turkers whose MACE competence score is < ??\
+\'95 Turkers whose MACE competence score is < ?? \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 \cf0 \
 
