@@ -1,27 +1,13 @@
 {
   "media_bias": "pro",
-  "sentence": "Environmental coverage, including climate, was down somewhat from 2007 and 2008, representing 1.5 percent of overall coverage.",
-  "key": "sent_no_10 of http://dotearth.blogs.nytimes.com/2010/01/02/the-greatest-story-rarely-told/"
-}
-{
-  "media_bias": "pro",
   "sentence": "There is a danger that we can get used to global warming.",
-  "key": "sent_no_37 of http://dotearth.blogs.nytimes.com/2010/01/02/the-greatest-story-rarely-told/"
+  "key": "sent_no_37 of http://dotearth.blogs.nytimes.com/2010/01/02/the-greatest-story-rarely-told/",
+  "df_ix": 0
 }
 {
   "media_bias": "pro",
   "sentence": "If global warming proceeds slowly enough, then the potential exists that we will just progressively become more used to unusual weather\u2013the unusual (by today\u2019s standards) becomes usual, and we will cease being alarmed about what is now the usual course of events.",
-  "key": "sent_no_49 of http://dotearth.blogs.nytimes.com/2010/01/02/the-greatest-story-rarely-told/"
-}
-{
-  "media_bias": "pro",
-  "sentence": "The warming influence of a persistent El Ni\u00f1o warming of the tropical Pacific Ocean is likely to be a bigger driver of conditions through the full course of this winter.",
-  "key": "sent_no_10 of http://dotearth.blogs.nytimes.com/2010/01/04/polar-pressure-pattern-driving-chill-nearly-off-chart/"
-}
-{
-  "media_bias": "pro",
-  "sentence": "There is no need to talk up every environmental change and event as evidence of anthropogenic climate change because the evidence is already strong, and going over the top may just backfire.",
-  "key": "sent_no_32 of http://dotearth.blogs.nytimes.com/2010/01/11/a-call-to-rein-in-climate-hype-cold-or-hot/"
+  "key": "sent_no_49 of http://dotearth.blogs.nytimes.com/2010/01/02/the-greatest-story-rarely-told/",
 }
 {
   "media_bias": "pro",
