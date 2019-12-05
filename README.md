@@ -10,13 +10,13 @@ TODOs
    - [ ] Yiwei's news data--needs annotation
 - [ ] MTurk 
    - [x] pilot, iterate with smaller subsample to check inter-annotator agreement
-   - [ ] Lock down non-pilot specifics:
-	- [ ] Config settings: 97% minPercentPreviousHITsApproved, 1000 minNumPreviousHITsApproved, USonly = yes
+   - [x] Lock down non-pilot specifics:
+	- [x] Config settings: 98% minPercentPreviousHITsApproved, 1000 minNumPreviousHITsApproved, USonly = yes
 	- [ ] Collect 2,000 total annotations in 5 rounds: N=300, 400, 400, 450, 450
-	- [ ] 8 annotators per annotation item
-	- [ ] Each HIT will have N/10 true items to annotate + 5 screen items (screen items differ b/w rounds, so need 25 total) (so Round 1 will have 35; Round 2, 45; Round 3, 50)
-	- [ ] N items/(N/10 items/HIT) = 10 HITs per round; multiply by 6 annotators = 60 annotators paid
-	- [ ] Payment (based on $12/hr MW in CA): $4, $5.14, $5.7 for Rounds 1, 2, 3, 4, 5; total cost = $4*60+$5.14*120+$5.7*120 = $1,540.8 USD
+	- [x] 8 annotators per annotation item
+	- [x] Each HIT will have N/10 true items to annotate + 5 screen items (screen items differ b/w rounds, so need 25 total) (so Round 1 will have 35; Round 2, 45; Round 3, 50)
+	- [x] N items/(N/10 items/HIT) = 10 HITs per round; multiply by 6 annotators = 60 annotators paid
+	- [x] Payment (based on $12/hr MW in CA): $4, $5.14, $5.7 for Rounds 1, 2, 3, 4, 5; total cost = $4*60+$5.14*120+$5.7*120 = $1,540.8 USD
 	- [ ] Exclusion criteria for all rounds, after collection:
 		- [ ] Turkers who choose agrees/disagrees on screen Q for which answer is disagrees/agrees
 		- [ ] For each Turker, calculate %items for which all other 5 Turkers chose agrees/disagrees but they chose disagrees/agrees; if this % is greater than N--exclude. N>=10%?
@@ -25,13 +25,16 @@ TODOs
 	- **looking at mean will end up being function of how many D vs. R raters--be careful
 
 
-   - [ ] Round 1: 300 sentences annotated; 6 annotators per (need 60 annotators total)
+   - [x] Round 1: 300 sentences annotated; 6 annotators per (need 60 annotators total)
 	- [ ] create "gold" labels for subsample? filter Turkers based on X% accuracy?
         - [ ] within-annotator consistency
         - [ ] 4-5 rounds w/ same set of sanity questions per round
    - [ ] How to invite specific annotators?
-   - [ ] How to limit number of HITs per worker?
+   - [x] How to limit number of HITs per worker?
+   - [ ] Model distribution of each annotation item?
    - [ ] Analyze annotator's demographics--may have effect, especially on more ambiguous sentences
+	- [ ] Power analysis w/ party
+	- [ ] Power analysis w/ responses to Poll questions
 
 
 - Miscellaneous ideas:
