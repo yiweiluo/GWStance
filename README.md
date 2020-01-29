@@ -21,20 +21,9 @@ TODOs
 		- [ ] Turkers who choose agrees/disagrees on screen Q for which answer is disagrees/agrees
 		- [ ] For each Turker, calculate %items for which all other 5 Turkers chose agrees/disagrees but they chose disagrees/agrees; if this % is greater than N--exclude. N>=10%?
 		- [ ] If find an effect from party--drop annotations s.t. balance of annotations per item from D and R
-	- increase task size, check IRR b/w first and second half of exp (60)
-	- **looking at mean will end up being function of how many D vs. R raters--be careful
-
-
-   - [x] Round 1: 300 sentences annotated; 6 annotators per (need 60 annotators total)
-	- [ ] create "gold" labels for subsample? filter Turkers based on X% accuracy?
-        - [ ] within-annotator consistency
-        - [ ] 4-5 rounds w/ same set of sanity questions per round
-   - [ ] How to invite specific annotators?
-   - [x] How to limit number of HITs per worker?
-   - [ ] Model distribution of each annotation item?
-   - [ ] Analyze annotator's demographics--may have effect, especially on more ambiguous sentences
-	- [ ] Power analysis w/ party
-	- [ ] Power analysis w/ responses to Poll questions
+		- [ ] increase task size, check IRR b/w first and second half of exp (60)
+   - [ ] Analysis:
+	- [ ] Item length effect on rating
 
 
 - Miscellaneous ideas:
