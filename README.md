@@ -24,7 +24,7 @@ TODOs
 		- [ ] increase task size, check IRR b/w first and second half of exp (60)
    - [ ] Analysis:
 	- [ ] Item length effect on rating
-	- [ ] average rating for each item, divided by liberal vs. conservative sources
+	- [x] average rating for each item, divided by liberal vs. conservative sources
 
 
 - Miscellaneous ideas:
