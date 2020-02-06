@@ -8,11 +8,13 @@ TODOs
    - [ ] Mohammad et al. paper--data requested
    - [ ] Dallas' annotated news data
    - [ ] Yiwei's news data--needs annotation
+- [ ] Training classifier
+   - [ ] Decide how to transform MTurk labels
 - [ ] MTurk 
    - [x] pilot, iterate with smaller subsample to check inter-annotator agreement
    - [x] Lock down non-pilot specifics:
 	- [x] Config settings: 98% minPercentPreviousHITsApproved, 1000 minNumPreviousHITsApproved, USonly = yes
-	- [ ] Collect 2,000 total annotations in 5 rounds: N=300, 400, 400, 450, 450
+	- [x] Collect 2,000 total annotations in 5 rounds: N=300, 400, 400, 450, 450
 	- [x] 8 annotators per annotation item
 	- [x] Each HIT will have N/10 true items to annotate + 5 screen items (screen items differ b/w rounds, so need 25 total) (so Round 1 will have 35; Round 2, 45; Round 3, 50)
 	- [x] N items/(N/10 items/HIT) = 10 HITs per round; multiply by 6 annotators = 60 annotators paid
@@ -22,8 +24,8 @@ TODOs
 		- [ ] For each Turker, calculate %items for which all other 5 Turkers chose agrees/disagrees but they chose disagrees/agrees; if this % is greater than N--exclude. N>=10%?
 		- [ ] If find an effect from party--drop annotations s.t. balance of annotations per item from D and R
 		- [ ] increase task size, check IRR b/w first and second half of exp (60)
-   - [ ] Analysis:
-	- [ ] Item length effect on rating
+   - [x] Analysis:
+	- [x] Item length effect on rating
 	- [x] average rating for each item, divided by liberal vs. conservative sources
 
 
