@@ -8,8 +8,17 @@ TODOs
    - [ ] Mohammad et al. paper--data requested
    - [ ] Dallas' annotated news data
    - [ ] Yiwei's news data--needs annotation
+   - [ ] Perspectrum (Chen et al. 2019)
+   - [ ] tweets (Koenecke)
+   - full news data can be used as in-domain data for initial fine-tuning
 - [ ] Training classifier
    - [ ] Decide how to transform MTurk labels
+   - [ ] Fine-tune on unlabeled in-domain data; then on all in-domain data 
+   - [ ] Baselines: 
+	- 
+	- STANCY on perspectrum (https://www.aclweb.org/anthology/D19-1675.pdf)
+	    - swap out their C for our single target sentence
+	    - instead of BERT, use GPT
 - [ ] MTurk 
    - [x] pilot, iterate with smaller subsample to check inter-annotator agreement
    - [x] Lock down non-pilot specifics:
@@ -37,5 +46,6 @@ TODOs
 
 References:
    - https://towardsdatascience.com/transfer-learning-in-nlp-for-tweet-stance-classification-8ab014da8dde
+   - STANCY https://www.aclweb.org/anthology/D19-1675.pdf
    - http://www.saifmohammad.com/WebDocs/StarSem2016-stance-tweets.pdf
 
