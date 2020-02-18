@@ -12,7 +12,7 @@ TODOs
    - full news data can be used as in-domain data for initial fine-tuning
 - [ ] Training classifier
    - [ ] Decide how to transform MTurk labels
-   - [ ] Fine-tune on unlabeled in-domain data; then on all in-domain data 
+   - [ ] Fine-tune on unlabeled in-domain data; then on all in-domain data (transformer.ipynb)
    - [ ] Baselines: 
 	- 
 	- STANCY on perspectrum (https://www.aclweb.org/anthology/D19-1675.pdf)
