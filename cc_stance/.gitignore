@@ -1,1 +1,8 @@
 old/
+venv/
+tweet-stance-prediction/assets/
+tweet-stance-prediction/data/
+tweet-stance-prediction/results/
+tweet-stance-prediction/transformer-openai/
+tweet-stance-prediction/venv/
+

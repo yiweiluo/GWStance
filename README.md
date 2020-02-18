@@ -3,10 +3,10 @@
 TODOs
 
 - [ ] Training and test data
-   - [ ] SemEval 2016 task 6 train, trial--both very small (211 for, 15 against)
-   - [ ] SemEval 2016 test (subtask A)--169 tweets (123 for, 11 against, 35 none)
-   - [ ] Dallas' annotated news data
-   - [ ] Yiwei's news data--unlabeled
+   - SemEval 2016 task 6 train, trial--both very small (211 for, 15 against)
+   - SemEval 2016 test (subtask A)--169 tweets (123 for, 11 against, 35 none)
+   - Dallas' annotated news data
+   - Yiwei's news data--unlabeled
    - [ ] Perspectrum (Chen et al. 2019)
    - [ ] tweets? (Koenecke)
    - full news data can be used as in-domain data for initial fine-tuning
@@ -18,7 +18,7 @@ TODOs
 	- STANCY on perspectrum (https://www.aclweb.org/anthology/D19-1675.pdf)
 	    - swap out their C for our single target sentence
 	    - instead of BERT, use GPT
-- [ ] MTurk 
+- [x] MTurk 
    - [x] pilot, iterate with smaller subsample to check inter-annotator agreement
    - [x] Lock down non-pilot specifics:
 	- [x] Config settings: 98% minPercentPreviousHITsApproved, 1000 minNumPreviousHITsApproved, USonly = yes
