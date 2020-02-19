@@ -14,7 +14,8 @@ TODOs
    - [ ] Decide how to transform MTurk labels
    - [ ] Fine-tune on unlabeled in-domain data; then on all in-domain data (transformer.ipynb)
    - [ ] Baselines: 
-	- 
+	- BERT
+	- GPT
 	- STANCY on perspectrum (https://www.aclweb.org/anthology/D19-1675.pdf)
 	    - swap out their C for our single target sentence
 	    - instead of BERT, use GPT
