@@ -15,10 +15,16 @@ TODOs
    - [ ] Fine-tune on unlabeled in-domain data; then on all in-domain data (transformer.ipynb)
    - [ ] Baselines: 
 	- BERT
-	- GPT
+	    - MTurk data: 71% dev acc (yiwei: 69%)
+	- GPT 
+	    - all labeled data: 79% dev acc
+	    - MTurk only: 69% dev acc
+	    - train all; test MTurk: 80.9% test acc
+	- GPT-2
 	- STANCY on perspectrum (https://www.aclweb.org/anthology/D19-1675.pdf)
 	    - swap out their C for our single target sentence
 	    - instead of BERT, use GPT
+   - [ ] Error analysis
 - [x] MTurk 
    - [x] pilot, iterate with smaller subsample to check inter-annotator agreement
    - [x] Lock down non-pilot specifics:
