@@ -14,13 +14,26 @@ TODOs
    - [ ] Decide how to transform MTurk labels
    - [ ] Fine-tune on unlabeled in-domain data; then on all in-domain data (transformer.ipynb)
    - [ ] Baselines: 
-	- BERT
-	    - MTurk data: 71% dev acc (yiwei: 69%)
+	- *BERT*
+	    - all labeled data: ?
+	    - MTurk data only: 71% dev acc (yiwei: 69%); macro F1: 0.68
+	    - train all; test MTurk: 80% dev acc; Macro F1: 0.52
 	- GPT 
 	    - all labeled data: 79% dev acc
 	    - MTurk only: 69% dev acc
-	    - train all; test MTurk: 80.9% test acc
+	    - train all; test MTurk: 80.9% test acc; Macro F1: 0.30
+	
 	- GPT-2
+	- XLNet
+	    - poor (acc 39%)
+	- *RoBERTa*
+	    - MTurk only: 72% dev acc; macro F1: 0.72
+	- DistilBERT
+	    - MTurk only: 69% acc; macro F1: 0.66
+	- AlBERT
+	    - MTurk only: 64% acc; macro F1: 0.61
+	- FlauBERT
+	    - MTurk only: 50% acc; macro F1: 0.37
 	- STANCY on perspectrum (https://www.aclweb.org/anthology/D19-1675.pdf)
 	    - swap out their C for our single target sentence
 	    - instead of BERT, use GPT
