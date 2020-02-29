@@ -1,0 +1,165 @@
+type	sentence	true_stance	pred_stance
+mturk	Submitting the USs 26 to 28 percent emissions reduction goal early will spark global cooperation in December climate negotiations in Paris.	neutral	neutral
+mturk	On the other hand, the proportion of so-called multiyear ice is higher this year than in 2011.	neutral	neutral
+mturk	This agreement sends a powerful signal that the world is fully committed to a low-carbon future.	neutral	agree
+mturk	Exxonmobil has spent at least $8 million dollars funding a network of groups to challenge the existence of global warming.	neutral	neutral
+mturk	Global warming isn't real Leo.	disagree	agree
+mturk	Balance of evidence suggests a discernible human influence on global climate.	agree	agree
+mturk	A combination of factors are at work, including a natural El Nino system, man-made global warming and a dash of random weather.	disagree	agree
+mturk	Fossil fuels have got to go.	agree	agree
+mturk	What remains is an enhanced global ambition to curb climate change and safeguard against its effects.	agree	neutral
+mturk	The trend will likely continue because of global warming.	agree	agree
+mturk	45 % of the general public view perceived global warming as caused by humans.	neutral	disagree
+mturk	There is no real-world evidence that supports man-made global warming theory.	disagree	neutral
+mturk	Glacier melt in Iceland will cause more volcanoes everywhere.	agree	agree
+mturk	The odds for human extinction because of climate change or global warming are 50 percent or more.	agree	neutral
+mturk	Atmospheric reaction to carbon dioxide, known as climate sensitivity, is probably too high for these models.	neutral	agree
+mturk	The scientific community is under tremendous financial and peer pressure to reach the conclusion that global industry is damaging the environment.	neutral	neutral
+mturk	Carbon dioxide is in fact a greenhouse gas.	neutral	agree
+mturk	The paper in no way diminishes the extensive body of observations that global warming is happening and that it is largely due to human activity.	agree	disagree
+mturk	The world only had a few decades, if even, to keep global future warming below 2 degrees Celsius and prevent practically all coral reefs from dying, more substantial sea level rise, and other catastrophic impacts.	agree	agree
+mturk	The goal of the new study is to provide a reality check on global climate models' representations of the impact that declining snow and ice has on the Earth's so-called radiation budget.	neutral	neutral
+mturk	Climate science should be less political, while climate policies should be more scientific.	neutral	disagree
+mturk	Mr. Colson had been converting to electric heat to fulfill his commitment to migrating the planet away from fossil fuels.	neutral	agree
+mturk	Natural variability is large for sea ice.	neutral	agree
+mturk	Carbon dioxide fertilizes plants, and emissions from fossil fuels have already had a hugely beneficial effect on crops, increasing yields by at least 10-15 percent.	disagree	agree
+mturk	Earth 's forests, it turns out, play a dominant role in absorbing greenhouse gases in the atmosphere, acting like a giant sponge and soaking up on average about 8.8 billion tons of carbon dioxide each year.	neutral	neutral
+mturk	Our climate crisis, however, will not be defeated anywhere near as easily.	agree	neutral
+mturk	The fossil fuel industrys tactics come straight out of the tobacco playbook.	neutral	disagree
+mturk	The United States government has violated their constitutional rights by allowing fossil fuel production to continue  despite knowing its effects on the planet.	agree	neutral
+mturk	It will be extremely difficult for the world to rapidly reduce its greenhouse gas emissions.	neutral	neutral
+mturk	Siemens to quit the mine project because emissions from coal-fired power plants contribute to global warming.	neutral	agree
+mturk	Balancing the water needs of the present with the long-term needs of the future is a global concern.	agree	neutral
+mturk	There are warming trends.	neutral	agree
+mturk	One of the driving forces of 'climate denial' is that it is `just too uncomfortable to face' because it will require people to stop doing things [ they ] like doing.	agree	neutral
+mturk	Global warming could wipe out more than half the earths species in the next few centuries.	agree	neutral
+mturk	Global warming is having an impact now.	agree	disagree
+mturk	Climate models could indeed reproduce a hiatus in warming during the 2000s if the model used observed sea-surface temperatures in the eastern equatorial Pacific between 1970 and 2012, rather calculating its own ocean temperatures.	neutral	neutral
+mturk	Man-made climate change isn't solely to blame for tropical storms.	disagree	agree
+mturk	Fossil fuel investments are pretty good bets regardless of the political climate.	disagree	agree
+mturk	Climate change is not a belief system.	neutral	agree
+mturk	Exxon plans to extract all its proved fossil fuel reserves.	neutral	neutral
+mturk	To avoid a climate catastrophe, the world the world must leave a big chunk of its fossil fuels in the ground and spend heavily on more benign forms of energy.	agree	neutral
+mturk	Anyone who wants to kill the dangerous and unfounded climate scare should focus on exposing the shaky science behind climate alarm.	disagree	neutral
+mturk	Human-induced global warming is a fundamental cause behind the 7.1 trillion gallons of torrential rainfall that a storm dumped on Louisiana in August, leading to a flooding disaster that killed at least 13 people and caused more than $ 1 billion in damage.	agree	agree
+mturk	More than half think global warming will never hurt anyone.	neutral	neutral
+mturk	The pace is most consistent with the slowing of Atlantic currents along the coast, either from warming waters, melting ice, or some combination.	neutral	neutral
+mturk	There had been 25 rapid climate change events like the Younger Dryas in the last glacial period.	neutral	neutral
+mturk	Global warming has slowed because of measures taken by the government.	disagree	neutral
+mturk	Rising sea levels  caused by global warming  significantly increase the threat of giant killer waves.	agree	agree
+mturk	The last time in Earth&apos;s geologic history that carbon dioxide is this high, there is no year-round sea ice in Antarctica.	neutral	agree
+mturk	This could mean that current I.P.C.C. model predictions for the next century are wrong, and there will be no cooling in the North Atlantic to partially offset the effects of global climate change over North America and Europe.	neutral	disagree
+mturk	Global warming doesnt worry me  at least not in a gut-twisting, obsessive way.	disagree	neutral
+mturk	The focus on growth is an anomaly in this climate emergency.	agree	neutral
+mturk	Arctic sea ice has increased since then.	neutral	agree
+mturk	Exxon planners dont believe serious carbon limits will be on the books anytime soon, leaving the company free to burn through its reserves of oil and gas.	neutral	disagree
+mturk	The truth's very difficult to predict exactly how burning fossil fuels will impact the global climate.	neutral	disagree
+mturk	Humanity will not alter its energy course as consequences of burning all fossil fuels become clearer.	neutral	agree
+mturk	Todays ice storm is likely to be more damaging than the January 2000 ice storm, which caused $48 million in losses in north Georgia.	neutral	agree
+mturk	So, ironically you might have some really cold days in the Midwest despite global warming.	neutral	agree
+mturk	The claim made in the 2007 report by the Intergovernmental Panel on Climate Change (IPCC) is unrealistic and the large Himalayan glaciers could not melt in a few decades.	disagree	agree
+mturk	Climate change would be used as an excuse to expand `big government' and lead to a loss of personal freedom.	disagree	agree
+mturk	We found out that the majority of our carbon emissions are actually coming from our supply chains.	neutral	neutral
+mturk	Global warming is real.	agree	disagree
+mturk	There is a realistic win-win outcome: with the right government policies, we can stimulate investment in green energy, efficient cities, better transportation and the like, which will address climate change as well as make many of our lives better and more comfortable.	agree	disagree
+mturk	Our burning of fossil fuels is increasing the CO2 to dangerous levels and we are facing a catastrophic cooling that would destroy the planet unless governments acted.	agree	neutral
+mturk	The forests of the western United States account for 20% to 40% of total US carbon sequestration.	neutral	agree
+mturk	Far from staying flat since 1998, global temperatures have carried on rising.	agree	agree
+mturk	All these plants would have put hundreds of millions of tons of carbon dioxide in the atmosphere.	neutral	agree
+mturk	The release of the anthropogenic greenhouse gases contributed to 90 percent or even higher of the observed increase in the global average temperature in the past 50 years.	agree	neutral
+mturk	Global warming is a Chinese hoax.	disagree	disagree
+mturk	We are all familiar with the general outlines of globalization.	neutral	agree
+mturk	To get any improvement in ice forecasting, you really have to improve weather forecasting in the Arctic.	neutral	agree
+mturk	Fixing the climate crisis is not only about trees.	agree	neutral
+mturk	Climate change and environmental issues are ranked as the 11th biggest threat to their companies 'growth prospects.	neutral	neutral
+mturk	Carbon dioxide has reached 400 parts per million in the atmosphere.	neutral	neutral
+mturk	The researchers plan to test additional sites and examine how carbon dioxide levels changed through the glacial cycle.	neutral	agree
+mturk	The rate of CO2 released from Earth&apos;s soil has increased globally by about 1.2 percent in just 25 years.	agree	agree
+mturk	These findings will require an upward revision to current predictions of sea level rise.	neutral	agree
+mturk	The long-held, internationally agreed upon target to limit rises in global average temperatures to 2 degrees Celsius is in error and far above the 1C threshold that would need to be maintained in order to avoid the effects of catastrophic climate change.	agree	neutral
+mturk	Global sea-level rise is both undeniable and consequential.	agree	neutral
+mturk	Large forest fires have occurred more often in the western United States since the mid-1980s as spring temperatures increased, snow melted earlier, and summers got hotter, leaving more and drier fuels for fires to devour.	agree	neutral
+mturk	Those who are unable to contradict with facts and arguments the movement of young people committed in the battle against the climate crisis have recourse instead to violence and intimidation.	agree	neutral
+mturk	Global warming is overestimated by 100 % over 20 years.	disagree	neutral
+mturk	When Thunberg first learned details about climate change, Thunberg didn&apost really believe it.	neutral	disagree
+mturk	This extended absence of solar activity may have been partly responsible for the Little Ice Age in Europe, during which temperatures were colder by about 1.8 degrees F than they are today.	neutral	agree
+mturk	Agriculture can help fight global warming.	agree	neutral
+mturk	The world must halve global emissions or face cataclysmic global warming.	agree	agree
+mturk	The striking Arctic change is as much a result of ice moving as melting.	disagree	neutral
+mturk	The alleged  consensus  behind the dangers of anthropogenic global warming is not nearly as settled among climate scientists as people imagine.	disagree	neutral
+mturk	No one can say they are happy about climate change.	agree	neutral
+mturk	Humans are not to blame for global warming.	disagree	disagree
+mturk	In addition, our oceans absorb about 25 % of the carbon dioxide.	neutral	neutral
+mturk	Co2 is a demon molecule that causes global warming.	agree	neutral
+mturk	If us do not address the global crisis of climate change, transform our energy system away from fossil fuel to sustainable energy, the planet that we're going to be leaving our kids and our grandchildren may well not be habitable.	agree	neutral
+mturk	The immense, still-unfolding tragedy of the Australian fires may yet prove to be the Chernobyl of climate crisis.	agree	neutral
+mturk	If families having fewer children should do so even if that emission has no real-world effect in order to satisfy Rieders morals.	neutral	neutral
+mturk	Global warming is caused mostly by human carbon emissions.	agree	disagree
+mturk	Increased revenue from a carbon tax can be used to alleviate other tax burdens.	neutral	agree
+mturk	She is advocating for violence against world leaders who dodge their responsibilities to fight climate change.	neutral	agree
+mturk	There should be carbon pricing for major emitters.	agree	agree
+mturk	Hopefully, now that scientists are aware of this discrepancy this discrepancy, this discrepancy can be addressed in future models of disappearing ice.	neutral	agree
+mturk	Global warming is mainly caused by human activity.	agree	disagree
+mturk	The several previous warming periods (called climate optima) directly correlated to fantastic periods of human prosperity and advances.	disagree	agree
+mturk	Global temperatures had reached a dangerous tipping point, with extreme warming imminent and unavoidable.	agree	neutral
+mturk	We must wean ourselves off fossil fuels.	neutral	disagree
+mturk	We are all losing the fight against climate change.	agree	disagree
+mturk	People in India and Latin America more worried about global warming than those in developed nations.	neutral	neutral
+mturk	Global warming could eventually reach these levels.	agree	disagree
+mturk	No single epidemic can be attributed wholly to climate change.	disagree	agree
+mturk	Fewer than half of Americans believe human activity is responsible for most global warming.	neutral	agree
+mturk	Many climate scientists are much less sure about man-made global warming than they will admit in public.	neutral	neutral
+mturk	The United States will join other nations in their fight against climate change at a United Nations-led press conference in Madrid, Spain.	agree	agree
+mturk	In California, however, which is already being ravaged by the heat and drought of climate change.	agree	disagree
+mturk	I was surprised to learn that shortage of good climate scientists is a global problem.	neutral	agree
+mturk	Global warming will never hurt anyone.	disagree	neutral
+mturk	The Arctic see would be ice-free this year.	neutral	agree
+mturk	The political will exists in Washington to pass legislation that could include some kind of a tax on carbon.	neutral	neutral
+mturk	Humans have a role and therefore as a matter of prudence we ought to have less carbon loading of the atmosphere.	agree	neutral
+mturk	Climate protection may become a matter of survival for Europe and the entire planet.	agree	agree
+mturk	Gore has seen small shifts in Republican views regarding the so-called climate issue.	neutral	agree
+mturk	Global warming is occurring more slowly than computer models forecast a decade ago.	disagree	agree
+mturk	The margins around Antarctica experience surface melting today .	neutral	agree
+mturk	Man-caused carbon releases prompted not only record heat and drought but also record coolness and precipitation within a few subsequent months.	agree	agree
+mturk	Climate change is a cult.	disagree	agree
+mturk	In other words, to the extent the public believes in the theory humans are responsible for global warming.	neutral	agree
+mturk	Climate change is not primarily caused by man.	disagree	neutral
+mturk	Most global warming is natural and even if there had been no Industrial Revolution current global temperatures would be almost exactly the same as they are now.	disagree	agree
+mturk	Global tropical activity, which can be measured using the ACE Index (Accumulated Cyclone Energy), is near record lows according to peer-reviewed research.	neutral	agree
+mturk	By facilitating the exploitation of particularly carbon-dense Canadian tar sands, Canada will substantially increase greenhouse gas emissions into the atmosphere.	neutral	neutral
+mturk	We have about a ten-year window to make very, very deep cuts in our carbon fuel use.	agree	neutral
+mturk	Global warming doesnt exist in a news vacuum.	disagree	neutral
+mturk	Human activities are not a major cause of global warming.	disagree	disagree
+mturk	If nothing is done to reduce emissions, global warming will be a very or somewhat serious problem in the future.	agree	agree
+mturk	Climate change is a huge confidence trick.	disagree	neutral
+mturk	Climate is an extremely complicated science that remains far less than fully understood.	disagree	disagree
+mturk	Ms. Trump is embracing at least some of Ms. Thunberg's urgency about climate change.	neutral	neutral
+mturk	The low-carbon electricity grid alone will cost $5.4 trillion.	neutral	agree
+mturk	On top of the vast quantities of carbon dioxide from fossil fuels that continue to enter the atmosphere in record amounts yearly.	neutral	neutral
+mturk	Alaskans have something of an appetite for a carbon tax.	neutral	disagree
+mturk	"Evidence of the climate 's warming ""is unequivocal"" based on observed increases in the world's average air and ocean temperatures, the widespread melting of snow and ice and a rising global average sea level."	agree	neutral
+mturk	Some scientists counter that the possibility of global tipping remains highly speculative.	neutral	agree
+mturk	The theories of man-made climate change are no longer credible in light of the so-called hiatus in rising temperatures, not to mention that polar ice is increasing, not melting away.	disagree	disagree
+mturk	Rising sea levels could force Los Angeles International Airport (LAX) to be moved.	agree	disagree
+mturk	There is no statistical evidence that global warming is intensifying hurricanes, floods, droughts and suchlike natural disasters, or making them more frequent.	disagree	neutral
+mturk	Reducing food waste from 20 to 50 percent globally could save $120 billion to $300 billion a year by 2030.	neutral	disagree
+mturk	Global Warming is a theory and should be taught as such in our schools.	disagree	neutral
+mturk	Global warming skeptics may have a point or two after all.	disagree	neutral
+mturk	Natural climate swings are playing a greater role in the loss of ice from West Antarctica than global warming.	disagree	disagree
+mturk	The effects of climate change are accelerating, particularly in the Arctic region and on mountain glaciers that impact critical watersheds.	agree	agree
+mturk	Abrupt climate change could bring the planet to the edge of anarchy as countries develop a nuclear threat to defend and secure dwindling food, water and energy supplies.	agree	agree
+mturk	Without additional measures to contain emissions, global temperatures will rise about 5 degrees to 7 degrees Fahrenheit by 2100 compared to current levels.	agree	neutral
+mturk	Global warming was much more of an abstraction to New York City until two years ago.	neutral	neutral
+mturk	A United Nations panel is more certain than ever that humans are causing global warming and predicted temperatures would rise by 0.3 to 4.8 degrees Celsius (0.5-8.6 degrees Fahrenheit) this century.	agree	agree
+mturk	"Ernman and Rentzhog signed an op-ed in Dagens Nyheter calling for ""bottom-up"" action against national governments to fight climate change."	neutral	neutral
+mturk	A global price on carbon is politically and economically unlikely, but individual nations have already implemented and may continue to implement such systems to meet their climate goals.	neutral	disagree
+mturk	The poorest people in the world, who have had virtually nothing to do with causing global warming, will be high on the list of victims as climatic disruptions intensify.	agree	neutral
+mturk	There are fewer climate problems elsewhere.	disagree	disagree
+mturk	Global warming is such an important issue they are giving up carbon for Lent.	agree	agree
+mturk	Unseasonal bouts of snow and ice are nothing to do with  global warming  but are a natural phenomenon which had been with us since time immemorial .	disagree	neutral
+mturk	Flooding alone may cost $325 billion by the year 2100 in one of the worst-case scenarios, with $130 billion of that in Florida.	neutral	agree
+mturk	Climate change is not a true crisis.	disagree	neutral
+mturk	Buildings should reduce gender-discriminating bias in thermal comfort because setting temperatures at slightly warmer levels can help combat global warming.	agree	neutral
+mturk	The global population of polar bears, estimated at 26,000, will decline by 30 percent over the next 35 years due to melting Arctic ice.	agree	neutral
+mturk	A modest carbon tax could pay for all of this work at a fraction the cost of a cap on emissions of greenhouse gases, the approach pursued by Europe under the Kyoto Protocol (and rejected in the United States).	neutral	neutral
+mturk	Only 6 percent of Americans are willing to pay $1,000 or more annually in higher taxes and utility costs to subsidize the cost of adding more sustainable energy to fight global warming.	neutral	neutral
