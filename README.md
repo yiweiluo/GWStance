@@ -5,19 +5,19 @@ TODOs
 - [ ] Training and test data
    - SemEval 2016 task 6 train, trial--both very small (211 for, 15 against)
    - SemEval 2016 test (subtask A)--169 tweets (123 for, 11 against, 35 none)
-   - Dallas' annotated news data
+   - Dallas' annotated and predicted news data
    - Yiwei's news data--unlabeled
    - [ ] Perspectrum (Chen et al. 2019)
    - [ ] tweets? (Koenecke)
    - full news data can be used as in-domain data for initial fine-tuning
 - [ ] Training classifier
    - [ ] Decide how to transform MTurk labels
-   - [ ] Fine-tune on unlabeled in-domain data; then on all in-domain data (transformer.ipynb)
+   - [ ] Fine-tune on unlabeled in-domain data(; then on all in-domain data (transformer.ipynb))
    - [ ] Baselines: 
 	- *BERT*
-	    - all labeled data: ?
-	    - MTurk data only: 71% dev acc (yiwei: 69%); macro F1: 0.68
-	    - train all; test MTurk: 80% dev acc; Macro F1: 0.52
+	    - train MTurk, test MTurk: 71% dev acc (yiwei: 69%) w/ macro F1: 0.68; 63% test acc w/ macro F1: 0.60
+	    - train downsampled MTurk, test MTurk: 79% test acc w/ macro F1: 0.71; 79% dev acc w/ macro F1: 0.71
+	    - train all; test MTurk: 80% dev acc; Macro F1: 0.55
 	- GPT 
 	    - all labeled data: 79% dev acc
 	    - MTurk only: 69% dev acc
@@ -38,6 +38,10 @@ TODOs
 	    - swap out their C for our single target sentence
 	    - instead of BERT, use GPT
    - [ ] Error analysis
+	- Evaluation on test data (change get_dev -> get_test in run.py)
+	- Need to upsample "disagree"
+	- Change to ordinal loss function
+	- Look into BERT for text classification
 - [x] MTurk 
    - [x] pilot, iterate with smaller subsample to check inter-annotator agreement
    - [x] Lock down non-pilot specifics:
