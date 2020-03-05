@@ -16,7 +16,7 @@ TODOs
    - [ ] Baselines: 
 	- *BERT*
 	    - train MTurk, test MTurk: 71% dev acc (yiwei: 69%) w/ macro F1: 0.68; 63% test acc w/ macro F1: 0.60
-	    - train downsampled MTurk, test MTurk: 79% test acc w/ macro F1: 0.71; 79% dev acc w/ macro F1: 0.71
+	    - train downsampled MTurk, test MTurk: 79% test acc w/ macro F1: 0.71; 78% dev acc w/ macro F1: 0.78
 	    - train all; test MTurk: 80% dev acc; Macro F1: 0.55
 	- GPT 
 	    - all labeled data: 79% dev acc
