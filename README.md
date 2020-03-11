@@ -14,10 +14,17 @@ TODOs
    - [ ] Decide how to transform MTurk labels
    - [ ] Fine-tune on unlabeled in-domain data(; then on all in-domain data (transformer.ipynb))
    - [ ] Baselines: 
-	- *BERT*
+	- *BERT base uncased*
 	    - train MTurk, test MTurk: 71% dev acc (yiwei: 69%) w/ macro F1: 0.68; 63% test acc w/ macro F1: 0.60
-	    - train downsampled MTurk, test MTurk: 79% test acc w/ macro F1: 0.71; 78% dev acc w/ macro F1: 0.78
-	    - train all; test MTurk: 80% dev acc; Macro F1: 0.55
+	    - *train downsampled MTurk, test MTurk: 79% test acc w/ macro F1: 0.71; 78% dev acc w/ macro F1: 0.78*
+	    - train all, test MTurk: 80% dev acc w/ Macro F1: 0.55; 50% test acc w/ Macro F1: 0.47 (sharp decrease from dev to test acc due to test data being MTurk only)
+	    - train downsampled all, test MTurk: 50% dev acc w/ macro F1: 0.31; 46% test acc w/ macro F1: 0.44
+	- BERT base cased
+	    - train MTurk, test MTurk: 65% dev acc w/ macro F1: 0.61
+	    - train downsampled MTurk, test MTurk: 64% dev acc w/ macro F1: 0.64
+	- BERT large uncased
+	    - train MTurk, test MTurk: 73% dev acc w/ macro F1: 0.71, 68% test acc w/ macro F1: 0.65
+	    - train downsampled MTurk, test MTurk: 70% dev acc w/ macro F1: 0.70, 67% test acc w/ macro F1: 0.58
 	- GPT 
 	    - all labeled data: 79% dev acc
 	    - MTurk only: 69% dev acc

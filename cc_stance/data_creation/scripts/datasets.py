@@ -67,6 +67,12 @@ def stance(data_dir, train_data_type=None, test_data_type=None, splits=None):
     for i,s in enumerate(stances):
         tr_text_by_stance[s],va_text_by_stance[s],tr_stance_by_stance[s],va_stance_by_stance[s] = train_test_split(train_X_by_stance[s], train_Y_by_stance[s], test_size=0.2, random_state=seed2)
     #tr_text, teX, tr_stance, teY = train_test_split(tr_te_text, tr_te_stance, test_size=0.1, random_state=seed2)
+    if args.downsample:
+        min_N = min([len(tr_text_by_stance[s]) for s in stances])
+        print('Downsampling to ~{} examples per stance.'.format(min_N))
+        for s in stances:
+            tr_text_by_stance[s] = tr_text_by_stance[s][:min_N+200]
+
     trX = []
     trY = []
     for i,s in enumerate(stances):
@@ -87,6 +93,7 @@ def stance(data_dir, train_data_type=None, test_data_type=None, splits=None):
         for t, y in zip(va_text_by_stance[s], va_stance_by_stance[s]):
             vaX.append(t)
             vaY.append(y)
+
     trY = np.asarray(trY, dtype=np.int32)
     vaY = np.asarray(vaY, dtype=np.int32)
     teY = np.asarray(teY, dtype=np.int32)
@@ -100,12 +107,13 @@ if __name__ == "__main__":
     parser.add_argument('--save_dir', type=str, default='./save')
     parser.add_argument('--data_dir', type=str, default='../data')
     #parser.add_argument('--seed', type=int, default=42)
-    parser.add_argument('--train_data_type', type=str, default='mturk')
+    parser.add_argument('--train_data_type', type=str, default=None)
     parser.add_argument('--test_data_type', type=str, default='mturk')
     # these are the defaults that result in roughly equal amounts of disagree/agree/neutral training data
     parser.add_argument('--disagree_split_size', type=float, default=0.1)
     parser.add_argument('--neutral_split_size', type=float, default=0.5)
     parser.add_argument('--agree_split_size', type=float, default=0.5)
+    parser.add_argument('--downsample',action='store_true')
 
     args = parser.parse_args()
     print(args)

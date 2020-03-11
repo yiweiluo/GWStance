@@ -1,3 +1,6 @@
+BERT/pytorch_model.bin
+data_creation/data/twint_scrape.pkl
+
 old/
 venv/
 tweet-stance-prediction/assets/
