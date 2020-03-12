@@ -4,5 +4,6 @@ Description of different data types
 - Folder name reflects the characterization of the data
 	- "downsapled"--overrepresented classes ("agree", "neutral" have been downsampled)
 	- "all"--training data type pools across all data types (excluding twint_tweets), test is still MTurk only
-	- "mturk"--training data type is restricted to MTurk data
+	- "mturk"--training data type is restricted to vanilla MTurk data (no flattening, windowing, downsampling)
+	- "windowed"--added windows of -/+2 sentences from original article, excluding sentence in which embedded clause is found
 	- "twint_tweets"--training data pools across all data types (including twint_tweets), test is only twint_tweets
