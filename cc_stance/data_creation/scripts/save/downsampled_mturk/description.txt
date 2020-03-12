@@ -1,0 +1,8 @@
+Description of different data types
+
+- Each folder contains test.tsv, dev.tsv, test.tsv
+- Folder name reflects the characterization of the data
+	- "downsapled"--overrepresented classes ("agree", "neutral" have been downsampled)
+	- "all"--training data type pools across all data types (excluding twint_tweets), test is still MTurk only
+	- "mturk"--training data type is restricted to MTurk data
+	- "twint_tweets"--training data pools across all data types (including twint_tweets), test is only twint_tweets
