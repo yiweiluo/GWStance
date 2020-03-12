@@ -16,7 +16,9 @@ TODOs
    - [ ] Baselines: 
 	- *BERT base uncased*
 	    - train MTurk, test MTurk: 71% dev acc (yiwei: 69%) w/ macro F1: 0.68; 63% test acc w/ macro F1: 0.60
-	    - *train downsampled MTurk, test MTurk: 79% test acc w/ macro F1: 0.71; 78% dev acc w/ macro F1: 0.78*
+	    - *train downsampled MTurk, test MTurk: 78% dev acc w/ macro F1: 0.78; 79% test acc w/ macro F1: 0.71*
+	    - train flattened MTurk, test MTurk: 67% dev acc w/ macro F1: 0.64; 74% test acc w/ macro F1: 0.73
+	    - train flattened downsampled MTurk, test Mturk: 63% dev acc w/ macro F1 0.62; 64% test acc w/ macro F1: 0.63
 	    - train all, test MTurk: 80% dev acc w/ Macro F1: 0.55; 50% test acc w/ Macro F1: 0.47 (sharp decrease from dev to test acc due to test data being MTurk only)
 	    - train downsampled all, test MTurk: 50% dev acc w/ macro F1: 0.31; 46% test acc w/ macro F1: 0.44
 	- BERT base cased
