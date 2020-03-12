@@ -4,17 +4,22 @@ import pandas as pd
 from pathlib import Path
 import argparse
 import os
+import re
 
 from sklearn.utils import shuffle
 from sklearn.model_selection import train_test_split
 from statistics import *
 
+def clean_ascii(text):
+    # function to remove non-ASCII chars from data
+    return ''.join(i for i in str(text) if ord(i) < 128)
+
+def clean_space(text):
+    return re.sub('\s+',' ',text)
+
 def _stance(path, train_data_type=None, test_data_type=None):
-    def clean_ascii(text):
-        # function to remove non-ASCII chars from data
-        return ''.join(i for i in str(text) if ord(i) < 128)
     orig = pd.read_pickle(path)#, encoding = "latin-1", index_col = 0)
-    orig['text'] = orig['text'].apply(clean_ascii)
+    orig['text'] = orig['text'].apply(clean_ascii).apply(clean_space)
     df = orig
     #print(df.shape)
 
@@ -32,6 +37,9 @@ def _stance(path, train_data_type=None, test_data_type=None):
     stances = ["agree", "neutral", "disagree"]
     class_nums = {s: i for i, s in enumerate(stances)}
     print('class_nums:',class_nums)
+    # print(train_df.head())
+    # print(train_df.stance.value_counts())
+    # print(test_df.head())
     train_df_by_stance = {s: train_df.loc[train_df.stance == s] for i,s in enumerate(stances)}
     test_df_by_stance = {s: test_df.loc[test_df.stance == s] for i,s in enumerate(stances)}
 
@@ -47,6 +55,7 @@ def flat_stance(data_dir):
     path = Path(data_dir)
     datafile = 'flat_mturk_df.pkl'
     flat_mturk_df = pd.read_pickle(path/datafile)
+    flat_mturk_df['text'] = flat_mturk_df['text'].apply(clean_ascii).apply(clean_space)
     flat_mturk_source_groups = flat_mturk_df.groupby('source')
     train_sources, dev_test_sources = train_test_split(flat_mturk_source_groups.first().index,
              test_size=0.3, random_state=seed1)
@@ -81,9 +90,7 @@ def flat_stance(data_dir):
     train_df = pd.DataFrame({'stance':train_Y,'text':train_X})
     dev_df = pd.DataFrame({'stance':dev_Y,'text':dev_X})
     test_df = pd.DataFrame({'stance':test_Y,'text':test_X})
-    #print(train_df.head())
-    p#rint(train_df.stance.value_counts())
-    #print(test_df.head())
+
     stances = ["agrees", "neutral", "disagrees"]
     class_nums = {s: i for i, s in enumerate(stances)}
     train_df_by_stance = {s: train_df.loc[train_df.stance == s] for s in stances}
@@ -151,6 +158,8 @@ def stance(data_dir, train_data_type=None, test_data_type=None, splits=None):
         proportion = test_props_by_stance[s]
         if len(test_Y) > 0:
             retrain_X_by_stance[s],teX_by_stance[s],retrain_Y_by_stance[s],teY_by_stance[s] = train_test_split(test_X_by_stance[s], test_Y_by_stance[s], test_size=proportion, random_state=seed1)
+            print('test')
+            print(len(retrain_X_by_stance[s]))
         else: # if there are 0 examples of a given stance in the test set
             teX_by_stance[s],teY_by_stance[s] = [],[]
             retrain_X_by_stance[s],retrain_Y_by_stance[s] = [],[]
