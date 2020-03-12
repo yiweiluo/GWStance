@@ -1,3 +1,9 @@
+data_creation/data/flat_mturk_df.pkl
+data_creation/data/labeled_data_df.pkl
+data_creation/scripts/save/twint_tweets/
+data_creation/scripts/save/twint_tweets_downsampled/
+
+
 BERT/pytorch_model.bin
 data_creation/data/twint_scrape.pkl
 
