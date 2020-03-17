@@ -19,6 +19,9 @@ TODOs
 	    - **train downsampled MTurk, test MTurk: 78% dev acc w/ macro F1: 0.78; 79% test acc w/ macro F1: 0.71**
 	    - *train flattened MTurk, test MTurk: 67% dev acc w/ macro F1: 0.64; 74% test acc w/ macro F1: 0.73*
 	    - train flattened downsampled MTurk, test Mturk: 63% dev acc w/ macro F1 0.62; 64% test acc w/ macro F1: 0.63
+	    - train windowed (n=2) MTurk, test regular MTurk: 52% dev acc w/ macro F1: 0.51; 55% test acc w/ macro F1: 0.55
+	    - train windowed (n=1) MTurk, test regular MTurk: 55% dev acc w/ macro F1: 0.54; 56% test acc w/ macro F1: 0.54; test downsampled MTurk: 66% test acc w/ macro F1: 0.55, 64% dev acc w/ macro F1: 0.64
+	    - train windowed (n=1) MTurk + downsampling, test regular MTurk: 52% dev acc w/ macro F1: 0.50; 52% test acc w/ macro F1: 0.50
 	    - train all, test MTurk: 80% dev acc w/ Macro F1: 0.55; 50% test acc w/ Macro F1: 0.47 (sharp decrease from dev to test acc due to test data being MTurk only)
 	    - train downsampled all, test MTurk: 50% dev acc w/ macro F1: 0.31; 46% test acc w/ macro F1: 0.44
 	    - train MTurk, test twint: 7% test acc 
