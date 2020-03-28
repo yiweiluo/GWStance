@@ -17,6 +17,8 @@ TODOs
 	- *BERT base uncased*
 	    - train MTurk, test MTurk: 71% dev acc (yiwei: 69%) w/ macro F1: 0.68; 63% test acc w/ macro F1: 0.60
 	    - **train downsampled MTurk, test MTurk: 78% dev acc w/ macro F1: 0.78; 79% test acc w/ macro F1: 0.71**
+		- LM fine-tuned on cc-keyword containing sentences from news (perplexity 7): 64% dev acc w/ macro F1: 0.64
+		- LM fine-tuned on all cc-news (perplexity 5.5)
 	    - *train flattened MTurk, test MTurk: 67% dev acc w/ macro F1: 0.64; 74% test acc w/ macro F1: 0.73*
 	    - train flattened downsampled MTurk, test Mturk: 63% dev acc w/ macro F1 0.62; 64% test acc w/ macro F1: 0.63
 	    - train windowed (n=2) MTurk, test regular MTurk: 52% dev acc w/ macro F1: 0.51; 55% test acc w/ macro F1: 0.55
