@@ -1,7 +1,10 @@
 __pycache__/
-../cc_stance/data_creation/scripts/save/small/
+cc_stance/data_creation/scripts/save/small/
 all.cc.fulltexts.test.raw
 all.cc.fulltexts.train.raw
+temp_combined_df.pkl
+temp_combined_df_with_fulltext.pkl
+filtered_all_url_df.pkl
 
 
 .ipynb_checkpoints
