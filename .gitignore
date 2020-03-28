@@ -1,1 +1,7 @@
+__pycache__/
+../cc_stance/data_creation/scripts/save/small/
+all.cc.fulltexts.test.raw
+all.cc.fulltexts.train.raw
+
+
 .ipynb_checkpoints
