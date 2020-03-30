@@ -2,7 +2,7 @@ import os
 import re
 import glob
 
-fulltext_dir='./fulltexts/'
+fulltext_dir='/Users/yiweiluo/scientific-debates/data_scraping/fulltexts/'
 fnames = set(os.listdir(fulltext_dir))
 
 def fulltext_exists(url,fulltext_dir=fulltext_dir):
