@@ -5,6 +5,7 @@ all.cc.fulltexts.train.raw
 temp_combined_df.pkl
 temp_combined_df_with_fulltext.pkl
 filtered_all_url_df.pkl
+scratchpad.ipynb
 
 
 .ipynb_checkpoints
