@@ -9,6 +9,13 @@ def fulltext_exists(url,fulltext_dir=fulltext_dir):
     fname = url.replace('/','[SEP]')
     return fname+'.txt' in fnames or fname[:90]+'.txt' in fnames
 
+def get_fname(url,fulltext_dir=fulltext_dir):
+    fname = url.replace('/','[SEP]')
+    if fname+'.txt' in fnames:
+        return fname
+    else:
+        return fname[:90]
+
 def get_fulltext(url,fulltext_dir=fulltext_dir):
     fname = url.replace('/','[SEP]')
     if fname+'.txt' in fnames or fname[:90]+'.txt' in fnames:
