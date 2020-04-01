@@ -199,14 +199,14 @@ if __name__ == "__main__":
     df.head(10)
 
     start_time = time.time()
-    for url_ix in range(100,500):
+    for url_ix in range(7433,len(df)):
         curr_url = df.url.values[url_ix]
         quotes = get_quotes(get_fulltext(curr_url)[0])
-        fname = get_fname(curr_url)
-        with open('./extracted_quotes/{}.jsonlist'.format(fname),'w+') as f:
+        #fname = get_fname(curr_url)
+        with open('./extracted_quotes_2/url_no_{}.jsonlist'.format(url_ix),'w+') as f:
             for res in quotes:
                 json.dump(res, f)
                 f.write('\n')
-    if url_ix % 50 == 0:
-        print(url_ix,curr_url)
+        if url_ix % 50 == 0:
+            print(url_ix,curr_url)
     print('{}\tElapsed time in minutes:'.format(fname),(time.time()-start_time)/60.)
