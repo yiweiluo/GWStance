@@ -28,18 +28,34 @@ TODOs
 		    - 70% dev acc w/ macro F1: 0.68
 		- 18 epochs:
 		    - epoch 3: loss=0.82, epoch 6: loss=0.14, epoch 9: loss=0.006; epoch 12: loss=0.00056; epoch 15: loss=0.00027; epoch 18: loss=0.16
-		    - 70# dev acc w/ macro F1: 0.69
+		    - 70% dev acc w/ macro F1: 0.69
 		- LM fine-tuned on all cc-news (cased) (perplexity 5.5): 
 		    - *72% dev acc w/ macro F1: 0.70 (uncased);*
 		    - 69% dev acc w/ macro F1: 66 (cased);
 		    - 66% test acc w/ macro F1: 0.62 (uncased);
 		    - 63% test acc w/ macro F1: 0.58 (cased)
+		- LM fine-tuned on all cc-news (uncased) (perplexity 5.5):
+		    - 70% dev acc w/ macro F1: 0.69 (cased);
+		    - 
+		    - *71% dev acc w/ macro F1: 0.70 (uncased);*
+		    - 65% test acc w/ macro F1: 0.63 (uncased);
 		- LM fine-tuned on wikitext (perplexity 4.8): 
 		    - 70% dev acc w/ macro F1: 0.68 (uncased); 
 		    - 67% dev acc w/ macro F1: 0.65 (cased); 
 		    - 63% test acc w/ macro F1: 0.59 (uncased); 
 		    - 63% test acc w/ macro F1: 0.60 (cased)
-	    - **train downsampled MTurk, test MTurk: 78% dev acc w/ macro F1: 0.78; 79% test acc w/ macro F1: 0.71**
+		- With French backtranslation:
+		    - 77% dev acc w/ macro F1: 0.77 (uncased);
+		    - *84% test acc w/ macro F1: 0.75 (uncased);*
+		    - 76% dev acc w/ macro F1: 0.76 (cased);
+		    - *85% test acc w/ macro F1: 0.81 (cased)*
+	    - **train downsampled MTurk, test MTurk: 78% dev acc w/ macro F1: 0.78; 79% test acc w/ macro F1: 0.71** (3 epochs, average loss=0.84) 
+		- On second trial, got 65% dev acc w/ macro F1: 0.65! wtf...
+		- With French backtranslation:
+		    - 
+		- LM fine-tuned on all cc-news (uncased) (perplexity 5.5):
+		    - 68% dev acc w/ macro F1: 0.68 (uncased)
+		    - 69% test acc w/ macro F1: 0.61 (uncased)
 		- LM fine-tuned on cc-keyword containing sentences from news (perplexity 7): 64% dev acc w/ macro F1: 0.64
 		- LM fine-tuned on all cc-news (cased) (perplexity 5.5): 
 		    - 62% dev acc w/ macro F1: 0.62 (uncased); 
@@ -61,7 +77,21 @@ TODOs
 	    - train MTurk, test twint: 7% test acc 
 	- BERT base cased
 	    - train MTurk, test MTurk: 65% dev acc w/ macro F1: 0.61
+		- LM fine-tuned on all cc-news (cased) (perplexity 5.3)
+		    - 5 epochs (3/5: loss=0.7, 5/5: loss=0.42)
+			- 68% dev acc w/ macro F1: 0.68 (cased)
+			- 67% test acc w/ macro F1: 0.65 (cased)
+		    - 5 epochs (3/5: loss=0.69, 5/5: loss=)
+			- 68% dev acc w/ macro F1: 0.67 (uncased)
+			- 65% test acc w/ macro F1: 0.63 (uncased)
 	    - train downsampled MTurk, test MTurk: 64% dev acc w/ macro F1: 0.64
+	    	- LM fine-tuned on all cc-news (cased) (perplexity 5.3)
+		    - 5 epochs (4/5: loss=0.66, 5/5: loss=0.59)
+			- 65% dev acc w/ macro F1: 0.65 (cased)
+			- 66% test acc w/ macro F1: 0.58 (cased)
+		    - 5 epochs (4/5: loss=0.54, 5/5: loss=0.47)
+			- 69% dev acc w/ macro F1: 0.69 (uncased)
+			- 67% test acc w/ macro F1: 0.59 (uncased)
 	- BERT large uncased
 	    - train MTurk, test MTurk: 73% dev acc w/ macro F1: 0.71, 68% test acc w/ macro F1: 0.65
 	    - train downsampled MTurk, test MTurk: 70% dev acc w/ macro F1: 0.70, 67% test acc w/ macro F1: 0.58

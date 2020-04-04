@@ -21,18 +21,18 @@ def _stance(path, train_data_type=None, test_data_type=None):
     orig = pd.read_pickle(path)#, encoding = "latin-1", index_col = 0)
     orig['text'] = orig['text'].apply(clean_ascii).apply(clean_space)
     df = orig
-    #print(df.shape)
+    print(df.shape)
 
     # Get only those items from a single data type in the training data
     if test_data_type is not None:
-        test_df = df.loc[df.type == test_data_type]
-    #print(test_df.shape)
+        test_df = df.loc[df.type.isin(test_data_type)]
+    print('Test df shape:',test_df.shape)
 
     if train_data_type is not None:
-        train_df = df.loc[(df.type == train_data_type) & (df.type != test_data_type)]
+        train_df = df.loc[(df.type.isin(train_data_type)) & (~df.type.isin(test_data_type))]
     else:
-        train_df = df.loc[df.type != test_data_type]
-        #print(train_df.shape)
+        train_df = df.loc[~df.type.isin(test_data_type)]
+    print('Train df shape:',train_df.shape)
 
     stances = ["agree", "neutral", "disagree"]
     class_nums = {s: i for i, s in enumerate(stances)}
@@ -229,8 +229,10 @@ if __name__ == "__main__":
     desc = args.desc
     save_dir = args.save_dir
     data_dir = args.data_dir
-    train_data_type = args.train_data_type
-    test_data_type = args.test_data_type
+    train_data_type = set(args.train_data_type.split(','))
+    test_data_type = set(args.test_data_type.split(','))
+    print('train data types:',train_data_type)
+    print('test data types:',test_data_type)
     split_sizes = {"disagree": args.disagree_split_size,
     "neutral": args.neutral_split_size,
     "agree": args.agree_split_size}
