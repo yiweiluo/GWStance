@@ -54,17 +54,40 @@ def is_rel_pronoun(tok):
     return tok in REL_PRONOUNS
 
 def get_quotes(text):
-    # Do coref resolution
+    # Step 0. Run pipeline.
     doc = nlp(text)
-    text = doc._.coref_resolved
 
+    # Step 1. Figure out which tokens to tag w/ coreferring token
+    to_annotate = {}
+    for clust in doc._.coref_clusters:
+        non_main_mentions = [x for x in clust.mentions if x != clust.main]
+        for mention in non_main_mentions:
+            start = mention.start
+            to_annotate[start] = True
+            end = mention.end
+            if start+1 != end:
+                for ix in range(start+1,end):
+                    to_annotate[ix] = False
+    to_annotate.update({ix: False for ix in range(len(doc)) if ix not in to_annotate})
+
+    annotated_tokens = {}
+    for token in doc:
+        #print(token.i,token.text,token.head,token.dep_)
+        if to_annotate[token.i]:
+            #print('Main span:',token._.coref_clusters[0].main)
+            # print('Main span start token_ix, end token_ix:',token._.coref_clusters[0].main.start,
+            #      token._.coref_clusters[0].main.end)
+            # print('\n')
+            annotated_tokens[token.i] = token._.coref_clusters[0].main
+        else:
+            annotated_tokens[token.i] = None
+
+    # Step 3. Go through each sentence in the doc, extract up to 1 quote from each sentence
     quote_objs = []
-
-    for sent in sent_tokenize(text):#d.sents:
+    for sent in doc.sents:
         #print(sent)
-        sent = nlp(sent)
-        # Go through entire sentence, looking for verbs embedding a complement clause
-        VERBS = np.unique([token.head for token in sent if token.dep_ == 'ccomp'])
+
+        VERBS = list(np.unique([token.head for token in sent if token.dep_ == 'ccomp']))
         #print(VERBS)
 
         # Extract everything else for each VERB
@@ -82,24 +105,30 @@ def get_quotes(text):
             # If verb's head is not itself (i.e., verb is not the ROOT),
             # recursively trace back to ROOT, then add all children of ROOT
             ROOT = VERB
-            while not is_ROOT(ROOT):
-                ROOT = ROOT.head
-                #print('\t\tCurrent root:',ROOT)
-            if VERB is not ROOT:
+            if is_ROOT(ROOT):
+                pass
+                #print("\n\tVerb '{}' is the ROOT.".format(ROOT))
+                #verb_deps.append(ROOT)
+            else:
+                #print('\n\tFinding ROOT...')
+                while not is_ROOT(ROOT):
+                    ROOT = ROOT.head
+                    #print('\t\tCurrent root:',ROOT)
+                assert is_ROOT(ROOT)
                 verb_deps.append(ROOT)
 
-            #print("\tAdding children of ROOT...")
-            root_deps = [x for x in ROOT.children if is_good_verb_dep(x.dep_)]
-            #print("\tFound ROOT deps:",root_deps)
-            for x in root_deps:
-                new_children = [c for c in x.children if is_good_verb_dep(c.dep_)]
-                #print("\tAdding children of {}:".format(x.text),new_children)
-                root_deps.extend(new_children)
-                #print("\tUpdated ROOT deps:",root_deps)
+                #print("\tAdding children of ROOT...")
+                root_deps = [x for x in ROOT.children if is_good_verb_dep(x.dep_)]
+                #print("\tFound ROOT deps:",root_deps)
+                for x in root_deps:
+                    new_children = [c for c in x.children if is_good_verb_dep(c.dep_)]
+                    #print("\tAdding children of {}:".format(x.text),new_children)
+                    root_deps.extend(new_children)
+                    #print("\tUpdated ROOT deps:",root_deps)
 
-            #print("\tAdding ROOT deps to verb deps...")
-            verb_deps.extend([x for x in root_deps if x != VERB and x not in verb_deps])
-            #print("\tUpdated verb deps:",verb_deps)
+                #print("\tAdding ROOT deps to verb deps...")
+                verb_deps.extend([x for x in root_deps if x != VERB and x not in verb_deps])
+                #print("\tUpdated verb deps:",verb_deps)
 
             NEG,IS_NEG,neg_children = None,None,None
             SUBJECT,subj_children = None,None
@@ -147,18 +176,6 @@ def get_quotes(text):
                     subj_children.extend(new_children)
                     #print("\tUpdated subject children:",subj_children)
 
-            sorted_verb_tokens = sorted([(c,c.i) for c in verb_deps+[VERB]],key=lambda x:x[1])
-            #print("\n\tSorted verb tokens:",sorted_verb_tokens)
-            if SUBJECT is not None:
-                sorted_subj_tokens = sorted([(c,c.i) for c in subj_children+[SUBJECT]],key=lambda x:x[1])
-                #print("\tSorted subject tokens:",sorted_subj_tokens)
-            else:
-                sorted_subj_tokens = None
-            if NEG is not None:
-                sorted_neg_tokens = sorted([(c,c.i) for c in neg_children+[NEG]],key=lambda x:x[1])
-            else:
-                sorted_neg_tokens = None
-
             #print("\nFinding quote introduced by '{}'...".format(VERB))
             emb_main_verbs = [c for c in VERB.children if c.dep_ == 'ccomp']
             #print("\tMain verbs of embedded clause:",emb_main_verbs)
@@ -178,17 +195,58 @@ def get_quotes(text):
                     #print("\tNew children queue:",children_queue)
 
                 # Sort children and matrix verb to be in correct order
-                #print("\nSorting tokens in quote...")
-                children_and_indices = [(c,c.i) for c in children_queue+[emb_main_verb]]
-                sorted_ = sorted(children_and_indices,key=lambda x:x[1])
-                quote_objs.append({'quote':[tup[0].text for tup in sorted_],
-                        'verb tokens':[tup[0].text for tup in sorted_verb_tokens],
-                        'main verb':VERB.text,
-                       'subject tokens':[tup[0].text for tup in sorted_subj_tokens] if sorted_subj_tokens is not None else None,
-                       'main subject':SUBJECT.text if SUBJECT is not None else None,
-                       'neg tokens':[tup[0].text for tup in sorted_neg_tokens] if sorted_neg_tokens is not None else None,
-                       'main neg':NEG.text if NEG is not None else None,
-                       'is neg':IS_NEG})
+                # Replace w/ coreferring text as necessary
+                children_and_indices_and_coref = [(c,c.i,annotated_tokens[c.i]) for c in children_queue+[emb_main_verb]]
+                sorted_ = sorted(children_and_indices_and_coref,key=lambda x:x[1])
+                sorted_verb_tokens = sorted([(c,c.i,annotated_tokens[c.i]) for c in verb_deps+[VERB]],key=lambda x:x[1])
+                #print("\n\tSorted verb tokens:",sorted_verb_tokens)
+                if SUBJECT is not None:
+                    sorted_subj_tokens = sorted([(c,c.i,annotated_tokens[c.i]) for c in subj_children+[SUBJECT]],key=lambda x:x[1])
+                    #print("\tSorted subject tokens:",sorted_subj_tokens)
+                else:
+                    sorted_subj_tokens = None
+                if NEG is not None:
+                    sorted_neg_tokens = sorted([(c,c.i,annotated_tokens[c.i]) for c in neg_children+[NEG]],key=lambda x:x[1])
+                else:
+                    sorted_neg_tokens = None
+
+                dict_ = {'quote tokens':[tup[0] for tup in sorted_],
+                        'quote tokens coref':[tup[0] if tup[-1] is None else tup[-1] for tup in sorted_],
+                        'verb tokens':[tup[0] for tup in sorted_verb_tokens],
+                        'verb tokens coref':[tup[0] if tup[-1] is None else tup[-1] for tup in sorted_verb_tokens],
+                        'main verb':VERB,
+                        'main verb coref':annotated_tokens[VERB.i] if annotated_tokens[VERB.i] else VERB,
+                       'subject tokens':[tup[0] for tup in sorted_subj_tokens] if sorted_subj_tokens is not None else None,
+                        'subject tokens coref':([tup[0] if tup[-1] is None else tup[-1] for tup in sorted_subj_tokens])
+                                   if sorted_subj_tokens is not None else None,
+                       'main subject':SUBJECT if SUBJECT is not None else None,
+                        'main subject coref':annotated_tokens[SUBJECT.i] if SUBJECT is not None and annotated_tokens[SUBJECT.i] else
+                                   (SUBJECT if SUBJECT is not None else None),
+                       'neg tokens':[tup[0] for tup in sorted_neg_tokens] if sorted_neg_tokens is not None else None,
+                       'main neg':NEG if NEG is not None else None,
+                       'is neg':IS_NEG}
+
+                res_ = {}
+                res_['quote lemmas'] = [x.lemma_ for x in dict_['quote tokens']]
+                res_['quote lemmas coref'] = [x.lemma_ for x in dict_['quote tokens coref']]
+                res_['verb lemmas'] = [x.lemma_ for x in dict_['verb tokens']]
+                res_['verb lemmas coref'] = [x.lemma_ for x in dict_['verb tokens coref']]
+                res_['main verb lemma'] = dict_['main verb'].lemma_
+                res_['main verb lemma coref'] = dict_['main verb coref'].lemma_
+                res_['subject lemmas'] = [x.lemma_ for x in dict_['subject tokens']] if dict_['subject tokens'] is not None else None
+                res_['subject lemmas coref'] = [x.lemma_ for x in dict_['subject tokens coref']] if dict_['subject tokens coref'] is not None else None
+                res_['main subject lemma'] = dict_['main subject'].lemma_ if dict_['main subject'] is not None else None
+                res_['main subject lemma coref'] = dict_['main subject coref'].lemma_ if dict_['main subject coref'] is not None else None
+                res_['neg lemmas'] = [x.lemma_ for x in dict_['neg tokens']] if dict_['neg tokens'] is not None else None
+                res_['main neg lemma'] = dict_['main neg'].norm_ if dict_['main neg'] is not None else None
+                res_['quote text'] = [x.text for x in dict_['quote tokens']]
+                res_['verb text'] = [x.text for x in dict_['verb tokens']]
+                res_['main verb text'] = dict_['main verb'].text
+                res_['subject text'] = [x.text for x in dict_['subject tokens']] if dict_['subject tokens'] is not None else None
+                res_['main subject text'] = dict_['main subject'].text if dict_['main subject'] is not None else None
+                res_['is neg'] = dict_['is neg']
+
+                quote_objs.append(res_)
 
     return quote_objs
 
@@ -196,14 +254,14 @@ def get_quotes(text):
 
 if __name__ == "__main__":
     df = pd.read_pickle('../scraping/dedup_combined_df.pkl')
-    df.head(10)
+    print('Length of df:',len(df))
 
     start_time = time.time()
-    for url_ix in range(7433,len(df)):
+    for url_ix in range(0,2):#len(df)):
         curr_url = df.url.values[url_ix]
         quotes = get_quotes(get_fulltext(curr_url)[0])
         #fname = get_fname(curr_url)
-        with open('./extracted_quotes_2/url_no_{}.jsonlist'.format(url_ix),'w+') as f:
+        with open('./extracted_quotes/url_no_{}.jsonlist'.format(url_ix),'w+') as f:
             for res in quotes:
                 json.dump(res, f)
                 f.write('\n')
