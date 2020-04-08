@@ -45,8 +45,8 @@ TODOs
 		    - 63% test acc w/ macro F1: 0.59 (uncased); 
 		    - 63% test acc w/ macro F1: 0.60 (cased)
 		- With French backtranslation:
-		    - 77% dev acc w/ macro F1: 0.77 (uncased);
-		    - *84% test acc w/ macro F1: 0.75 (uncased);*
+		    - 71% dev acc w/ macro F1: 0.71 (uncased);
+		    - 70% test acc w/ macro F1: 0.69 (uncased);
 		    - 76% dev acc w/ macro F1: 0.76 (cased);
 		    - *85% test acc w/ macro F1: 0.81 (cased)*
 	    - **train downsampled MTurk, test MTurk: 78% dev acc w/ macro F1: 0.78; 79% test acc w/ macro F1: 0.71** (3 epochs, average loss=0.84) 

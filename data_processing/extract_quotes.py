@@ -5,7 +5,7 @@ import json
 import time
 from nltk.tokenize import sent_tokenize
 
-fulltext_dir='/juice/u/yiweil/sci-debates/scraping/fulltexts/'
+fulltext_dir='/u/scr/yiweil/sci-debates/scraping/fulltexts/'
 fnames = set(os.listdir(fulltext_dir))
 print(len(fnames))
 
@@ -253,18 +253,18 @@ def get_quotes(text):
 
 
 if __name__ == "__main__":
-    df = pd.read_pickle('../scraping/dedup_combined_df.pkl')
+    df = pd.read_pickle('/u/scr/yiweil/sci-debates/scraping/dedup_combined_df.pkl')
     print('Length of df:',len(df))
 
     start_time = time.time()
-    for url_ix in range(0,2):#len(df)):
+    for url_ix in range(17621+80,len(df)):#missing:#len(df)):
         curr_url = df.url.values[url_ix]
         quotes = get_quotes(get_fulltext(curr_url)[0])
-        #fname = get_fname(curr_url)
-        with open('./extracted_quotes/url_no_{}.jsonlist'.format(url_ix),'w+') as f:
+        fname = get_fname(curr_url)
+        with open('/u/scr/yiweil/sci-debates/prepro/extracted_quotes/{}.jl'.format(fname),'w+') as f:
             for res in quotes:
                 json.dump(res, f)
                 f.write('\n')
-        if url_ix % 50 == 0:
+        if url_ix % 100 == 0:
             print(url_ix,curr_url)
-    print('{}\tElapsed time in minutes:'.format(fname),(time.time()-start_time)/60.)
+            print('Elapsed time in minutes:',(time.time()-start_time)/60.)
