@@ -1,3 +1,7 @@
+cc_stance/BERT/bert_preds/ 
+cc_stance/BERT/
+cc_stance/LM_data/
+
 __pycache__/
 cc_stance/data_creation/scripts/save/small/
 all.cc.fulltexts.test.raw
@@ -6,6 +10,11 @@ temp_combined_df.pkl
 temp_combined_df_with_fulltext.pkl
 filtered_all_url_df.pkl
 scratchpad.ipynb
+data_processing/all_quotes.pkl
+data_processing/extracted_quotes/
+data_processing/filtered_quotes.pkl
+data_scraping/fulltexts/
+cc_stance/data_creation/scripts/save/
 
 
 .ipynb_checkpoints
