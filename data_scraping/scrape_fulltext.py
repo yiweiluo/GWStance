@@ -282,13 +282,14 @@ SEP_TOK = '[SEP]'
 
 
 if __name__ == "__main__":
-    combined_df = pd.read_pickle('temp_combined_df.pkl')
-    print(combined_df.shape)
+    combined_df = pd.read_pickle('/u/scr/yiweil/sci-debates/scraping/temp_combined_df.pkl')
+    covid_df = combined_df.loc[combined_df.topic=='covid']
+    print(covid_df.shape)
 
     urls_needed = []
     url_unique_keys = {}
 
-    for n,ix in enumerate(combined_df.index[10300+3100+14900:]):
+    for n,ix in enumerate(covid_df.index):
         row = combined_df.loc[ix]
         assert row.shape == (7,)
         url = row['url']
@@ -312,11 +313,11 @@ if __name__ == "__main__":
             if ft is not None:
                 save_url = SEP_TOK.join(url.split('/'))
                 try:
-                    with open('./fulltexts/{}.txt'.format(save_url),'w') as f:
+                    with open('/u/scr/yiweil/sci-debates/scraping/fulltexts/{}.txt'.format(save_url),'w') as f:
                         f.write(ft)
                     url_unique_keys[url] = save_url
                 except OSError:
-                    with open('./fulltexts/{}.txt'.format(save_url[:90]),'w') as f:
+                    with open('/u/scr/yiweil/sci-debates/scraping/fulltexts/{}.txt'.format(save_url[:90]),'w') as f:
                         f.write(ft)
                     url_unique_keys[url] = save_url[:90]
             else:
@@ -327,5 +328,5 @@ if __name__ == "__main__":
         if n % 100 == 0:
             print(n)
 
-    pickle.dump(url_unique_keys,open('url_2_unique_key.pkl','wb'))
-    pickle.dump(urls_needed,open('fulltext_needed_urls.pkl','wb'))
+    pickle.dump(url_unique_keys,open('/u/scr/yiweil/sci-debates/scraping/url_2_unique_key.pkl','wb'))
+    pickle.dump(urls_needed,open('/u/scr/yiweil/sci-debates/scraping/fulltext_needed_urls.pkl','wb'))

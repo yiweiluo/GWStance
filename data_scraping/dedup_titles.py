@@ -42,7 +42,7 @@ def is_same(u1,u2):
 
 
 if __name__ == "__main__":
-    combined_df_ft = pd.read_pickle('temp_combined_df_with_fulltext.pkl')
+    combined_df_ft = pd.read_pickle('/u/scr/yiweil/sci-debates/scraping/temp_combined_covid_df_with_fulltext.pkl')
     outlet_groups = combined_df_ft.groupby('domain')
     print(combined_df_ft.shape)
 
@@ -63,7 +63,7 @@ if __name__ == "__main__":
                     print('New df title values:{}, {}'.format(combined_df_ft.loc[index2].title,
                          combined_df_ft.loc[index1].title))
 
-        combined_df_ft.to_pickle('temp_combined_df_with_fulltext.pkl')
+        combined_df_ft.to_pickle('/u/scr/yiweil/sci-debates/scraping/temp_combined_covid_df_with_fulltext.pkl')
 
     print('Finished! Saving...')
-    combined_df_ft.to_pickle('temp_combined_df_with_fulltext.pkl')
+    combined_df_ft.to_pickle('/u/scr/yiweil/sci-debates/scraping/temp_combined_covid_df_with_fulltext.pkl')

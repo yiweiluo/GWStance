@@ -4,6 +4,7 @@ import numpy as np
 import json
 import time
 from nltk.tokenize import sent_tokenize
+import pickle
 
 fulltext_dir='/u/scr/yiweil/sci-debates/scraping/fulltexts/'
 fnames = set(os.listdir(fulltext_dir))
@@ -22,7 +23,10 @@ def get_fname(url,fulltext_dir=fulltext_dir):
 
 def get_fulltext(url,fulltext_dir=fulltext_dir):
     fname = url.replace('/','[SEP]')
+    #print('fname:',fname)
+
     if fname+'.txt' in fnames or fname[:90]+'.txt' in fnames:
+        #print('ft exists')
         try:
             with open(fulltext_dir+fname+'.txt','r') as f:
                 lines = f.readlines()
@@ -255,16 +259,30 @@ def get_quotes(text):
 if __name__ == "__main__":
     df = pd.read_pickle('/u/scr/yiweil/sci-debates/scraping/dedup_combined_df.pkl')
     print('Length of df:',len(df))
+    covid_df = df.loc[df.topic=='covid']
+    print('Length of COVID df:',len(covid_df))
+    missing_urls = pickle.load(open('/u/scr/yiweil/sci-debates/prepro/missing_urls.pkl','rb'))
+    print('len missing:',len(missing_urls))
 
+    
     start_time = time.time()
-    for url_ix in range(17621+80,len(df)):#missing:#len(df)):
-        curr_url = df.url.values[url_ix]
-        quotes = get_quotes(get_fulltext(curr_url)[0])
-        fname = get_fname(curr_url)
-        with open('/u/scr/yiweil/sci-debates/prepro/extracted_quotes/{}.jl'.format(fname),'w+') as f:
-            for res in quotes:
-                json.dump(res, f)
-                f.write('\n')
+    for url_ix in missing_urls:#missing:#len(df)):
+        curr_url = covid_df.url.values[url_ix]
+        #print(url_ix,curr_url)
+        #print(get_fulltext(curr_url))
+        ft = get_fulltext(curr_url)
+        if len(ft) > 0:
+            quotes = get_quotes(ft[0])
+        # with open('/u/scr/yiweil/sci-debates/scraping/fulltexts/temp.txt','r') as f:
+        #     ft = f.readlines()
+        # print(ft)
+        #quotes = get_quotes(ft[0])
+            fname = get_fname(curr_url)
+            with open('/u/scr/yiweil/sci-debates/prepro/extracted_quotes/{}.jl'.format(fname),'w+') as f:
+                for res in quotes:
+                    json.dump(res, f)
+                    f.write('\n')
+
         if url_ix % 100 == 0:
             print(url_ix,curr_url)
             print('Elapsed time in minutes:',(time.time()-start_time)/60.)
