@@ -99,8 +99,8 @@ def build_dataloader(*args, sampler='random'):
     #print(data[0])
     data = TensorDataset(*data)
 
-    #sampler = RandomSampler(data) if sampler == 'random' else SequentialSampler(data)
-    dataloader = DataLoader(data, batch_size=1)
+    sampler = RandomSampler(data) if sampler == 'random' else SequentialSampler(data)
+    dataloader = DataLoader(data, sampler=sampler, batch_size=1)
 
     return dataloader
 
@@ -112,18 +112,24 @@ def get_out_data(dat_path,max_seq_length=500):
 
     out = defaultdict(list)
 
-    print('Number of examples to predict:',len(data))
+    print('Number of examples:',len(data))
     to_predict = data.text.values
     true = data.label.values
 
-    for dat_ix in range(len(data)):
+    for dat_ix in range(0,len(data)):
         sent = to_predict[dat_ix]
         #print(sent)
         label = true[dat_ix]
-        encoded_sent = tokenizer.encode(sent,add_special_tokens=True)
+        encoded_sent = tokenizer.encode(sent,add_special_tokens=True)[1:] # remove [CLS] auto-inserted at beginning
+        #print('encoded sent:',encoded_sent)
+        CLS_ix = encoded_sent.index(101)
+        SEP_ix = encoded_sent[CLS_ix:].index(102)+CLS_ix
         out['input_ids'].append(encoded_sent)
         out['sentences'].append(sent)
         out['label'].append(label)
+        out['index_CLS'].append(CLS_ix)
+        out['index_SEP_after_CLS'].append(SEP_ix)
+        #print(encoded_sent[CLS_ix])
 
     out['input_ids'] = pad_sequences(
             out['input_ids'],
@@ -136,9 +142,16 @@ def get_out_data(dat_path,max_seq_length=500):
 
     print('Adding attention masks...')
     # get attn masks
-    for sent in out['input_ids']:
+    for sent_no,sent in enumerate(out['input_ids']):
         tok_type_ids = [0 for tok_id in sent]
-        mask = [int(tok_id > 0) for tok_id in sent]
+        #print('tok type ids:',tok_type_ids
+        #     )
+        #mask = [int(tok_id > 0) for tok_id in sent]
+        #print('old mask:',mask)
+        #print('CLS index:',out['index_CLS'][sent_no])
+        #print('SEP index:',out['index_SEP_after_CLS'][sent_no])
+        mask = [0 if n < out['index_CLS'][sent_no] or n > out['index_SEP_after_CLS'][sent_no] else 1
+                for n,tok_id in enumerate(sent)]
         out['attention_mask'].append(mask)
         out['token_type_ids'].append(tok_type_ids)
     #print(len(out['labels']))
@@ -167,7 +180,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--num_epochs",
-        default=3,
+        default=10,
         type=int,
         help="fine tuning epochs"
     )
@@ -292,10 +305,19 @@ if __name__ == "__main__":
     print(model_path)
 
     # Load model
-    config = BertConfig.from_pretrained(model_path, num_labels=NUM_LABELS)
-    tokenizer = AutoTokenizer.from_pretrained(model_path)
-    model = AutoModelForSequenceClassification.from_pretrained(model_path,
-                                                              config=config)
+    # config = BertConfig.from_pretrained(model_path, num_labels=NUM_LABELS)
+    # tokenizer = AutoTokenizer.from_pretrained(model_path)
+    # model = AutoModelForSequenceClassification.from_pretrained(model_path,
+    #                                                           config=config)
+    config = BertConfig.from_pretrained('bert-base-uncased', num_labels=3)
+    model = BertForSequenceClassification.from_pretrained(
+        "bert-base-uncased",
+        num_labels=3,
+        output_attentions=True,
+        output_hidden_states=False,
+    )
+    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=(ARGS.casing=='uncased'))
+
     optimizer = AdamW(model.parameters(), lr=ARGS.learning_rate, eps=1e-8)
     model.to(ARGS.device)
 
@@ -303,10 +325,13 @@ if __name__ == "__main__":
 
     # Load data for prediction/eval
     eval_set = 'test' if ARGS.eval_on_test else 'dev' # can also be 'test'
-    eval_data = pd.read_csv(os.path.join(DATA_DIR,eval_set+'.tsv'),
-                              sep='\t',header=None)
-    eval_data.columns = ['text','label']#,'outlet']
-    print('Num eval examples:',len(eval_data))
+    eval_dat_path = os.path.join(DATA_DIR,eval_set+'.tsv')
+    eval_data = get_out_data(eval_dat_path,max_seq_length=500)
+
+    test_inputs, test_labels, test_masks = eval_data['input_ids'], eval_data['label'], eval_data['attention_mask']
+    test_dataloader = build_dataloader(
+        test_inputs, test_labels, test_masks,
+        sampler='order')
 
     # Prepare training data
     if ARGS.do_train:
@@ -331,16 +356,9 @@ if __name__ == "__main__":
             data = get_out_data(os.path.join(DATA_DIR, 'train.tsv'))
             pickle.dump(data, open(ARGS.output_dir + "/data.cache.pkl", 'wb'))
 
-
-        train_inputs, test_inputs, train_labels, test_labels, train_masks, test_masks, = train_test_split(
-        data['input_ids'], data['label'], data['attention_mask'],
-        random_state=ARGS.seed, test_size=0.1)
-
+        train_inputs, train_labels, train_masks = data['input_ids'], data['label'], data['attention_mask']
         train_dataloader = build_dataloader(
             train_inputs, train_labels, train_masks)
-        test_dataloader = build_dataloader(
-            test_inputs, test_labels, test_masks,
-            sampler='order')
 
         total_steps = len(train_dataloader) * ARGS.num_epochs
         scheduler = get_linear_schedule_with_warmup(
@@ -378,8 +396,8 @@ if __name__ == "__main__":
 
                 #print(len(outputs))
 
-                #loss, _, _ = outputs
-                loss, _ = outputs
+                loss, _, _ = outputs
+                #loss, _ = outputs
                 losses.append(loss.item())
 
                 loss.backward()
@@ -405,7 +423,7 @@ if __name__ == "__main__":
     losses = []
     all_preds = []
     all_labels = []
-    log = open(ARGS.output_dir + '/epoch%d.log' % epoch_i, 'w')
+    log = open(ARGS.output_dir + '/log', 'w')
     for step, batch in enumerate(test_dataloader):
 
         if CUDA:
@@ -417,8 +435,8 @@ if __name__ == "__main__":
                 input_ids,
                 attention_mask=masks,
                 labels=labels)
-        #loss, logits, attns = outputs
-        loss, logits = outputs
+        loss, logits, attns = outputs
+        #loss, logits = outputs
 
         losses.append(loss.item())
 
@@ -463,15 +481,15 @@ if __name__ == "__main__":
     # Want to save: model, config, vocab, eval results, preds, training_args,
     result = {'acc': acc,
         'f1':f1,
-        'cm':cm(all_preds, all_labels)}
+        'cm':cm(np.argmax(all_preds, axis=1),all_labels)}
 
     preds_df = pd.DataFrame({'true':all_labels,
-    'predicted':all_preds})
+    'predicted':np.argmax(all_preds, axis=1)})
     preds_df.to_csv(ARGS.output_dir+'/{}.tsv'.format(ARGS.pred_file_name),sep='\t',index=False)
 
     output_eval_file = os.path.join(ARGS.output_dir, "eval_results_{}.txt".format(ARGS.pred_file_name))
     with open(output_eval_file, "w") as writer:
-        logger.info("***** Eval results {} *****".format(prefix))
+        logger.info("***** Eval results *****")
         for key in sorted(result.keys()):
             logger.info("  %s = %s", key, str(result[key]))
             writer.write("%s = %s\n" % (key, str(result[key])))
