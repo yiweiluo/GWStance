@@ -1,6 +1,13 @@
 cc_stance/BERT/bert_preds/ 
 cc_stance/data_creation/data/vax_labeled_data_df.pkl
+../framing-twitter
 
+Analyses/topics/
+./cc_stance/data/mturk_french_backtranslations.tsv
+cc_stance/data/mturk_zh_backtranslations.tsv
+cc_stance/my_BERT
+framing-twitter
+./cc_stance/data_creation/scripts/save/
 
 cc_stance/BERT/
 cc_stance/LM_data/
