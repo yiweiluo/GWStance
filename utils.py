@@ -3,7 +3,8 @@ import re
 import glob
 
 fulltext_dir='/Users/yiweiluo/scientific-debates/data_scraping/fulltexts/'
-fnames = set(os.listdir(fulltext_dir))
+fulltext_dir_2='/Users/yiweiluo/scientific-debates/data_scraping/cc_fulltexts/'
+fnames = set(os.listdir(fulltext_dir)) | set(os.listdir(fulltext_dir_2))
 
 def fulltext_exists(url,fulltext_dir=fulltext_dir):
     fname = url.replace('/','[SEP]')
