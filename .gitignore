@@ -1,3 +1,9 @@
+4_analyses/topics
+scratchpad.ipynb
+quotes_per_year.pkl
+
+
+
 cc_stance/BERT/bert_preds/ 
 cc_stance/data_creation/data/vax_labeled_data_df.pkl
 ../framing-twitter
