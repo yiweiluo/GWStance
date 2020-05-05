@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import re
 import os
+from collections import defaultdict,Counter
 from sklearn.cluster import KMeans
 from sklearn import svm
 from numpy.random import RandomState
@@ -15,6 +16,7 @@ from sklearn.feature_extraction.text import HashingVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import BernoulliNB
 from sklearn import metrics
+from sklearn.metrics import matthews_corrcoef, f1_score, confusion_matrix, classification_report
 from datetime import timedelta
 from sklearn.utils import shuffle
 from sklearn.model_selection import train_test_split
@@ -35,6 +37,11 @@ def label2float(x):
         return -1.0
     else:
         return 0.0
+
+
+def classif_report(preds, labels):
+    target_names = ['agrees', 'neutral', 'disagrees']
+    return classification_report(labels, preds, labels=[0,1,2], target_names=target_names, output_dict=True)
 
 
 def load_data_splits(datadir):
@@ -77,12 +84,29 @@ def make_corpus(datadir,train_dat,val_dat=None):
         print(len(train_df),len(val_df))
 
     corpus_all = train_df
-    corpus_all.to_csv(datadir+'_corpus.csv', sep=',')
+    #corpus_all.to_csv(datadir+'_corpus.csv', sep=',')
     corpus = corpus_all['sentence']
     corpus_val = val_df
     print("length of the corpus: ",len(corpus))
 
     return (corpus_all,corpus_val)
+
+
+def do_majority_class(train_corpus,val_corpus,test_dat):
+    maj_class = sorted(Counter(train_corpus['stance']).items(),key=lambda x:x[1],reverse=True)[0][0]
+    print('Majority class:',maj_class)
+    pred_val = [maj_class]*len(val_corpus)
+    pred_test = [maj_class]*len(test_dat)
+
+    score_val = metrics.accuracy_score(val_corpus['stance'].apply(label2float),
+                                          pred_val)
+    score_test = metrics.accuracy_score(test_dat['stance'].apply(label2float), pred_test)
+    print("validation accuracy:   %0.3f" % score_val)
+    print("test accuracy:   %0.3f" % score_test)
+    val_f1s = classif_report(val_corpus['stance'].apply(label2float),pred_val)
+    test_f1s = classif_report(test_dat['stance'].apply(label2float), pred_test)
+
+    return {'dev acc':score_val,'test acc':score_test,'dev F1':val_f1s,'test F1':test_f1s}
 
 
 def do_svm(train_corpus,val_corpus,test_dat,unigram=False):
@@ -109,6 +133,10 @@ def do_svm(train_corpus,val_corpus,test_dat,unigram=False):
     score_u4 = metrics.accuracy_score(test_dat['stance'].apply(label2float), pred)
     print("validation accuracy:   %0.3f" % score_val_u4)
     print("test accuracy:   %0.3f" % score_u4)
+    val_f1s = classif_report(val_corpus['stance'].apply(label2float),pred_val)
+    test_f1s = classif_report(test_dat['stance'].apply(label2float), pred)
+
+    return {'dev acc':score_val_u4,'test acc':score_u4,'dev F1':val_f1s,'test F1':test_f1s}
 
 
 def do_rnn(train_corpus,val_corpus,test_dat):
@@ -166,12 +194,18 @@ def do_rnn(train_corpus,val_corpus,test_dat):
                  optimizer='adam',
                  metrics=['accuracy'])
     batch_size = 64
-    num_epochs = 5
+    num_epochs = 1#5
     history = model.fit(X_train, Y_train_cat, validation_data=(X_val, Y_val_cat),
                         batch_size=batch_size, epochs=num_epochs)
 
     score_val_t5 = history.history['val_accuracy'][-1]
     score_t5 = model.evaluate(X_test, Y_test_cat, verbose=0)[1]
+
+    pred_test = np.argmax(model.predict(X_test),axis=1)
+    #print('test preds:',pred_test)
+    pred_val = np.argmax(model.predict(X_val),axis=1)
+    val_f1s = classif_report(Y_val,pred_val)
+    test_f1s = classif_report(Y_test, pred_test)
 
     print("validation accuracy:   %0.3f" % score_val_t5)
     print("test accuracy:   %0.3f" % score_t5)
@@ -192,6 +226,8 @@ def do_rnn(train_corpus,val_corpus,test_dat):
     plt.xlabel('epoch')
     plt.legend(['train', 'val'], loc='upper left')
     plt.show()
+
+    return {'dev acc':score_val_t5,'test acc':score_t5,'dev F1':val_f1s,'test F1':test_f1s}
 
 
 def main():
@@ -215,16 +251,26 @@ def main():
     )
 
     parser.add_argument(
-        "--dataname",
+        "--datatype",
         default=None,
         type=str,
         required=True,
         help="Name of folder containing train.tsv etc.",
     )
 
+    parser.add_argument(
+        "--output_dir",
+        default=None,
+        type=str,
+        required=True,
+        help="Name of folder to write output.",
+    )
+
     args = parser.parse_args()
     glove_dir = args.glove_dir
     DATA_DIR = args.data_dir
+    datatype = args.datatype
+    n_folds = 10
 
     embeddings_index = {}
     f = open(glove_dir)
@@ -238,10 +284,36 @@ def main():
         embeddings_index[word] = coefs
     f.close()
 
-    res = load_data_splits(dataname)
-    print(len(res['train']),len(res['test']))
+    for fold in range(n_folds):
+        dataname = '{}_{}_fold_{}'.format(datatype,seed,fold)
+        res = load_data_splits(os.path.join(DATA_DIR,dataname))
+        print(fold,len(res['train']),len(res['dev']),len(res['test']))
 
-    tr_corpus,val_corpus = make_corpus(dataname,res['train'])
-    do_svm(tr_corpus,val_corpus,res['test'],unigram=True)
-    do_svm(tr_corpus,val_corpus,res['test'],unigram=False)
-    do_rnn(tr_corpus,val_corpus,res['test'])
+        tr_corpus,val_corpus = make_corpus(dataname,res['train'])
+        uni_svm_res = do_svm(tr_corpus,val_corpus,res['test'],unigram=True)
+        ngram_svm_res = do_svm(tr_corpus,val_corpus,res['test'],unigram=False)
+        rnn_res = do_rnn(tr_corpus,val_corpus,res['test'])
+        maj_class_res = do_majority_class(tr_corpus,val_corpus,res['test'])
+
+        results[fold]['SVM_unigram'] = uni_svm_res
+        results[fold]['SVM_ngram'] = ngram_svm_res
+        results[fold]['RNN'] = rnn_res
+        results[fold]['majority'] = maj_class_res
+
+    pickle.dump(results,open('{}_results'.format(datatype),'wb'))
+
+    df_models,df_accs = [],[]
+    df_f1s = defaultdict(list)
+    for model in ['majority','SVM_unigram','SVM_ngram','RNN']:
+        for eval_type in ['test acc']:
+            model_eval_accs = [results[f][model][eval_type] for f in range(n_folds)]
+            df_models.append(model)
+            df_accs.append(np.average(model_eval_accs))
+        for eval_type in ['test F1']:
+            for class_ in ['agrees','neutral','disagrees','macro avg']:
+                model_eval_f1s = [results[f][model][eval_type][class_]['f1-score'] for f in range(n_folds)]
+                #df_models.append(model)
+                df_f1s[class_].append(np.average(model_eval_f1s))
+
+    pd.DataFrame({'model':df_models,'test_acc':df_accs,'F_agrees':df_f1s['agrees'],'F_neutral':df_f1s['neutral'],
+             'F_disagrees':df_f1s['disagrees'],'F_avg':df_f1s['macro avg']}).to_csv(os.path.join(args.output_dir,'results.tsv'),sep='\t',index=False)
