@@ -19,28 +19,20 @@ from urllib.error import HTTPError
 from nltk.tokenize import sent_tokenize
 from urllib.error import URLError
 
-def soupify(url):
-    if url[:8] != 'https://':
-        if url[:4] != 'www.':
-            url = 'www.'+url
-        url = 'https://'+url
+ssl.match_hostname = lambda cert, hostname: True
+ssl._create_default_https_context = ssl._create_unverified_context
 
+def soupify(url):
     try:
         req = urllib.request.Request(url, headers={'User-Agent' : "Magic Browser"})
-        try:
-            con = urllib.request.urlopen( req )
-        except ssl.CertificateError:
-            return None
+        con = urllib.request.urlopen( req )
         html = con.read()
         soup = BeautifulSoup(html,'html.parser')
         return soup
-    except URLError:
+    except (URLError,TimeoutError) as e:
         return None
 
 def newspaper_parse(url):
-    if url[:8] != 'https://':
-        url = 'https://'+url
-
     try:
         article = Article(url)
         article.download()
@@ -124,6 +116,15 @@ def get_fulltext(url,domain):
     elif domain == 'daily_dot':
         title,text = newspaper_parse(url)
         stop_ix = -2
+    elif domain == 'www.dailysignal' or domain == 'daily_signal':
+        soup = soupify(url)
+        if soup is not None:
+            title = soup.find('h1').text.strip()
+            try:
+                ps = soup.find('div',attrs={'class':'tds-content'}).find_all('p')
+            except AttributeError:
+                ps = soup.find('div',attrs={'class':'amp-wp-article-content'}).find_all('p')
+            text = ' '.join([p.text.replace('\n',' ') for p in ps])
     elif domain == 'dallas_morning_news':
         soup = soupify(url)
         if soup is not None:
@@ -139,6 +140,15 @@ def get_fulltext(url,domain):
         text = ' '.join([p.text.replace('\n', ' ') for p in ps])
     elif domain == 'drudgereport':
         title,text = newspaper_parse(url)
+    elif domain == 'forbes':
+        soup = soupify(url)
+        if soup is not None:
+            try:
+                ps = soup.find('div',attrs={'class':'article-body fs-article fs-responsive-text current-article'}).find_all('p')
+                text = ' '.join([p.text.replace('\n', ' ') for p in ps])
+                title = soup.find('h1').text.strip()
+            except AttributeError:
+                pass
     elif domain == 'fox':
         title,text = newspaper_parse(url)
         stop_ix = -2
@@ -204,11 +214,35 @@ def get_fulltext(url,domain):
     elif domain == 'new_york_magazine':
         title,text = newspaper_parse(url)
         stop_ix = -2
+    elif domain == 'new_york_sun':
+        soup = soupify(url)
+        if soup is not None:
+            ps = soup.find('div',attrs={'itemprop':'articleBody'}).find_all('p')
+            text = ' '.join([p.text.replace('\n',' ') for p in ps])
+            title = soup.find('h1').text.strip()
+    elif domain == 'newsbusters':
+        soup = soupify(url)
+        if soup is not None:
+            ps = soup.find('div',attrs={'class':'field-item'}).find_all('p')
+            text = ' '.join([p.text.replace('\n',' ') for p in ps])
+            title = soup.find('h2').text.strip()
+        else:
+            title,text = newspaper_parse(url)
     elif domain == 'newsday':
         soup = soupify(url)
-        title = soup.find('div',attrs={'class':'sticky'}).find('header').find('h1').text.strip()
-        ps = soup.find('div',attrs={'id':'contentAccess'}).find_all('p')
-        text = ' '.join([p.text.replace('\n',' ') for p in ps])
+        if soup is not None:
+            title = soup.find('div',attrs={'class':'sticky'}).find('header').find('h1').text.strip()
+            ps = soup.find('div',attrs={'id':'contentAccess'}).find_all('p')
+            text = ' '.join([p.text.replace('\n',' ') for p in ps])
+        else:
+            title,text = newspaper_parse(url)
+    elif domain == 'newsmax':
+        soup = soupify(url)
+        if soup is not None:
+            title = soup.find('h1',attrs={'itemprop':'headline'}).text.strip()
+            text = soup.find('div',attrs={'id':'mainArticleDiv'}).text.replace('\n',' ')
+        else:
+            title,text = newspaper_parse(url)
     elif domain == 'newsweek':
         soup = soupify(url)
         ps = soup.find('div',attrs={'class':'article-content'}).find_all('p')
@@ -216,6 +250,8 @@ def get_fulltext(url,domain):
     elif domain == 'newswithviews':
         title,text = newspaper_parse(url)
         stop_ix = -10
+    elif domain == 'ny_post':
+        title,text = newspaper_parse(url)
     elif domain == 'nyt':
         try:
             soup = soupify(url)
@@ -228,6 +264,8 @@ def get_fulltext(url,domain):
     elif domain == 'pajamas_media':
         title,text = newspaper_parse(url)
         stop_ix = -2
+    elif domain == 'patriotpost.us':
+        title,text = newspaper_parse(url)
     elif domain == 'pj':
         title,text = newspaper_parse(url)
         stop_ix = -2
@@ -244,18 +282,29 @@ def get_fulltext(url,domain):
     elif domain == 'rare.us':
         title,text = newspaper_parse(url)
         stop_ix = -2
-    elif domain == 'www.realclearpolitics':
+    elif domain == 'real_clear_politics':
         soup = soupify(url)
-        try:
-            ps = soup.find('div',attrs={'class':'article_body'}).find_all('p',recursive=False)
-            text = ' '.join([p.text.replace('\n',' ') for p in ps])
-        except AttributeError:
-            pass
+        if soup is not None:
+            try:
+                ps = soup.find('div',attrs={'class':'article-body-text'}).find_all('p')
+                text = ' '.join([p.text.replace('\n',' ') for p in ps])
+                title = soup.find('h1').text.strip()
+            except AttributeError:
+                try:
+                    ps = soup.find('div',attrs={'class':'article_body'}).find_all('p',recursive=False)
+                    text = ' '.join([p.text.replace('\n',' ') for p in ps])
+                except AttributeError:
+                    try:
+                        ps = soup.find('div',attrs={'id':'alpha'}).find_all('p')
+                        text = ' '.join([p.text.replace('\n',' ') for p in ps])
+                    except AttributeError:
+                        pass
+        if title is None:
+            try:
+                title = soup.find('h2').text.strip()
+            except AttributeError:
+                pass
 
-        try:
-            title = soup.find('h2').text.strip()
-        except AttributeError:
-            pass
     elif domain == 'reason':
         title,text = newspaper_parse(url)
         stop_ix = -3
@@ -275,6 +324,8 @@ def get_fulltext(url,domain):
         title,text = newspaper_parse(url)
         stop_ix = -2
     elif domain == 'the_american_spectator':
+        title,text = newspaper_parse(url)
+    elif domain == 'the_columbus_dispatch':
         title,text = newspaper_parse(url)
     elif domain == 'the_nation':
         title,text = newspaper_parse(url)
@@ -328,78 +379,65 @@ def get_fulltext(url,domain):
     elif domain == 'vox':
         title,text = newspaper_parse(url)
         stop_ix = -2
+    elif domain == 'washington_times':
+        title,text = newspaper_parse(url)
     elif domain == 'wapo':
         title,text = newspaper_parse(url)
         stop_ix = -2
+    elif domain == 'wnd':
+        soup = soupify(url)
+        if soup is not None:
+            title = soup.find('h1').text.strip()
+            ps = soup.find('div',attrs={'class':'entry-content'}).find_all('p')
+            text = ' '.join([p.text.replace('\n',' ') for p in ps])
     else:
         print('Unknown domain:',domain)
-        with open('unknown_domains.txt','a') as f:
+        with open('unknown_domains.txt','w') as f:
             f.write(domain+'\n')
 
     if text is not None and len(text) > 0:
         text = text.strip()
         sent_tokens = sent_tokenize(text)
 
-        # Remove final 2 sentences (usually about social media)
+        # Remove final few sentences (usually about social media)
         sent_tokens = sent_tokens[:stop_ix]
         text = ' '.join(sent_tokens)
 
     return (title,text)
 
 
-SEP_TOK = '[SEP]'
-
-
 if __name__ == "__main__":
-    combined_df = pd.read_pickle('/u/scr/yiweil/sci-debates/scraping/temp_combined_df.pkl')
-    urls_without_ft = pickle.load(open('/u/scr/yiweil/sci-debates/scraping/new_urls_without_ft.pkl','rb'))
-    print(len(urls_without_ft))
+    combined_df = pd.read_pickle('/u/scr/yiweil/sci-debates/scraping/missing_temp_known_combined_df.pkl')
+    #urls_without_ft = pickle.load(open('/u/scr/yiweil/sci-debates/scraping/new_urls_without_ft.pkl','rb'))
+    #print(len(urls_without_ft))
     print(combined_df.shape)
-    combined_df_missing_indices = combined_df.loc[combined_df.url.isin(urls_without_ft)]
+    #combined_df.reset_index(drop=True,inplace=True)
+    print(combined_df.index)
+    #combined_df['guid'] = ['url_no_{}'.format(i) for i in range(len(combined_df))]
+    #combined_df_missing_indices = combined_df.loc[combined_df.url.isin(urls_without_ft)]
     #covid_df = combined_df.loc[combined_df.topic=='covid']
     #print(covid_df.shape)
 
-    urls_needed = []
-    url_unique_keys = {}
     new_n = 0
     if not os.path.exists('/u/scr/yiweil/sci-debates/scraping/fulltexts_{}'.format(new_n)):
         os.mkdir('/u/scr/yiweil/sci-debates/scraping/fulltexts_{}'.format(new_n))
 
-    for n,ix in enumerate(combined_df_missing_indices.index[15000+51800:]):
-        row = combined_df.loc[ix]
-        assert row.shape == (7,)
+    for n in range(len(combined_df)):
+        row = combined_df.iloc[n]
+        assert row.shape == (8,)
         url = row['url']
+        scrape_url = 'https://'+url
         domain = row['domain']
         title = row['title']
+        guid = row['guid']
         try:
-            newspaper_title,ft = get_fulltext(url,domain)
-
-            # Replace title w/ newspaper title if it's longer
-            if newspaper_title is not None and \
-            title is not None and \
-            len(newspaper_title) > len(title):
-                title = newspaper_title
-            # Replace title w/ newspaper title if the former is null but
-            # not the latter
-            elif newspaper_title is not None and title is None:
-                title = newspaper_title
-            else:
-                pass
+            newspaper_title,ft = get_fulltext(scrape_url,domain)
 
             if ft is not None:
-                save_url = SEP_TOK.join(url.split('/'))
-                try:
-                    with open('/u/scr/yiweil/sci-debates/scraping/fulltexts_{}/{}.txt'.format(new_n,save_url),'w') as f:
-                        f.write(ft)
-                    url_unique_keys[url] = save_url
-                except OSError:
-                    with open('/u/scr/yiweil/sci-debates/scraping/fulltexts_{}/{}.txt'.format(new_n,save_url[:90]),'w') as f:
-                        f.write(ft)
-                    url_unique_keys[url] = save_url[:90]
-            else:
-                urls_needed.append(ix)
+                with open('/u/scr/yiweil/sci-debates/scraping/fulltexts_{}/{}.txt'.format(new_n,guid),'w') as f:
+                    f.write(ft)
         except AttributeError:
-            urls_needed.append(ix)
+            pass
 
         if n % 100 == 0:
             print(n)
@@ -409,5 +447,5 @@ if __name__ == "__main__":
             if not os.path.exists('/u/scr/yiweil/sci-debates/scraping/fulltexts_{}'.format(new_n)):
                 os.mkdir('/u/scr/yiweil/sci-debates/scraping/fulltexts_{}'.format(new_n))
 
-    pickle.dump(url_unique_keys,open('/u/scr/yiweil/sci-debates/scraping/url_2_unique_key.pkl','wb'))
-    pickle.dump(urls_needed,open('/u/scr/yiweil/sci-debates/scraping/fulltext_needed_urls.pkl','wb'))
+    #pickle.dump(url_unique_keys,open('/u/scr/yiweil/sci-debates/scraping/url_2_unique_key.pkl','wb'))
+    #pickle.dump(urls_needed,open('/u/scr/yiweil/sci-debates/scraping/fulltext_needed_urls.pkl','wb'))
