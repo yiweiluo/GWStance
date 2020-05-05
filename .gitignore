@@ -1,4 +1,10 @@
 3_cc_stance
+1_data_scraping/0_get_urls_and_scraping_scratch.ipynb
+1_data_scraping/cc_texts/
+1_data_scraping/combined_df_missing.pkl
+1_data_scraping/temp_combined_cc_df_with_fulltext.pkl
+1_data_scraping/temp_known_combined_df.pkl
+1_data_scraping/url_meta/
 
 
 1_data_scraping/cc_fulltexts
