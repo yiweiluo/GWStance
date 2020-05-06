@@ -16,7 +16,6 @@ import datetime
 
 # Set up MediaCloud API
 import mediacloud.api
-MC_API_KEY = ""
 with open('MC_API_KEY.txt','r') as f:
     MC_API_KEY = f.read()
 mc = mediacloud.api.MediaCloud(MC_API_KEY)
@@ -26,7 +25,8 @@ mc_ids.reset_index(drop=True, inplace=True)
 
 # Set up SerpAPI
 from serpapi.google_search_results import GoogleSearchResults
-SERP_API_KEY = "481df24348cbec5d00f65baa55986d30b3b1ef2b09c5ab9de0f667dd43ce51d2"
+with open('SERP_API_KEY.txt','r') as f:
+    SERP_API_KEY = f.read()
 query_params = {"location":"United States", "device":"desktop", "hl":"en", "gl":"us", "serp_api_key":SERP_API_KEY}
 CC_KEYWORDS = ['climate_change','global_warming','fossil_fuels','carbon_dioxide','co2']
 client = GoogleSearchResults(query_params)
