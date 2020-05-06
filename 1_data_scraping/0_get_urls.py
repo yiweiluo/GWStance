@@ -104,7 +104,8 @@ def get_urls():
     pickle.dump(URLS_PER_DOMAIN,open('google_search_res_climate_change.pkl','wb'))
 
     # Collect stories from each outlet using MediaCloud
-    os.mkdir('./mediacloud')
+    if not os.path.exists('./mediacloud'):
+        os.mkdir('./mediacloud')
     for curr_outlet_ix in mc_ids.index:
         curr_outlet_id = mc_ids.iloc[curr_outlet_ix]['media_id']
         curr_outlet_stance = mc_ids.iloc[curr_outlet_ix]['leaning']
