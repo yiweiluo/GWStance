@@ -16,7 +16,10 @@ import datetime
 
 # Set up MediaCloud API
 import mediacloud.api
-mc = mediacloud.api.MediaCloud('af45669619d65786ea20f7a6d1c8d8fa59ca859f25bb3f5aacfe1be49f9f3fa3')
+MC_API_KEY = ""
+with open('MC_API_KEY.txt','r') as f:
+    MC_API_KEY = f.read()
+mc = mediacloud.api.MediaCloud(MC_API_KEY)
 mc_metadata = ['ap_syndicated','language','media_id','media_name','publish_date','title','guid','url','word_count']
 mc_ids = pd.read_pickle('mediacloud_ids.pkl')
 mc_ids.reset_index(drop=True, inplace=True)
@@ -398,7 +401,7 @@ def create_filtered_df():
 
 if __name__ == "__main__":
     print('Getting URLs...')
-    #get_urls()
+    get_urls()
     print('Done retrieving URLs!')
 
     print('Creating intermediate dataframe...')
