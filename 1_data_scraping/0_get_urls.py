@@ -330,7 +330,7 @@ def create_filtered_df():
     filtered_topics = []
     filtered_is_AP = []
 
-    google_cc_urls = pickle.load(open('google_search_res_climate_change.pkl','rb')) 
+    google_cc_urls = pickle.load(open('google_search_res_climate_change.pkl','rb'))
     mediacloud_cc_urls = pd.read_pickle('mediacloud_df.pkl')
 
     for key in google_cc_urls:
@@ -397,7 +397,7 @@ def create_filtered_df():
 
 if __name__ == "__main__":
     print('Getting URLs...')
-    get_urls()
+    #get_urls()
     print('Done retrieving URLs!')
 
     print('Creating intermediate dataframe...')
