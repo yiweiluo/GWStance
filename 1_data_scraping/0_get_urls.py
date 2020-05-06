@@ -384,6 +384,7 @@ def create_filtered_df():
     combined_df.title = combined_df.title.apply(lambda x: x.strip().lower() if x
                                            is not None else x)
     stance_reg_dict = {'l':'pro','r':'anti','c':'between','pro':'pro','anti':'anti','between':'between'}
+    combined_df = combined_df.loc[~pd.isnull(combined_df.stance)]
     combined_df['stance'] = combined_df.stance.apply(lambda x: stance_reg_dict[x])
     #combined_df.stance.value_counts()
     combined_df['date'] = combined_df['date'].apply(standardize_date)
