@@ -16,7 +16,7 @@ import datetime
 
 # Set up MediaCloud API
 import mediacloud.api
-mc = mediacloud.api.MediaCloud('feb32a16d870132da7e7d93a0414d796fec95edd30a55d453075927d083a807b')
+mc = mediacloud.api.MediaCloud('af45669619d65786ea20f7a6d1c8d8fa59ca859f25bb3f5aacfe1be49f9f3fa3s')
 mc_metadata = ['ap_syndicated','language','media_id','media_name','publish_date','title','guid','url','word_count']
 mc_ids = pd.read_pickle('mediacloud_ids.pkl')
 mc_ids.reset_index(drop=True, inplace=True)
