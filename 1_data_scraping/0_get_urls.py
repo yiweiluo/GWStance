@@ -18,7 +18,8 @@ import datetime
 import mediacloud.api
 mc = mediacloud.api.MediaCloud('feb32a16d870132da7e7d93a0414d796fec95edd30a55d453075927d083a807b')
 mc_metadata = ['ap_syndicated','language','media_id','media_name','publish_date','title','guid','url','word_count']
-mc_ids = pd.read_pickle('mediacloud_ids.pkl').reset_index(drop=True, inplace=True)
+mc_ids = pd.read_pickle('mediacloud_ids.pkl')
+mc_ids.reset_index(drop=True, inplace=True)
 
 # SCRAPE_DIR = os.getcwd()
 # os.chdir('..')
@@ -103,13 +104,14 @@ def get_urls():
     pickle.dump(URLS_PER_DOMAIN,open('google_search_res_climate_change.pkl','wb'))
 
     # Collect stories from each outlet using MediaCloud
+    os.mkdir('./mediacloud')
     for curr_outlet_ix in mc_ids.index:
         curr_outlet_id = mc_ids.iloc[curr_outlet_ix]['media_id']
         curr_outlet_stance = mc_ids.iloc[curr_outlet_ix]['leaning']
         fetch_size = 5000
         stories = []
         last_processed_stories_id = 0
-        for start_year in range(2000,2021,5): # Start collecting stories from Jan. 1, 2000
+        for start_year in range(2020,2021,5): # Start collecting stories from Jan. 1, 2000
             while len(stories) < 10000:
                 fetched_stories = mc.storyList('(climate AND chang*) OR (global AND warming) OR (carbon AND dioxide) OR (co2) OR (fossil AND fuel*) AND media_id:{}'.format(curr_outlet_id),
                                                solr_filter=mc.publish_date_query(datetime.date(start_year,1,1), datetime.date(start_year+4,12,31)),
