@@ -21,11 +21,6 @@ mc_metadata = ['ap_syndicated','language','media_id','media_name','publish_date'
 mc_ids = pd.read_pickle('mediacloud_ids.pkl')
 mc_ids.reset_index(drop=True, inplace=True)
 
-# SCRAPE_DIR = os.getcwd()
-# os.chdir('..')
-# from utils import get_fname,fulltext_exists
-# os.chdir(SCRAPE_DIR)
-
 # Set up SerpAPI
 from serpapi.google_search_results import GoogleSearchResults
 SERP_API_KEY = "481df24348cbec5d00f65baa55986d30b3b1ef2b09c5ab9de0f667dd43ce51d2"
@@ -334,6 +329,9 @@ def create_filtered_df():
     filtered_stances = []
     filtered_topics = []
     filtered_is_AP = []
+
+    google_cc_urls = pickle.load(open('google_search_res_climate_change.pkl','rb')) 
+    mediacloud_cc_urls = pd.read_pickle('mediacloud_df.pkl')
 
     for key in google_cc_urls:
         for keyword in google_cc_urls[key]:
