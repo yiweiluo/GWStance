@@ -5,6 +5,10 @@
 1_data_scraping/temp_combined_cc_df_with_fulltext.pkl
 1_data_scraping/temp_known_combined_df.pkl
 1_data_scraping/url_meta/
+1_data_scraping/leaning_needed.csv
+1_data_scraping/1_scraping_main.ipynb
+1_data_scraping/mediacloud_collections/
+
 
 
 1_data_scraping/cc_fulltexts
