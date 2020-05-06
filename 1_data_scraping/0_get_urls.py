@@ -14,6 +14,10 @@ import numpy as np
 import glob
 import datetime
 
+config = json.load(open('../config.json', 'r'))
+MC_API_KEY = config['MC_API_KEY']
+SERP_API_KEY = config['SERP_API_KEY']
+
 # Set up MediaCloud API
 import mediacloud.api
 with open('MC_API_KEY.txt','r') as f:
