@@ -60,9 +60,9 @@ if __name__ == "__main__":
                 if is_same(t1,t2):
                     print('Match found!')
                     # Set reg_title of t1 to be t2
+                    print('Changing df title value from {} to {}'.format(combined_df_ft.loc[index1].reg_title,
+                         combined_df_ft.loc[index2].reg_title))
                     combined_df_ft.at[index1,'reg_title'] = t2
-                    print('New df title values:{}, {}'.format(combined_df_ft.loc[index2].reg_title,
-                         combined_df_ft.loc[index1].reg_title))
 
         combined_df_ft.to_pickle('/u/scr/yiweil/sci-debates/scraping/temp_combined_df_with_ft_date_title_dedup.pkl')
 
