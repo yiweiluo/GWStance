@@ -2,6 +2,9 @@ import re
 import pandas as pd
 import os
 
+config = json.load(open('../config.json', 'r'))
+REMOTE_SCRAPE_DIR = config['REMOTE_SCRAPE_DIR']
+
 def regularize_title(t):
     return re.sub("[^A-Za-z0-9.,']+", ' ', t.lower().strip()).strip()
 
@@ -42,7 +45,7 @@ def is_same(u1,u2):
 
 
 if __name__ == "__main__":
-    combined_df_ft = pd.read_pickle('/u/scr/yiweil/sci-debates/scraping/temp_combined_df_with_ft_date_title.pkl')
+    combined_df_ft = pd.read_pickle(REMOTE_SCRAPE_DIR+'/temp_combined_df_with_ft_date_title.pkl')
     outlet_groups = combined_df_ft.groupby('domain')
     print(combined_df_ft.shape)
 
@@ -64,8 +67,8 @@ if __name__ == "__main__":
                          combined_df_ft.loc[index2].reg_title))
                     combined_df_ft.at[index1,'reg_title'] = t2
 
-        combined_df_ft.to_pickle('/u/scr/yiweil/sci-debates/scraping/temp_combined_df_with_ft_date_title_dedup.pkl')
+        combined_df_ft.to_pickle(REMOTE_SCRAPE_DIR+'/temp_combined_df_with_ft_date_title_dedup.pkl')
 
     combined_df_ft = combined_df_ft.drop_duplicates('reg_title',keep='first')
     print('Finished! Saving...')
-    combined_df_ft.to_pickle('/u/scr/yiweil/sci-debates/scraping/temp_combined_df_with_ft_date_title_dedup.pkl')
+    combined_df_ft.to_pickle(REMOTE_SCRAPE_DIR+'/temp_combined_df_with_ft_date_title_dedup.pkl')
