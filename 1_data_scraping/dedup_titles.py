@@ -59,11 +59,13 @@ if __name__ == "__main__":
                 #print('Titles: {}, {}'.format(t1,t2))
                 if is_same(t1,t2):
                     print('Match found!')
-                    combined_df_ft.at[index1,'title'] = t2
-                    print('New df title values:{}, {}'.format(combined_df_ft.loc[index2].title,
-                         combined_df_ft.loc[index1].title))
+                    # Set reg_title of t1 to be t2
+                    combined_df_ft.at[index1,'reg_title'] = t2
+                    print('New df title values:{}, {}'.format(combined_df_ft.loc[index2].reg_title,
+                         combined_df_ft.loc[index1].reg_title))
 
         combined_df_ft.to_pickle('/u/scr/yiweil/sci-debates/scraping/temp_combined_df_with_ft_date_title_dedup.pkl')
 
+    combined_df_ft = combined_df_ft.drop_duplicates('reg_title',keep='first')
     print('Finished! Saving...')
     combined_df_ft.to_pickle('/u/scr/yiweil/sci-debates/scraping/temp_combined_df_with_ft_date_title_dedup.pkl')
