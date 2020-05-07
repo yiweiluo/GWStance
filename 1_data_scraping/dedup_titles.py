@@ -6,6 +6,7 @@ def regularize_title(t):
     return re.sub("[^A-Za-z0-9.,']+", ' ', t.lower().strip()).strip()
 
 def d_l_dist(s1, s2):
+    """Compute Damerau-Levenshtein distance between s1 and s2"""
     d = {}
     lenstr1 = len(s1)
     lenstr2 = len(s2)
@@ -31,8 +32,7 @@ def d_l_dist(s1, s2):
     return d[lenstr1-1,lenstr2-1]
 
 def is_same(u1,u2):
-    #Djk ≤ 0.2 × Min.[|Tj|,|Tk|]
-    # determine Damerau-Levensthtein edit distance
+    """Determine whether Djk ≤ 0.2 × Min.[|Tj|,|Tk|]"""
     D_jk = d_l_dist(u1,u2)
     t_j = len(u1)
     t_k = len(u2)
@@ -42,7 +42,7 @@ def is_same(u1,u2):
 
 
 if __name__ == "__main__":
-    combined_df_ft = pd.read_pickle('/u/scr/yiweil/sci-debates/scraping/temp_combined_covid_df_with_fulltext.pkl')
+    combined_df_ft = pd.read_pickle('/u/scr/yiweil/sci-debates/scraping/temp_combined_df_with_ft_date_title.pkl')
     outlet_groups = combined_df_ft.groupby('domain')
     print(combined_df_ft.shape)
 
@@ -54,8 +54,8 @@ if __name__ == "__main__":
                 index1 = outlet_df.index[ix1]
                 index2 = outlet_df.index[ix2]
                 #print('Comparing titles of {} and {}...'.format(index1,index2))
-                t1 = regularize_title(outlet_df.loc[index1].title)
-                t2 = regularize_title(outlet_df.loc[index2].title)
+                t1 = outlet_df.loc[index1].reg_title
+                t2 = outlet_df.loc[index2].reg_title
                 #print('Titles: {}, {}'.format(t1,t2))
                 if is_same(t1,t2):
                     print('Match found!')
@@ -63,7 +63,7 @@ if __name__ == "__main__":
                     print('New df title values:{}, {}'.format(combined_df_ft.loc[index2].title,
                          combined_df_ft.loc[index1].title))
 
-        combined_df_ft.to_pickle('/u/scr/yiweil/sci-debates/scraping/temp_combined_covid_df_with_fulltext.pkl')
+        combined_df_ft.to_pickle('/u/scr/yiweil/sci-debates/scraping/temp_combined_df_with_ft_date_title_dedup.pkl')
 
     print('Finished! Saving...')
-    combined_df_ft.to_pickle('/u/scr/yiweil/sci-debates/scraping/temp_combined_covid_df_with_fulltext.pkl')
+    combined_df_ft.to_pickle('/u/scr/yiweil/sci-debates/scraping/temp_combined_df_with_ft_date_title_dedup.pkl')
