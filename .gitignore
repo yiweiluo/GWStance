@@ -8,8 +8,9 @@
 1_data_scraping/leaning_needed.csv
 1_data_scraping/1_scraping_main.ipynb
 1_data_scraping/mediacloud_collections/
-
-
+1_data_scraping/guessed_titles.pkl
+1_data_scraping/temp_combined_df_with_ft.pkl
+1_data_scraping/temp_combined_df_with_ft_date.pkl
 
 1_data_scraping/cc_fulltexts
 1_data_scraping/dedup_combined_df.pkl
