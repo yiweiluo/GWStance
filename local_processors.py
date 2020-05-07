@@ -10,8 +10,6 @@ from bs4 import BeautifulSoup
 from urllib.request import urlopen
 
 def soupify(url):
-    if url[:8] != 'https://' and url[:7] != 'http://':
-        url = 'http://'+url
         
     try:
         req = urllib.request.Request(url, headers={'User-Agent' : "Magic Browser"}) 
@@ -19,15 +17,16 @@ def soupify(url):
         html = con.read()
         soup = BeautifulSoup(html,'html.parser')
         return soup
-    except URLError:
+    except (URLError,TimeoutError) as e:
         return None
 
 # fulltext_dir='/Users/yiweiluo/scientific-debates/1_data_scraping/fulltexts/'
 # fulltext_dir_2='/Users/yiweiluo/scientific-debates/1_data_scraping/cc_fulltexts/'
 # fnames = set(os.listdir(fulltext_dir)) | set(os.listdir(fulltext_dir_2))
 
-fulltext_dir = './1_data_scraping/url_texts'
-meta_dir = './1_data_scraping/url_meta'
+BASE_DIR = '/Users/yiweiluo/scientific-debates'
+fulltext_dir = os.path.join(BASE_DIR,'1_data_scraping','url_texts')
+meta_dir = os.path.join(BASE_DIR,'1_data_scraping','url_meta')
 fnames = set(os.listdir(fulltext_dir))
 metanames = set(os.listdir(meta_dir))
 
