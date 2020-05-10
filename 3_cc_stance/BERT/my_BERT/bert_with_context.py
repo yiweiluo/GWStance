@@ -16,7 +16,6 @@ from tensorflow.python.keras.preprocessing.sequence import pad_sequences
 from sklearn.model_selection import train_test_split
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
 from transformers import get_linear_schedule_with_warmup
-#from tensorboardX import SummaryWriter
 import numpy as np
 import time
 import datetime
@@ -168,7 +167,7 @@ if __name__ == "__main__":
     # Required parameters
     parser.add_argument(
         "--max_seq_len",
-        default=500,
+        default=128,
         type=int,
         help="max seq len"
     )
@@ -176,17 +175,17 @@ if __name__ == "__main__":
         "--output_dir",
         default='output_dir',
         type=str,
-        help="num messages to include in context"
+        help="output dir"
     )
     parser.add_argument(
         "--num_epochs",
-        default=10,
+        default=7,
         type=int,
         help="fine tuning epochs"
     )
     parser.add_argument(
         "--batch_size",
-        default=10,
+        default=16,
         type=int,
         help="fine tuning epochs"
     )
@@ -198,13 +197,13 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--seed",
-        default=420,
+        default=42,
         type=int,
         help="fine tuning epochs"
     )
     parser.add_argument(
         "--downsample",
-        default=0.2,
+        default=0.0,
         type=float,
         help="p = prop examples to throw out"
     )
