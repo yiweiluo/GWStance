@@ -9,4 +9,4 @@ Out of copyright concerns, we do not make the full text of the corresponding URL
 	To run `0_get_urls.py`, you need to get API keys for both. You can register for a MediaCloud API key for free; SerpAPI is only free within a limited trial period. Once you have gotten API keys, either copy them to the respective fields in `config.json` (in the root directory), or save them to files named 'MC_API_KEY.txt' and 'SERP_API_KEY.txt', respectively, in your local copy of this sub-directory.
 
 
-* `dedup_titles.py` regularizes the headlines of fetched URLs for deduplication purposes.
+* `1_dedup_titles.py` regularizes the headlines of fetched URLs for deduplication purposes.
