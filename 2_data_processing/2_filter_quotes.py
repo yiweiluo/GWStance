@@ -65,6 +65,22 @@ def contains_keyword(stem_set):
     """Returns True if stem_set contains a CC keyword stem"""
     return len(set(stem_set).intersection(KEYWORD_STEMS)) > 0
 
+def prettify(clause):
+    """Clean comp. clause for classification."""
+    clause = re.sub('[^a-zA-Z0-9’“”"\'% \n\.]', '', clause)
+
+    # remove initial that, add periods, capitalize first word
+    split_clause = clause.split()
+    if split_clause[0] == 'that':
+        split_clause = split_clause[1:]
+    split_clause[0] = split_clause[0].capitalize()
+    clause_str = " ".join(split_clause).strip()
+
+    if clause_str[-1] != '.':
+        clause_str += "."
+
+    return clause_str
+
 
 def main():
     """Writes complement clauses of quotes (filtered down to those with a Householder stem as the quoting verb) to 'all_quote_comps.csv'.
@@ -128,8 +144,12 @@ def main():
     print('Filtering comp. clauses by keywords...')
     #keyword_quotes_df = quotes_df.loc[quotes_df['quote_stem_list'].apply(contains_keyword)]
     keyword_coref_quotes_df = quotes_df.loc[quotes_df['quote_stem_list_coref'].apply(contains_keyword)]
-    print('Found {} comp. clauses with keywords. Saving for classification...'.format(len(keyword_coref_quotes_df)))
-    keyword_coref_quotes_df[['guid','sent_no','quote_text','coref']].to_csv('keyword_filtered_comp_clauses.tsv'
+    print('Found {} comp. clauses with keywords.\n'.format(len(keyword_coref_quotes_df)))
+
+    print('Cleaning comp. clauses for classification...')
+    keyword_coref_quotes_df['clean_quote'] = keyword_coref_quotes_df['quote_text'].apply(prettify)
+    print('Saving...')
+    keyword_coref_quotes_df[['guid','sent_no','quote_text','coref','clean_quote']].to_csv('keyword_filtered_comp_clauses.tsv'
                                                                             ,sep='\t',header=True)
     print('Done!\n')
 
