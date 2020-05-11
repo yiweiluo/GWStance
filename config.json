@@ -3,5 +3,6 @@
   "SERP_API_KEY": "",
   "SEED": 42,
   "REMOTE_SCRAPE_DIR": "/u/scr/yiweil/sci_debates/scraping",
-  "REMOTE_PREPRO_DIR": "/u/scr/yiweil/sci_debates/prepro"
+  "REMOTE_PREPRO_DIR": "/u/scr/yiweil/sci_debates/prepro",
+  "QUOTES_DIR": "url_quotes"
 }
