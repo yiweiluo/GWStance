@@ -1,0 +1,49 @@
+Poll 1: 
+	Q: Do you think that the world's temperature has been going up over the past 100 years, or do you think this has not been happening?
+	a. Probably has been happening
+	b. Probably has not been happening
+
+Poll 2: 
+	Q (if chose a.): How sure are you that the world’s temperature has indeed been going up over the past 100 years?
+	Q (if chose b.): How sure are you that the world’s temperature has not been going up over the past 100 years?
+	a. Extremely sure
+	b. Very sure
+	c. Moderately sure
+	d. Somewhat sure
+	e. Not at all sure
+
+Poll 3: 
+	Q: Do you think that changes in the world’s temperature over the past 100 years have been caused mostly by things people have done, mostly by natural causes, or about equally by things people have done and by natural causes?
+	a. Mostly by things people have done
+	b. Mostly by natural causes
+	c. About equally by people and natural causes
+
+Poll 4:
+	Q: In your opinion, do you think the federal government should or should not limit the amount of greenhouse gases that U.S. businesses put out?
+	a. Federal government should limit
+	b. Federal government should not limit
+
+Poll 5:
+	Q: How concerned are you about global warming?
+	a. Extremely concerned
+	b. Very concerned
+	c. Moderately concerned
+	d. Somewhat concerned
+	e. Not at all concerned
+
+Poll 6:
+	Q: During the past 6 months, how often did you hear about global warming in the media?
+	a. Multiple times a week
+	b. About once a week
+	c. A couple times a month
+	d. A couple times a year
+	e. Never
+
+Poll 7: 
+	Q: How accurately do you think the news media reports on global warming?
+	a. Extremely accurately
+	b. Very accurately
+	c. Moderately accurately
+	d. Somewhat accurately
+	e. Not at all accurately
+
