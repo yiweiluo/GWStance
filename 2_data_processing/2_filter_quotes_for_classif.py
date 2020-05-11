@@ -123,7 +123,8 @@ def main():
     #keyword_quotes_df = quotes_df.loc[quotes_df['quote_stem_list'].apply(contains_keyword)]
     keyword_coref_quotes_df = quotes_df.loc[quotes_df['quote_stem_list_coref'].apply(contains_keyword)]
     print('Found {} comp. clauses with keywords. Saving for classification...'.format(len(keyword_coref_quotes_df)))
-    keyword_coref_quotes_df.to_csv('keyword_filtered_comp_clauses.tsv',sep='\t',header=True)
+    keyword_coref_quotes_df[['guid','sent_no','quote_text','coref']].to_csv('keyword_filtered_comp_clauses.tsv'
+                                                                            ,sep='\t',header=True)
     print('Done!\n')
 
 if __name__ == "__main__":
