@@ -24,7 +24,7 @@ lemmatizer = nlp.vocab.morphology.lemmatizer
 ps = PorterStemmer()
 
 config = json.load(open('../config.json', 'r'))
-QUOTES_DIR = './url_quotes'
+QUOTES_DIR = '/Users/yiweiluo/scientific-debates/2_data_processing/url_quotes'
 
 householder_verbs = pd.read_pickle(open('householder_verbs.pkl','rb'))
 with open('pronouns.txt','r') as f:
