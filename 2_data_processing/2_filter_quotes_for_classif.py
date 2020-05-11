@@ -59,7 +59,7 @@ def get_householder_main_v_quotes(quote_tag_dict_list):
 
     return good_quotes
 
-with open('filtering_keywords.txt','w') as f:
+with open('filtering_keywords.txt','r') as f:
     lines = f.read().splitlines()
     KEYWORDS = set([l.split('\t')[0] for l in lines])
     KEYWORD_STEMS = set([l.split('\t')[1] for l in lines])
