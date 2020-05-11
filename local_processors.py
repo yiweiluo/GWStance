@@ -26,15 +26,10 @@ def soupify(url):
 
 BASE_DIR = '/Users/yiweiluo/scientific-debates'
 fulltext_dir = os.path.join(BASE_DIR,'1_data_scraping','url_texts')
-meta_dir = os.path.join(BASE_DIR,'1_data_scraping','url_meta')
 fnames = set(os.listdir(fulltext_dir))
-metanames = set(os.listdir(meta_dir))
 
 def fulltext_exists(url_guid):
     return '{}.txt'.format(url_guid) in fnames
-
-def meta_exists(url_guid):
-    return '{}.json'.format(url_guid) in metanames
 
 def get_fulltext(url_guid):
     if fulltext_exists(url_guid):
@@ -45,8 +40,13 @@ def get_fulltext(url_guid):
         return ""
     return ""
 
-def get_meta(url_guid):
-    if meta_exists(url_guid):
-        with open(os.path.join(meta_dir,url_guid+'.json'),'r') as f:
-            json_obj = json.loads(f.read())
-        return json_obj
+def mv_files(subdir_name,outerdir_name): 
+    """Moves contents of subdir_name (usually smaller batches) to outerdir_name."""
+    print('Moving contents of {} to {}...'.format(subdir_name,outerdir_name))
+    print('Size of outerdir:',len(os.listdir(outerdir_name))) 
+    inner_fs = os.listdir(os.path.join(outerdir_name,subdir_name))
+    print('Size of subdir:',len(inner_fs)) 
+    for f in inner_fs:  
+        os.rename(os.path.join(outerdir_name,subdir_name,f),os.path.join(outerdir_name,f))  
+    print('New size of outerdir:',len(os.listdir(outerdir_name))) 
+    
