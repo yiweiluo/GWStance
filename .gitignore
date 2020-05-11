@@ -2,6 +2,20 @@
 1_data_scraping/scrape_fulltext.py
 2_data_processing/old/
 
+1_data_scraping/temp_combined_df_with_ft_date_title.pkl
+1_data_scraping/temp_combined_df_with_ft_date_title_dedup.pkl
+1_data_scraping/url_texts/
+2_data_processing/NER.ipynb
+2_data_processing/all_quote_comps.csv
+2_data_processing/all_quote_comps_with_stems.csv
+2_data_processing/all_quotes.pkl
+2_data_processing/extracted_quotes/
+2_data_processing/filtered_quotes.pkl
+2_data_processing/good_coref_quotes.pkl
+2_data_processing/keyword_filtered_comp_clauses.tsv
+2_data_processing/missing_urls.pkl
+2_data_processing/preprocessing_main.ipynb
+2_data_processing/url_quotes/
 
 3_cc_stance
 1_data_scraping/0_get_urls_and_scraping_scratch.ipynb
