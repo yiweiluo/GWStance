@@ -2,19 +2,16 @@ import os
 import pandas as pd
 import numpy as np
 import re
-import datetime
 import pickle
 import json
 import csv
 import time
 import glob
-from nltk.tokenize import sent_tokenize
-import nltk
 import shutil
 from collections import Counter
 
 from nltk.stem import WordNetLemmatizer,PorterStemmer
-from nltk.tokenize import word_tokenize
+from nltk.tokenize import word_tokenize, sent_tokenize
 
 import spacy
 from spacy.lemmatizer import Lemmatizer, ADJ, NOUN, VERB
