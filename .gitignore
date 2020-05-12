@@ -1,7 +1,7 @@
 1_data_scraping/thenation_title_gueeses.pkl
 1_data_scraping/scrape_fulltext.py
 2_data_processing/old/
-
+2_data_processing/output/
 1_data_scraping/temp_combined_df_with_ft_date_title.pkl
 1_data_scraping/temp_combined_df_with_ft_date_title_dedup.pkl
 1_data_scraping/url_texts/
