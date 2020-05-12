@@ -14,6 +14,7 @@ import pandas as pd
 import numpy as np
 import glob
 import datetime
+import json
 
 config = json.load(open('../config.json', 'r'))
 MC_API_KEY = config['MC_API_KEY']
