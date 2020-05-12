@@ -189,7 +189,7 @@ def get_google_res_stance(x):
         return 'pro'
 
 
-def create_filtered_df():
+def create_filtered_df(r_domains,l_domains):
     """Creates intermediate df for collected URLs, applying filtering, regularization, and deduplication."""
 
     BLACKLIST_URL_INIT_STRS = set(['rss.','feeds.','rssfeeds.'])
@@ -352,48 +352,51 @@ def create_filtered_df():
     filtered_topics = []
     filtered_is_AP = []
 
-    google_cc_urls = pickle.load(open('google_search_res_climate_change.pkl','rb'))
-    mediacloud_cc_urls = pd.read_pickle('mediacloud_df.pkl')
+    if args.do_serp:
+        google_cc_urls = pickle.load(open('google_search_res_climate_change.pkl','rb'))
 
-    for key in google_cc_urls:
-        for keyword in google_cc_urls[key]:
-            for item in google_cc_urls[key][keyword]:
-                url = strip_url(item[1])
-                if not is_rss(url) and not is_blacklist(url):
-                    title = item[0]
-                    date = item[2] if len(item) > 2 else None
-                    stance = get_google_res_stance(url)
-                    topic = 'cc'
-                    is_AP = None
+        for key in google_cc_urls:
+            for keyword in google_cc_urls[key]:
+                for item in google_cc_urls[key][keyword]:
+                    url = strip_url(item[1])
+                    if not is_rss(url) and not is_blacklist(url):
+                        title = item[0]
+                        date = item[2] if len(item) > 2 else None
+                        stance = 'pro' if key in l_domains else 'anti'#get_google_res_stance(url)
+                        topic = 'cc'
+                        is_AP = None
 
-                    if ' | ' not in title:
-                        filtered_urls.append(url)
-                        filtered_titles.append(title)
-                        filtered_dates.append(date)
-                        filtered_domains.append(key)
-                        filtered_stances.append(stance)
-                        filtered_topics.append(topic)
-                        filtered_is_AP.append(is_AP)
+                        if ' | ' not in title:
+                            filtered_urls.append(url)
+                            filtered_titles.append(title)
+                            filtered_dates.append(date)
+                            filtered_domains.append(key)
+                            filtered_stances.append(stance)
+                            filtered_topics.append(topic)
+                            filtered_is_AP.append(is_AP)
 
-    for ix in mediacloud_cc_urls.index:
-        row = mediacloud_cc_urls.loc[ix]
-        url = strip_url(row['url']) if 'http' in row['url'] else strip_url(row['guid'])
-        if not is_rss(url) and not is_blacklist(url):
-            title = row['clean_title']
-            date = row['publish_date']
-            domain = row['media_name']
-            stance = row['stance']
-            topic = row['topic']
-            is_AP = row['ap_syndicated']
+    if args.do_mediacloud:
+        mediacloud_cc_urls = pd.read_pickle('mediacloud_df.pkl')
 
-            if ' | ' not in title:
-                filtered_urls.append(url)
-                filtered_titles.append(title)
-                filtered_dates.append(date)
-                filtered_domains.append(domain)
-                filtered_stances.append(stance)
-                filtered_topics.append(topic)
-                filtered_is_AP.append(is_AP)
+        for ix in mediacloud_cc_urls.index:
+            row = mediacloud_cc_urls.loc[ix]
+            url = strip_url(row['url']) if 'http' in row['url'] else strip_url(row['guid'])
+            if not is_rss(url) and not is_blacklist(url):
+                title = row['clean_title']
+                date = row['publish_date']
+                domain = row['media_name']
+                stance = row['stance']
+                topic = row['topic']
+                is_AP = row['ap_syndicated']
+
+                if ' | ' not in title:
+                    filtered_urls.append(url)
+                    filtered_titles.append(title)
+                    filtered_dates.append(date)
+                    filtered_domains.append(domain)
+                    filtered_stances.append(stance)
+                    filtered_topics.append(topic)
+                    filtered_is_AP.append(is_AP)
 
     combined_df = pd.DataFrame({'url':filtered_urls,
                               'title':filtered_titles,
@@ -419,18 +422,30 @@ def create_filtered_df():
     combined_df.to_pickle('temp_combined_df.pkl')
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--google_domains', type=str, default=None,
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument('--google_domains', type=str, default=None,
                       help='/path/to/domains')
-    parser.add_argument('--do_serp', action="store_true", help='whether to run SerpAPI URL retrieval')
-    parser.add_argument('--do_mediacloud', action="store_true", help='whether to run MediaCloud URL retrieval')
+    arg_parser.add_argument('--do_serp', action="store_true", help='whether to run SerpAPI URL retrieval')
+    arg_parser.add_argument('--do_mediacloud', action="store_true", help='whether to run MediaCloud URL retrieval')
 
-    args = parser.parse_args()
+    args = arg_parser.parse_args()
+
+    # Read in list of domains and political leanings for SerpAPI
+    if args.google_domains is None:
+        L_DOMAINS,R_DOMAINS = [],[]
+        with open('google_domains.txt','r') as f:
+            lines = f.readlines()
+            for line in lines:
+                split_line = line.split()
+                R_DOMAINS.append(split_line[0]) if split_line[1] == 'R' else L_DOMAINS.append(split_line[0])
+    else:
+        domain_dict = pickle.load(open(args.google_domains,'rb'))
+        L_DOMAINS = domain_list['L']
+        R_DOMAINS = domain_list['R']
 
     print('Getting URLs...')
     if args.do_serp:
         if args.google_domains is not None:
-            domain_dict = pickle.load(open(args.google_domains,'rb'))
             get_serp_urls(domain_dict)
         else:
             get_serp_urls()
@@ -439,4 +454,4 @@ if __name__ == "__main__":
     print('Done retrieving URLs!')
 
     print('Creating intermediate dataframe...')
-    create_filtered_df()
+    create_filtered_df(R_DOMAINS,L_DOMAINS)
