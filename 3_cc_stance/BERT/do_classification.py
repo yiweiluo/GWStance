@@ -106,28 +106,28 @@ def build_dataloader(*args, sampler='random'):
 def get_out_data(dat_path,max_seq_length=500):
     #eval_set = 'train' # can also be 'test'
     data = pd.read_csv(dat_path,
-                              sep='\t',header=None)
-    data.columns = ['text','label']#,'outlet']
+                              sep='\t',header=0,index_col=0)
+    data = data.head(100)
+    #data.columns = ['text']#,'outlet']
 
     out = defaultdict(list)
 
     print('Number of examples:',len(data))
-    to_predict = data.text.values
-    true = data.label.values
+    to_predict = data.clean_quote.values
 
-    for dat_ix in range(0,len(data)):
+    for dat_ix in range(len(data)):
         sent = to_predict[dat_ix]
         #print(sent)
-        label = true[dat_ix]
         encoded_sent = tokenizer.encode(sent,add_special_tokens=True)[1:] # remove [CLS] auto-inserted at beginning
         #print('encoded sent:',encoded_sent)
-        CLS_ix = encoded_sent.index(101)
-        SEP_ix = encoded_sent[CLS_ix:].index(102)+CLS_ix
+        #CLS_ix = encoded_sent.index(101)
+        #SEP_ix = encoded_sent[CLS_ix:].index(102)+CLS_ix
         out['input_ids'].append(encoded_sent)
         out['sentences'].append(sent)
-        out['label'].append(label)
-        out['index_CLS'].append(CLS_ix)
-        out['index_SEP_after_CLS'].append(SEP_ix)
+        out['url_guid'].append(data['guid'].values[dat_ix])
+        out['sent_no'].append(data['sent_no'].values[dat_ix])
+        #out['index_CLS'].append(CLS_ix)
+        #out['index_SEP_after_CLS'].append(SEP_ix)
         #print(encoded_sent[CLS_ix])
 
     out['input_ids'] = pad_sequences(
@@ -145,12 +145,12 @@ def get_out_data(dat_path,max_seq_length=500):
         tok_type_ids = [0 for tok_id in sent]
         #print('tok type ids:',tok_type_ids
         #     )
-        #mask = [int(tok_id > 0) for tok_id in sent]
+        mask = [int(tok_id > 0) for tok_id in sent]
         #print('old mask:',mask)
         #print('CLS index:',out['index_CLS'][sent_no])
         #print('SEP index:',out['index_SEP_after_CLS'][sent_no])
-        mask = [0 if n < out['index_CLS'][sent_no] or n > out['index_SEP_after_CLS'][sent_no] else 1
-                for n,tok_id in enumerate(sent)]
+        # mask = [0 if n < out['index_CLS'][sent_no] or n > out['index_SEP_after_CLS'][sent_no] else 1
+        #         for n,tok_id in enumerate(sent)]
         out['attention_mask'].append(mask)
         out['token_type_ids'].append(tok_type_ids)
     #print(len(out['labels']))
@@ -319,143 +319,62 @@ if __name__ == "__main__":
     eval_dat_path = os.path.join(DATA_DIR,eval_set+'.tsv')
     eval_data = get_out_data(eval_dat_path,max_seq_length=500)
 
-    test_inputs, test_labels, test_masks = eval_data['input_ids'], eval_data['label'], eval_data['attention_mask']
+    test_inputs, test_masks, test_src_guids, test_src_sent_nos = eval_data['input_ids'], eval_data['attention_mask'], eval_data['url_guid'], eval_data['sent_no']
     test_dataloader = build_dataloader(
-        test_inputs, test_labels, test_masks,
+        test_inputs, test_masks,
         sampler='order')
 
-    # Prepare training data
-    if ARGS.do_train:
-        if not os.path.exists(ARGS.output_dir) and ARGS.local_rank in [-1, 0]:
-            os.makedirs(ARGS.output_dir)
-
-        logger.info("Saving model checkpoint to %s", ARGS.output_dir)
-        # Save a trained model, configuration and tokenizer using `save_pretrained()`.
-        # They can then be reloaded using `from_pretrained()`
-        model_to_save = (
-            model.module if hasattr(model, "module") else model
-        )  # Take care of distributed/parallel training
-        save_pretrained(model_to_save,ARGS.output_dir)
-        tokenizer.save_pretrained(ARGS.output_dir)
-
-        # Good practice: save your training arguments together with the trained model
-        torch.save(ARGS, os.path.join(ARGS.output_dir, "training_args.bin"))
-
-        if os.path.exists(ARGS.output_dir + "/data.cache.pkl"):
-            data = pickle.load(open(ARGS.output_dir + "/data.cache.pkl", 'rb'))
-        else:
-            data = get_out_data(os.path.join(DATA_DIR, 'train.tsv'))
-            pickle.dump(data, open(ARGS.output_dir + "/data.cache.pkl", 'wb'))
-
-        train_inputs, train_labels, train_masks = data['input_ids'], data['label'], data['attention_mask']
-        train_dataloader = build_dataloader(
-            train_inputs, train_labels, train_masks)
-
-        total_steps = len(train_dataloader) * ARGS.num_epochs
-        scheduler = get_linear_schedule_with_warmup(
-            optimizer, num_warmup_steps=0, num_training_steps=total_steps)
-
-        for epoch_i in range(0, ARGS.num_epochs):
-
-            # ========================================
-            #               Training
-            # ========================================
-            print("")
-            print('======== Epoch {:} / {:} ========'.format(epoch_i + 1, ARGS.num_epochs))
-            print('Training...')
-
-            losses = []
-            t0 = time.time()
-            model.train()
-            for step, batch in enumerate(train_dataloader):
-                #print(step,batch)
-
-                if step % 40 == 0 and not step == 0:
-                    elapsed = format_time(time.time() - t0)
-                    print('  Batch {:>5,}  of  {:>5,}.    Elapsed: {:}. Loss: {:.2f}'.format(
-                        step, len(train_dataloader), elapsed, float(np.mean(losses))))
-
-                if CUDA:
-                    batch = (x.cuda() for x in batch)
-                input_ids, labels, masks = batch
-                model.zero_grad()
-
-                outputs = model(
-                    input_ids,
-                    attention_mask=masks,
-                    labels=labels)
-
-                #print(len(outputs))
-
-                loss, _, _ = outputs
-                #loss, _ = outputs
-                losses.append(loss.item())
-
-                loss.backward()
-                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-                optimizer.step()
-                scheduler.step()
-
-            avg_loss = np.mean(losses)
-            #writer.add_scalar('train/loss', np.mean(avg_loss), epoch_i)
-
-            print("")
-            print("  Average training loss: {0:.2f}".format(avg_loss))
-            print("  Training epcoh took: {:}".format(format_time(time.time() - t0)))
-
     # ========================================
-    #               Validation
+    #               Prediction
     # ========================================
     print("")
-    print("Running Validation...")
+    print("Doing predictions...")
 
     t0 = time.time()
     model.eval()
     losses = []
     all_preds = []
-    all_labels = []
+    #all_labels = []
     log = open(ARGS.output_dir + '/log', 'w')
     for step, batch in enumerate(test_dataloader):
 
         if CUDA:
             batch = (x.cuda() for x in batch)
-        input_ids, labels, masks = batch
+        input_ids, masks = batch
 
         with torch.no_grad():
             outputs = model(
                 input_ids,
-                attention_mask=masks,
-                labels=labels)
-        loss, logits, attns = outputs
+                attention_mask=masks)
+        #print("Outputs:",outputs)
+        #print("Outputs[0]:",outputs[0])
+        logits = outputs[0]
+        #print("Logits:",logits)
         #loss, logits = outputs
 
-        losses.append(loss.item())
+        #losses.append(loss.item())
 
-        labels = labels.cpu().numpy()
         input_ids = input_ids.cpu().numpy()
         preds = scipy.special.softmax(logits.cpu().numpy(), axis=1)
         input_toks = [
             tokenizer.convert_ids_to_tokens(s) for s in input_ids
         ]
 
-        for seq, label, pred in zip(input_toks, labels, preds):
-            sep_char = '+' if np.argmax(pred) == label else '-'
-            log.write(sep_char * 40 + '\n')
+        for seq, pred in zip(input_toks, preds):
+            log.write('+' * 40 + '\n')
             log.write(' '.join(seq) + '\n')
-            log.write('label: ' + str(label) + '\n')
             log.write('pred: ' + str(np.argmax(pred)) + '\n')
             log.write('dist: ' + str(pred) + '\n')
             log.write('\n\n')
 
             all_preds += [pred]
-            all_labels += [label]
+
     log.close()
     all_preds = np.array(all_preds)
-    all_labels = np.array(all_labels)
 
-    avg_loss = np.mean(losses)
-    f1 = sklearn.metrics.f1_score(all_labels, np.argmax(all_preds, axis=1),average='macro')
-    acc = sklearn.metrics.accuracy_score(all_labels, np.argmax(all_preds, axis=1))
+    #avg_loss = np.mean(losses)
+    #f1 = sklearn.metrics.f1_score(all_labels, np.argmax(all_preds, axis=1),average='macro')
+    #acc = sklearn.metrics.accuracy_score(all_labels, np.argmax(all_preds, axis=1))
     #auc = sklearn.metrics.roc_auc_score(all_labels, all_preds[:, 1])
 
     #writer.add_scalar('eval/acc', acc, epoch_i)
@@ -463,24 +382,25 @@ if __name__ == "__main__":
     #writer.add_scalar('eval/f1', f1, epoch_i)
     #writer.add_scalar('eval/loss', f1, epoch_i)
 
-    print("  Loss: {0:.2f}".format(avg_loss))
-    print("  Accuracy: {0:.2f}".format(acc))
-    print("  F1: {0:.2f}".format(f1))
+    #print("  Loss: {0:.2f}".format(avg_loss))
+    #print("  Accuracy: {0:.2f}".format(acc))
+    #print("  F1: {0:.2f}".format(f1))
     #print("  AUC: {0:.2f}".format(auc))
-    print("  Validation took: {:}".format(format_time(time.time() - t0)))
+    print("  Evaluation took: {:}".format(format_time(time.time() - t0)))
 
     # Want to save: model, config, vocab, eval results, preds, training_args,
-    result = {'acc': acc,
-        'f1':f1,
-        'cm':cm(np.argmax(all_preds, axis=1),all_labels)}
+    # result = {'acc': acc,
+    #     'f1':f1,
+    #     'cm':cm(np.argmax(all_preds, axis=1),all_labels)}
 
-    preds_df = pd.DataFrame({'true':all_labels,
+    preds_df = pd.DataFrame({'src_guid':test_src_guids,
+    'src_sent_no':test_src_sent_nos,
     'predicted':np.argmax(all_preds, axis=1)})
     preds_df.to_csv(ARGS.output_dir+'/{}.tsv'.format(ARGS.pred_file_name),sep='\t',index=False)
 
-    output_eval_file = os.path.join(ARGS.output_dir, "eval_results_{}.txt".format(ARGS.pred_file_name))
-    with open(output_eval_file, "w") as writer:
-        logger.info("***** Eval results *****")
-        for key in sorted(result.keys()):
-            logger.info("  %s = %s", key, str(result[key]))
-            writer.write("%s = %s\n" % (key, str(result[key])))
+    # output_eval_file = os.path.join(ARGS.output_dir, "eval_results_{}.txt".format(ARGS.pred_file_name))
+    # with open(output_eval_file, "w") as writer:
+    #     logger.info("***** Eval results *****")
+    #     for key in sorted(result.keys()):
+    #         logger.info("  %s = %s", key, str(result[key]))
+    #         writer.write("%s = %s\n" % (key, str(result[key])))
