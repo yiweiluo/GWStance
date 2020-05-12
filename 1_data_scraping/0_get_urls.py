@@ -420,10 +420,10 @@ def create_filtered_df():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_option('--google_domains', type=str, default=None,
+    parser.add_argument('--google_domains', type=str, default=None,
                       help='/path/to/domains')
-    parser.add_option('--do_serp', type=store_true, help='whether to run SerpAPI URL retrieval')
-    parser.add_option('--do_mediacloud', type=store_true, help='whether to run MediaCloud URL retrieval')
+    parser.add_argument('--do_serp', type=store_true, help='whether to run SerpAPI URL retrieval')
+    parser.add_argument('--do_mediacloud', type=store_true, help='whether to run MediaCloud URL retrieval')
 
     args = parser.parse_args()
 
