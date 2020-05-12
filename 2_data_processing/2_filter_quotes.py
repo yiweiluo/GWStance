@@ -21,14 +21,15 @@ lemmatizer = nlp.vocab.morphology.lemmatizer
 ps = PorterStemmer()
 
 config = json.load(open('../config.json', 'r'))
-QUOTES_DIR = '/Users/yiweiluo/scientific-debates/2_data_processing/url_quotes'
+BASE_DIR = config["BASE_DIR"]
+QUOTES_DIR = os.path.join(BASE_DIR,'2_data_processing','url_quotes')
 
 householder_verbs = pd.read_pickle(open('householder_verbs.pkl','rb'))
 with open('pronouns.txt','r') as f:
     PRONOUNS = set(f.read().splitlines())
 
 def stem(s):
-    return set([ps.stem(w) for w in word_tokenize(s.lower())])
+    return [ps.stem(w) for w in word_tokenize(s.lower())]
 
 def read_stem_str(s):
     """Reads string formatted set of stems into an iterable list."""
@@ -45,14 +46,14 @@ def read_quote_json(url_guid):
 def get_householder_main_v_quotes(quote_tag_dict_list):
     """Given a labeled sentence, returns the Quotes in the sentence with a Householder verb main verb."""
     good_quotes = []
-    for q_dict in quote_tag_dict_list['quotes']:
+    for q_no,q_dict in enumerate(quote_tag_dict_list['quotes']):
         main_v_indices = [x for x in q_dict if q_dict[x] == 'main_v']
         main_v_toks = [quote_tag_dict_list['idx2text'][x] for x in sorted(main_v_indices)]
         main_v_lemmas = [lemmatizer(tok.lower(),VERB)[0] for tok in main_v_toks]
         main_v_lemmas.append('_'.join(main_v_lemmas))
         main_v_lemmas = set(main_v_lemmas)
         if len(main_v_lemmas.intersection(householder_verbs)) > 0:
-            good_quotes.append(q_dict)
+            good_quotes.append((q_no,q_dict))
 
     return good_quotes
 
@@ -91,50 +92,57 @@ def main():
     df = pd.read_csv('../1_data_scraping/dedup_df.tsv',sep='\t',header=0)
 
     # Set-up CSV with quote comp clauses
-    fieldnames = ['guid', 'sent_no', 'quote_text', 'coref']
-    with open('all_quote_comps.csv', 'w', newline='') as csvfile:
+    fieldnames = ['guid', 'sent_no', 'quote_no', 'quote_text', 'coref']
+    with open('./output/all_quote_comps.csv', 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
 
     for n,url_guid in enumerate(df.guid):
+
         # Read in parsed results
         obj = read_quote_json(url_guid)
-        if obj is not None:
+        if obj is None:
+            pass
+        else:
             # Find sents containing extracted quotes
             sents_with_quotes = [s_no for s_no in obj['quote_tags'] if len(obj['quote_tags'][s_no]['quotes']) > 0]
-            if len(sents_with_quotes) > 0:
-                good_v_quotes = []
-                for sent_no in sents_with_quotes:
-                    # Get quotes with main verb that is one of interest (in Householder list)
-                    householder_main_v_quotes = get_householder_main_v_quotes(obj['quote_tags'][sent_no])
-                    good_v_quotes.extend(list(zip([sent_no]*len(householder_main_v_quotes),householder_main_v_quotes)))
+            if len(sents_with_quotes) == 0:
+                pass
 
-                # Now, get the quote text to classify stance, with url_guid + sent_no, so I can recover context
-                good_v_quote_texts = [(sent_no,[(obj['quote_tags'][sent_no]['idx2text'][idx],obj['coref_tags'][idx])
-                                                for (idx,label) in sorted(q_dict.items(),key=lambda x: x[0])
-                                                if q_dict[idx] == 'q']) for sent_no,q_dict in good_v_quotes]
+            good_v_quotes = []
+            for sent_no in sents_with_quotes:
+                # Get quotes with main verb that is one of interest (in Householder list)
+                householder_main_v_quotes = get_householder_main_v_quotes(obj['quote_tags'][sent_no])
+                good_v_quotes.extend(list(zip([sent_no]*len(householder_main_v_quotes),householder_main_v_quotes)))
 
-                # Write to csv file
-                with open('all_quote_comps.csv', 'a', newline='') as csvfile:
-                    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-                    for tup in good_v_quote_texts:
-                        writer.writerow({'guid': url_guid, 'sent_no': tup[0],
-                                         'coref': ' '.join([x[1] if x[0].lower() in PRONOUNS and x[1] is not None else x[0] for x in tup[1]]),
-                                        'quote_text': ' '.join([x[0] for x in tup[1]])})
+            # Now, get the quote text to classify stance, with url_guid + sent_no, so I can recover context
+            good_v_quote_texts = [(sent_no,q_no,[(obj['quote_tags'][sent_no]['idx2text'][idx],obj['coref_tags'][idx])
+                                            for (idx,label) in sorted(q_dict.items(),key=lambda x: x[0])
+                                            if q_dict[idx] == 'q']) for sent_no,(q_no,q_dict) in good_v_quotes]
+
+
+            with open('./output/all_quote_comps.csv', 'a', newline='') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                for sent_no,q_no,q_text in good_v_quote_texts:
+                    writer.writerow({'guid': url_guid, 'sent_no': sent_no, 'quote_no': q_no,
+                                     'coref': ' '.join([x[1] if x[0].lower() in PRONOUNS and x[1] is not None
+                                                           else x[0] for x in q_text]),
+                                    'quote_text': ' '.join([x[0] for x in q_text])})
 
         if n % 1000 == 0:
-            print('Finished writing comp. clauses from URL no. {}, {}'.format(n,url_guid))
+            print(n,url_guid)
     print('Finished writing all filtered comp. clauses!\n')
 
     print('Adding stems to filtered comp. clauses...')
-    quotes_df = pd.read_csv('all_quote_comps.csv',sep=',',header=0)
+    quotes_df = pd.read_csv('./output/all_quote_comps.csv',sep=',',header=0)
     quotes_df['quote_stems'] = quotes_df['quote_text'].apply(stem)
     quotes_df['quote_stems_coref'] = quotes_df['coref'].apply(stem)
-    quotes_df = pd.read_csv('all_quote_comps_with_stems.csv',sep=',',header=0)
+    print('Done! Saving...\n')
+    quotes_df.to_csv('./output/all_quote_comps_with_stems.csv',sep=',',header=True)
+    quotes_df = pd.read_csv('./output/all_quote_comps_with_stems.csv',sep=',',header=0,index_col=0)
+    # Parse string list into actual list of stems
     quotes_df['quote_stem_list'] = quotes_df['quote_stems'].apply(read_stem_str)
     quotes_df['quote_stem_list_coref'] = quotes_df['quote_stems_coref'].apply(read_stem_str)
-    print('Done! Saving...\n')
-    quotes_df.to_csv('all_quote_comps_with_stems.csv',sep=',',header=True)
 
     print('Filtering out indirect questions...')
     QUESTION_WORDS = set(['what','who','where','which'])
@@ -142,14 +150,13 @@ def main():
     print('Found {} comp. clauses that are not indirect questions.\n'.format(len(quotes_df)))
 
     print('Filtering comp. clauses by keywords...')
-    #keyword_quotes_df = quotes_df.loc[quotes_df['quote_stem_list'].apply(contains_keyword)]
-    keyword_coref_quotes_df = quotes_df.loc[quotes_df['quote_stem_list_coref'].apply(contains_keyword)]
+    keyword_coref_quotes_df = quotes_df.loc[quotes_df['quote_stem_list_coref'].apply(contains_keyword)].copy()
     print('Found {} comp. clauses with keywords.\n'.format(len(keyword_coref_quotes_df)))
 
     print('Cleaning comp. clauses for classification...')
     keyword_coref_quotes_df['clean_quote'] = keyword_coref_quotes_df['quote_text'].apply(prettify)
     print('Saving...')
-    keyword_coref_quotes_df[['guid','sent_no','quote_text','coref','clean_quote']].to_csv('keyword_filtered_comp_clauses.tsv'
+    keyword_coref_quotes_df[['guid','sent_no','quote_no','quote_text','coref','clean_quote']].to_csv('./output/keyword_filtered_comp_clauses.tsv'
                                                                             ,sep='\t',header=True)
     print('Done!\n')
 
