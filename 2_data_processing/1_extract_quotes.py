@@ -91,6 +91,7 @@ def spacy_pipe(text):
     labeled_sents = defaultdict(dict) # To fill with list of doc.sents, with tagged versions of tokens
     for sent_no,sent in enumerate(doc.sents):
         labeled_sents[sent_no]["idx2text"] = {tok.i: tok.text for tok in sent}
+        labeled_sents[sent_no]["idx2lemma"] = {tok.i: tok.lemma_ for tok in sent}
         labeled_sents[sent_no]["quotes"] = [] # We will add dicts with {tok.idx: tok.label} (key, value) pairs.
 
         VERBS = list(np.unique([token.head for token in sent if token.dep_ == 'ccomp']))
