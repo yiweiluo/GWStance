@@ -178,7 +178,7 @@ def spacy_pipe(text):
                 quote_indices = set([c.i for c in children_queue+[emb_main_verb]])
                 verb_indices = set([c.i for c in verb_deps+[VERB]])
                 verb_prt_indices = set([c.i for c in verb_prts+[VERB]])
-                main_verb_indices = verb_prt_indices | {ROOT.i}
+                main_verb_indices = {ROOT.i}
                 subj_indices = set([c.i for c in subj_children+[SUBJECT]]) if SUBJECT is not None else set()
                 main_subj_indices = {SUBJECT.i} if SUBJECT is not None else set()
                 neg_indices = set([c.i for c in neg_children+[NEG]]) if NEG is not None else set()
