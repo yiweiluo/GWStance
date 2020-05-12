@@ -4,5 +4,6 @@
   "SEED": 42,
   "REMOTE_SCRAPE_DIR": "/u/scr/yiweil/sci_debates/scraping",
   "REMOTE_PREPRO_DIR": "/u/scr/yiweil/sci_debates/prepro",
+  "BASE_DIR": "/Users/yiweiluo/scientific-debates",
   "QUOTES_DIR": "url_quotes"
 }

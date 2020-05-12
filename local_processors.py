@@ -25,6 +25,7 @@ def soupify(url):
 # fnames = set(os.listdir(fulltext_dir)) | set(os.listdir(fulltext_dir_2))
 
 BASE_DIR = '/Users/yiweiluo/scientific-debates'
+QUOTES_DIR = os.path.join(BASE_DIR,'2_data_processing','url_quotes')
 fulltext_dir = os.path.join(BASE_DIR,'1_data_scraping','url_texts')
 fnames = set(os.listdir(fulltext_dir))
 
@@ -49,4 +50,14 @@ def mv_files(subdir_name,outerdir_name):
     for f in inner_fs:  
         os.rename(os.path.join(outerdir_name,subdir_name,f),os.path.join(outerdir_name,f))  
     print('New size of outerdir:',len(os.listdir(outerdir_name))) 
+    
+    
+def read_quote_json(url_guid):
+    with open(os.path.join(QUOTES_DIR,'{}.json'.format(url_guid)),'r') as f:
+        contents = f.read()
+        if len(contents) > 0:
+            return json.loads(contents)
+        return None
+    
+    
     
