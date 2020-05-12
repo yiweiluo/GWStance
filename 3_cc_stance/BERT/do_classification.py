@@ -33,29 +33,6 @@ CUDA = (torch.cuda.device_count() > 0)
 CLASSES = ['for','against','neutral']
 NUM_LABELS = 3
 
-def simple_accuracy(preds, labels):
-    return (preds == labels).mean()
-
-def acc_and_f1(preds, labels):
-    acc = simple_accuracy(preds, labels)
-    micro_f1 = f1_score(y_true=labels, y_pred=preds, average='micro')
-    macro_f1 = f1_score(y_true=labels, y_pred=preds, average='macro')
-    return {
-        "acc": acc,
-        "micro_f1": micro_f1,
-        "macro_f1":macro_f1,
-        "acc_and_macro_f1": (acc + macro_f1) / 2,
-    }
-
-def cm(preds, labels):
-    return confusion_matrix(preds, labels)
-
-def get_pred_label(res_,to_str=False):
-    if to_str:
-        return CLASSES[res_.index(max(res_))]
-    else:
-        return res_.index(max(res_))
-
 
 def format_time(elapsed):
     '''
@@ -126,6 +103,7 @@ def get_out_data(dat_path,max_seq_length=500):
         out['sentences'].append(sent)
         out['url_guid'].append(data['guid'].values[dat_ix])
         out['sent_no'].append(data['sent_no'].values[dat_ix])
+        out['quote_no'].append(data['quote_no'].values[dat_ix])
         #out['index_CLS'].append(CLS_ix)
         #out['index_SEP_after_CLS'].append(SEP_ix)
         #print(encoded_sent[CLS_ix])
@@ -141,7 +119,7 @@ def get_out_data(dat_path,max_seq_length=500):
 
     print('Adding attention masks...')
     # get attn masks
-    for sent_no,sent in enumerate(out['input_ids']):
+    for sent in out['input_ids']:
         tok_type_ids = [0 for tok_id in sent]
         #print('tok type ids:',tok_type_ids
         #     )
@@ -319,7 +297,7 @@ if __name__ == "__main__":
     eval_dat_path = os.path.join(DATA_DIR,eval_set+'.tsv')
     eval_data = get_out_data(eval_dat_path,max_seq_length=500)
 
-    test_inputs, test_masks, test_src_guids, test_src_sent_nos = eval_data['input_ids'], eval_data['attention_mask'], eval_data['url_guid'], eval_data['sent_no']
+    test_inputs, test_masks, test_src_guids, test_src_sent_nos, test_src_quote_nos = eval_data['input_ids'], eval_data['attention_mask'], eval_data['url_guid'], eval_data['sent_no'], eval_data['quote_no']
     test_dataloader = build_dataloader(
         test_inputs, test_masks,
         sampler='order')
@@ -395,6 +373,7 @@ if __name__ == "__main__":
 
     preds_df = pd.DataFrame({'src_guid':test_src_guids,
     'src_sent_no':test_src_sent_nos,
+    'src_quote_no':test_src_quote_nos,
     'predicted':np.argmax(all_preds, axis=1)})
     preds_df.to_csv(ARGS.output_dir+'/{}.tsv'.format(ARGS.pred_file_name),sep='\t',index=False)
 
