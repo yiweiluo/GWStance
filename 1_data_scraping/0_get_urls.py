@@ -454,4 +454,4 @@ if __name__ == "__main__":
     print('Done retrieving URLs!')
 
     print('Creating intermediate dataframe...')
-    create_filtered_df(R_DOMAINS,L_DOMAINS)
+    create_filtered_df(set(R_DOMAINS),set(L_DOMAINS))
