@@ -101,7 +101,7 @@ def main():
 
             # Now, get the quote text to classify stance, with url_guid + sent_no, so I can recover context
             good_v_quote_texts = [(sent_no,q_no,[(obj['quote_tags'][sent_no]['idx2text'][idx],obj['coref_tags'][idx])
-                                            for (idx,label) in sorted(q_dict.items(),key=lambda x: x[0])
+                                            for (idx,label) in sorted(q_dict.items(),key=lambda x: int(x[0]))
                                             if q_dict[idx] == 'q']) for sent_no,(q_no,q_dict) in good_v_quotes]
 
 
