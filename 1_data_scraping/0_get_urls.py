@@ -419,18 +419,22 @@ def create_filtered_df():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_option('--domains', type=str, default=None,
+    parser.add_option('--google_domains', type=str, default=None,
                       help='/path/to/domains')
+    parser.add_option('--do_serp', type=store_true, help='whether to run SerpAPI URL retrieval')
+    parser.add_option('--do_mediacloud', type=store_true, help='whether to run MediaCloud URL retrieval')
 
     args = parser.parse_args()
 
     print('Getting URLs...')
-    if args.domains is not None:
-        domain_dict = pickle.load(args.domains)
-        get_serp_urls(domain_dict)
-    else:
-        get_serp_urls()
-    get_mc_urls()
+    if args.do_serp:
+        if args.google_domains is not None:
+            domain_dict = pickle.load(args.google_domains)
+            get_serp_urls(domain_dict)
+        else:
+            get_serp_urls()
+    if args.do_mediacloud:
+        get_mc_urls()
     print('Done retrieving URLs!')
 
     print('Creating intermediate dataframe...')
