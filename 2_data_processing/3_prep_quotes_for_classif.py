@@ -31,8 +31,9 @@ if __name__ == "__main__":
 
     print('Cleaning comp. clauses for classification...')
     quotes_df['clean_quote'] = quotes_df['quote_text'].apply(prettify)
+    quotes_df['clean_quote_coref'] = quotes_df['coref'].apply(prettify)
     print('Saving...')
-    quotes_df[['guid','sent_no','quote_no','clean_quote']].to_csv('./output/keyword_filtered_comp_clauses.tsv'
+    quotes_df[['guid','sent_no','quote_no','clean_quote','clean_quote_coref']].to_csv('./output/keyword_filtered_comp_clauses.tsv'
                                                                             ,sep='\t',header=True)
     print('Done!\n')
 
