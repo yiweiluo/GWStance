@@ -28,6 +28,10 @@ householder_verbs = pd.read_pickle(open('householder_verbs.pkl','rb'))
 with open('pronouns.txt','r') as f:
     PRONOUNS = set(f.read().splitlines())
 
+def read_stem_str(s):
+    """Reads string formatted set of stems into an iterable list."""
+    return s[2:-2].split("', '")
+
 def stem(s):
     return [ps.stem(w) for w in word_tokenize(s.lower())]
 
@@ -120,13 +124,16 @@ def main():
     print('Done! Saving...\n')
     quotes_df.to_csv('./output/all_quote_comps_with_stems.csv',sep=',',header=True)
 
+    quotes_df = pd.read_csv('./output/all_quote_comps_with_stems.csv',sep=',',header=0)
     print('Filtering out indirect questions...')
     QUESTION_WORDS = set(['what','who','where','which'])
     quotes_df = quotes_df.loc[quotes_df['quote_text'].apply(lambda x: x.split()[0].lower() not in QUESTION_WORDS)]
     print('Found {} comp. clauses that are not indirect questions.\n'.format(len(quotes_df)))
 
     print('Filtering comp. clauses by keywords...')
-    keyword_coref_quotes_df = quotes_df.loc[quotes_df['quote_stems_coref'].apply(contains_keyword)].copy()
+    quotes_df['quote_stem_list'] = quotes_df['quote_stems'].apply(read_stem_str)
+    quotes_df['quote_stem_list_coref'] = quotes_df['quote_stems_coref'].apply(read_stem_str)
+    keyword_coref_quotes_df = quotes_df.loc[quotes_df['quote_stem_list_coref'].apply(contains_keyword)].copy()
     print('Found {} comp. clauses with keywords.\n'.format(len(keyword_coref_quotes_df)))
     print('Saving...')
     keyword_coref_quotes_df.to_csv('./output/keyword_filtered_comp_clauses.tsv',sep='\t',header=True)
