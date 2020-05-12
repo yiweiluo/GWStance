@@ -430,7 +430,7 @@ if __name__ == "__main__":
     print('Getting URLs...')
     if args.do_serp:
         if args.google_domains is not None:
-            domain_dict = pickle.load(args.google_domains)
+            domain_dict = pickle.load(open(args.google_domains,'rb'))
             get_serp_urls(domain_dict)
         else:
             get_serp_urls()
