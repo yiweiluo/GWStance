@@ -1,3 +1,5 @@
 spacy
 pandas
 numpy
+Newspaper
+transformers

@@ -31,10 +31,6 @@ with open('pronouns.txt','r') as f:
 def stem(s):
     return [ps.stem(w) for w in word_tokenize(s.lower())]
 
-def read_stem_str(s):
-    """Reads string formatted set of stems into an iterable list."""
-    return s[2:-2].split("', '")
-
 def read_quote_json(url_guid):
     """Reads json file containing quote objects associated with url_guid."""
     with open(os.path.join(QUOTES_DIR,'{}.json'.format(url_guid)),'r') as f:
@@ -66,27 +62,11 @@ def contains_keyword(stem_set):
     """Returns True if stem_set contains a CC keyword stem"""
     return len(set(stem_set).intersection(KEYWORD_STEMS)) > 0
 
-def prettify(clause):
-    """Clean comp. clause for classification."""
-    clause = re.sub('[^a-zA-Z0-9’“”"\'% \n\.]', '', clause)
-
-    # remove initial that, add periods, capitalize first word
-    split_clause = clause.split()
-    if split_clause[0] == 'that':
-        split_clause = split_clause[1:]
-    split_clause[0] = split_clause[0].capitalize()
-    clause_str = " ".join(split_clause).strip()
-
-    if clause_str[-1] != '.':
-        clause_str += "."
-
-    return clause_str
-
 
 def main():
     """Writes complement clauses of quotes (filtered down to those with a Householder stem as the quoting verb) to 'all_quote_comps.csv'.
     Then, finds stems of all tokens in filtered complement clauses. Finally, removes indirect questions and filters comp. clauses again
-    by keyword stems."""
+    by keyword stems and writes to `keyword_filtered_comp_clauses.tsv`."""
 
     # Load data
     df = pd.read_csv('../1_data_scraping/dedup_df.tsv',sep='\t',header=0)
@@ -139,10 +119,6 @@ def main():
     quotes_df['quote_stems_coref'] = quotes_df['coref'].apply(stem)
     print('Done! Saving...\n')
     quotes_df.to_csv('./output/all_quote_comps_with_stems.csv',sep=',',header=True)
-    quotes_df = pd.read_csv('./output/all_quote_comps_with_stems.csv',sep=',',header=0,index_col=0)
-    # Parse string list into actual list of stems
-    quotes_df['quote_stem_list'] = quotes_df['quote_stems'].apply(read_stem_str)
-    quotes_df['quote_stem_list_coref'] = quotes_df['quote_stems_coref'].apply(read_stem_str)
 
     print('Filtering out indirect questions...')
     QUESTION_WORDS = set(['what','who','where','which'])
@@ -150,15 +126,12 @@ def main():
     print('Found {} comp. clauses that are not indirect questions.\n'.format(len(quotes_df)))
 
     print('Filtering comp. clauses by keywords...')
-    keyword_coref_quotes_df = quotes_df.loc[quotes_df['quote_stem_list_coref'].apply(contains_keyword)].copy()
+    keyword_coref_quotes_df = quotes_df.loc[quotes_df['quote_stems_coref'].apply(contains_keyword)].copy()
     print('Found {} comp. clauses with keywords.\n'.format(len(keyword_coref_quotes_df)))
-
-    print('Cleaning comp. clauses for classification...')
-    keyword_coref_quotes_df['clean_quote'] = keyword_coref_quotes_df['quote_text'].apply(prettify)
     print('Saving...')
-    keyword_coref_quotes_df[['guid','sent_no','quote_no','quote_text','coref','clean_quote']].to_csv('./output/keyword_filtered_comp_clauses.tsv'
-                                                                            ,sep='\t',header=True)
+    keyword_coref_quotes_df.to_csv('./output/keyword_filtered_comp_clauses.tsv',sep='\t',header=True)
     print('Done!\n')
+
 
 if __name__ == "__main__":
 
