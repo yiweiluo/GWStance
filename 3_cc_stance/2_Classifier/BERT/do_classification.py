@@ -90,7 +90,7 @@ def get_out_data(dat_path,max_seq_length=500):
     out = defaultdict(list)
 
     print('Number of examples:',len(data))
-    to_predict = data.clean_quote.values
+    to_predict = data.clean_quote_coref.values
 
     for dat_ix in range(len(data)):
         sent = to_predict[dat_ix]

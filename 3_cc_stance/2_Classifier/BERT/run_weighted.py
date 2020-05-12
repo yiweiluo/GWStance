@@ -437,6 +437,8 @@ def load_and_cache_examples(args, task, tokenizer, evaluate=False):
                 examples = (processor.get_test_examples(args.data_dir,args.do_text_b))
             elif args.eval_partition == 'dev':
                 examples = (processor.get_dev_examples(args.data_dir,args.do_text_b))
+            elif args.eval_partition == 'pred':
+                examples = (processor.get_pred_examples(args.data_dir,args.do_text_b))
             else:
                 examples = (processor.get_examples(args.data_dir, args.eval_partition,args.do_text_b))
             #print('args.eval_on_test:',args.eval_on_test)
@@ -554,6 +556,7 @@ def main():
     )
     parser.add_argument("--do_train", action="store_true", help="Whether to run training.")
     parser.add_argument("--do_eval", action="store_true", help="Whether to run eval.")
+    parser.add_argument("--do_prediction", action="store_true", help="Whether to simply apply model for predictions.")
     #parser.add_argument("--eval_on_test", action="store_true", help="Whether to run eval on the dev set (False) or test set (True).")
     parser.add_argument(
         "--eval_partition",
@@ -760,8 +763,13 @@ def main():
     # Evaluation
     results = {}
     if args.do_eval and args.local_rank in [-1, 0]:
-        tokenizer = tokenizer_class.from_pretrained(args.output_dir, do_lower_case=args.do_lower_case)
-        checkpoints = [args.output_dir]
+        if args.do_prediction:
+            tokenizer = tokenizer_class.from_pretrained(args.model_name_or_path, do_lower_case=args.do_lower_case)
+            checkpoints = [args.model_name_or_path]
+        else:
+            tokenizer = tokenizer_class.from_pretrained(args.output_dir, do_lower_case=args.do_lower_case)
+            checkpoints = [args.output_dir]
+
         if args.eval_all_checkpoints:
             checkpoints = list(
                 os.path.dirname(c) for c in sorted(glob.glob(args.output_dir + "/**/" + WEIGHTS_NAME, recursive=True))
