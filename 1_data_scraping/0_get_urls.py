@@ -1,4 +1,5 @@
 # Import statements
+import argparse
 import urllib
 import requests
 from bs4 import BeautifulSoup
@@ -29,8 +30,9 @@ mc_ids.reset_index(drop=True, inplace=True)
 
 # Set up SerpAPI
 from serpapi.google_search_results import GoogleSearchResults
-with open('SERP_API_KEY.txt','r') as f:
-    SERP_API_KEY = f.read()
+if SERP_API_KEY == "":
+    with open('SERP_API_KEY.txt','r') as f:
+        SERP_API_KEY = f.read()
 query_params = {"location":"United States", "device":"desktop", "hl":"en", "gl":"us", "serp_api_key":SERP_API_KEY}
 CC_KEYWORDS = ['climate_change','global_warming','fossil_fuels','carbon_dioxide','co2']
 client = GoogleSearchResults(query_params)
@@ -77,34 +79,10 @@ def parse_serpapi_results(d_list):
     return meta
 
 
-def get_urls():
+def get_mc_urls():
     """
-    Generates the following data structures:
-    * google_search_res_climate_change.pkl, a dictionary with outer keys for domains and inner keys for search terms;
-    * mediacloud_df.pkl, a dataframe w/ output from MediaCloud
+    Generates `mediacloud_df.pkl`, a dataframe w/ output from MediaCloud.
     """
-
-    # Read in list of domains and political leanings for SerpAPI
-    L_DOMAINS,R_DOMAINS = [],[]
-    with open('google_domains.txt','r') as f:
-        lines = f.readlines()
-        for line in lines:
-            split_line = line.split()
-            R_DOMAINS.append(split_line[0]) if split_line[1] == 'R' else L_DOMAINS.append(split_line[0])
-
-    # Initialize default nested dict with outer keys for each media domain and inner keys for each keyword.
-    URLS_PER_DOMAIN = defaultdict(dict)
-
-    # Query each domain for each keyword
-    for DOMAIN in L_DOMAINS + R_DOMAINS:
-        for KW in CC_KEYWORDS:
-            dl = do_serpapi(DOMAIN,KW)
-            results = parse_serpapi_results(dl)
-            URLS_PER_DOMAIN[DOMAIN][KW] = results
-
-    # Save nested dict
-    pickle.dump(URLS_PER_DOMAIN,open('google_search_res_climate_change.pkl','wb'))
-
     # Collect stories from each outlet using MediaCloud
     if not os.path.exists('./mediacloud'):
         os.mkdir('./mediacloud')
@@ -143,6 +121,42 @@ def get_urls():
     df_all['clean_title'] = df_all.title.apply(lambda x: re.sub(r'[^a-zA-Z0-9\s]', '', x.lower()))
     df_all.to_pickle('mediacloud_df.pkl')
 
+def get_serp_urls(domain_list=None):
+    """
+    Generates `google_search_res_climate_change_n.pkl`, a dictionary with outer keys for domains and inner keys for search terms.
+    :param domain_list: list of domains. If None, will default to domains in `google_domains.txt`.
+    """
+
+    # Read in list of domains and political leanings for SerpAPI
+    if domain_list is None:
+        L_DOMAINS,R_DOMAINS = [],[]
+        with open('google_domains.txt','r') as f:
+            lines = f.readlines()
+            for line in lines:
+                split_line = line.split()
+                R_DOMAINS.append(split_line[0]) if split_line[1] == 'R' else L_DOMAINS.append(split_line[0])
+    else:
+        L_DOMAINS = domain_list['L']
+        R_DOMAINS = domain_list['R']
+
+    # Initialize default nested dict with outer keys for each media domain and inner keys for each keyword.
+    URLS_PER_DOMAIN = defaultdict(dict)
+
+    # Query each domain for each keyword
+    for DOMAIN in L_DOMAINS + R_DOMAINS:
+        for KW in CC_KEYWORDS:
+            dl = do_serpapi(DOMAIN,KW)
+            results = parse_serpapi_results(dl)
+            URLS_PER_DOMAIN[DOMAIN][KW] = results
+
+    # Save nested dict
+    existing = glob.glob('google_search_res_climate_change*')
+    num_existing = len(existing)
+    save_prefix = 'google_search_res_climate_change_{}'.format(num_existing)
+    save_name = '{}.pkl'.format(save_prefix)
+    print('Saving search results to {}...'.format(save_name))
+    pickle.dump(URLS_PER_DOMAIN,open(save_name,'wb'))
+    print('Done!')
 
 def get_google_res_stance(x):
     """
@@ -404,8 +418,19 @@ def create_filtered_df():
     combined_df.to_pickle('temp_combined_df.pkl')
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_option('--domains', type=str, default=None,
+                      help='/path/to/domains')
+
+    args = parser.parse_args()
+
     print('Getting URLs...')
-    get_urls()
+    if args.domains is not None:
+        domain_dict = pickle.load(args.domains)
+        get_serp_urls(domain_dict)
+    else:
+        get_serp_urls()
+    get_mc_urls()
     print('Done retrieving URLs!')
 
     print('Creating intermediate dataframe...')
