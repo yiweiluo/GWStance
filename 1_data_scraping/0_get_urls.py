@@ -210,6 +210,9 @@ def create_filtered_df(r_domains,l_domains):
                 return True
         return False
 
+    def is_pdf(url):
+        return url[-4:] == '.pdf':
+
     from urllib.parse import urlparse
 
     def get_hostname(url, uri_type='both'):
@@ -359,7 +362,7 @@ def create_filtered_df(r_domains,l_domains):
             for keyword in google_cc_urls[key]:
                 for item in google_cc_urls[key][keyword]:
                     url = strip_url(item[1])
-                    if not is_rss(url) and not is_blacklist(url):
+                    if not is_rss(url) and not is_blacklist(url) and not is_pdf(url):
                         title = item[0]
                         date = item[2] if len(item) > 2 else None
                         stance = 'pro' if key in l_domains else 'anti'#get_google_res_stance(url)
