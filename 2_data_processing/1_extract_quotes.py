@@ -65,8 +65,7 @@ def spacy_pipe(text):
     to_coref = {}
     for clust in doc._.coref_clusters:
         for mention in clust.mentions:
-            start = mention.start
-            end = mention.end
+            start,end = mention.start,mention.end
             if start+1==end:
                 to_coref[start] = True
             else:
@@ -77,15 +76,10 @@ def spacy_pipe(text):
     # Step 2. Annotate those tokens with coreferring tokens
     corefed_tokens = {}
     for token in doc:
-        #print(token.i,token.text,token.head,token.dep_)
         if token.i in to_coref and to_coref[token.i]:
-            #print('Main span:',token._.coref_clusters[0].main)
-            #print('Main span start token_ix, end token_ix:',token._.coref_clusters[0].main.start,
-            #     token._.coref_clusters[0].main.end)
             corefed_tokens[token.i] = token._.coref_clusters[0].main.text
-
         else:
-            corefed_tokens[token.i] = None#token
+            corefed_tokens[token.i] = None
 
     # Step 3. Go through each sentence in the doc, tag relevant parts as Q, V, S, or N
     labeled_sents = defaultdict(dict) # To fill with list of doc.sents, with tagged versions of tokens
@@ -116,7 +110,6 @@ def spacy_pipe(text):
             ROOT = VERB
             if is_ROOT(ROOT):
                 if ROOT.dep_ == 'relcl' and ROOT.head.lemma_ in householder_stems:
-                    #print('CL DEP:',ROOT.dep_)
                     ROOT = ROOT.head
                     verb_deps.append(ROOT)
                 else:
@@ -136,7 +129,7 @@ def spacy_pipe(text):
 
                 verb_deps.extend([x for x in root_deps if x != VERB and x not in verb_deps])
 
-            NEG,IS_NEG,neg_children = None,None,None
+            NEG,subj_NEG,IS_NEG,neg_children,subj_NEG_children = None,None,None,None,None
             SUBJECT,subj_children = None,None
 
             for child in ROOT.children:
@@ -147,12 +140,10 @@ def spacy_pipe(text):
 
                 if child.dep_[:3] == 'neg':
                     NEG = child
-                    verb_deps.append(NEG)
                     neg_children = [c for c in NEG.children if c != ROOT]
                     for x in neg_children:
                         new_children = [c for c in x.children]
                         neg_children.extend(new_children)
-                    verb_deps.extend(neg_children)
                     IS_NEG = ROOT in NEG.head.children or ROOT == NEG.head
 
             if (SUBJECT is None) and ROOT.dep_[-2:] == 'cl':
@@ -161,12 +152,22 @@ def spacy_pipe(text):
             # Get rest of subject tokens
             if SUBJECT is not None:
                 subj_children = [c for c in SUBJECT.children if is_good_subj_dep(c.dep_)]
+                subj_NEG = [c for c in subj_children if c.dep_ == 'neg']
+                if len(subj_NEG) > 0:
+                    subj_NEG = subj_NEG[0]
+                    subj_children.remove(subj_NEG)
+                    subj_NEG_children = [c for c in subj_NEG.children if c != ROOT]
+                    for x in subj_NEG_children:
+                        new_children = [c for c in x.children]
+                        subj_NEG_children.extend(new_children)
+                else:
+                    subj_NEG = None
                 for x in subj_children:
                     new_children = [c for c in x.children if is_good_subj_dep(c.dep_)]
                     subj_children.extend(new_children)
 
+            # Find embedded comp. clause
             emb_main_verbs = [c for c in VERB.children if c.dep_ == 'ccomp']
-            # ^what if change to ROOT.children??????
 
             for emb_main_verb in emb_main_verbs:
                 # Recursively get all children of main verb of embedded clause
@@ -179,27 +180,27 @@ def spacy_pipe(text):
                 quote_indices = set([c.i for c in children_queue+[emb_main_verb]])
                 verb_indices = set([c.i for c in verb_deps+[VERB]])
                 verb_prt_indices = set([c.i for c in verb_prts])
-                main_verb_indices = {ROOT.i}
+                main_verb_indices = {VERB.i}
                 subj_indices = set([c.i for c in subj_children+[SUBJECT]]) if SUBJECT is not None else set()
                 main_subj_indices = {SUBJECT.i} if SUBJECT is not None else set()
-                neg_indices = set([c.i for c in neg_children+[NEG]]) if NEG is not None else set()
-                main_neg_indices = {NEG.i} if NEG is not None else set()
+                neg_verb_indices = set([c.i for c in neg_children+[NEG]]) if NEG is not None else set()
+                main_neg_verb_indices = {NEG.i} if NEG is not None else set()
+                neg_subj_indices = set([c.i for c in subj_NEG_children+[subj_NEG]]) if subj_NEG is not None else set()
+                main_neg_subj_indices = {subj_NEG.i} if subj_NEG is not None else set()
 
-                indices_per_label = {'s':subj_indices,
+                indices_per_label = {
+                                     'neg_s':neg_subj_indices,
+                                     'main_neg_s':main_neg_subj_indices,
+                                    's':subj_indices,
                                     'main_s':main_subj_indices,
-                                    'n':neg_indices,
-                                    'main_n':main_neg_indices,
+                                    'neg_v':neg_verb_indices,
+                                    'main_neg_v':main_neg_verb_indices,
                                     'v': verb_indices,
                                      'v_prt':verb_prt_indices,
                                     'main_v':main_verb_indices,
                                     'q': quote_indices}
 
-                # Tagging of tokens in sent happens here
-                tagged_tokens = {}
-                for label in indices_per_label:
-                    tagged_tokens.update({tok_index: label for tok_index in indices_per_label[label]})
-
-                labeled_sents[sent_no]["quotes"].append(tagged_tokens)
+                labeled_sents[sent_no]["quotes"].append(indices_per_label)
 
     return labeled_sents,corefed_tokens
 
