@@ -8,6 +8,7 @@ import urllib
 import requests
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
+import shutil
 
 def soupify(url):
         
@@ -50,7 +51,7 @@ def mv_files(subdir_name,outerdir_name):
     for f in inner_fs:  
         os.rename(os.path.join(outerdir_name,subdir_name,f),os.path.join(outerdir_name,f))  
     print('New size of outerdir:',len(os.listdir(outerdir_name))) 
-    
+    shutil.rmtree(os.path.join(outerdir_name,subdir_name))
     
 def read_quote_json(url_guid):
     with open(os.path.join(QUOTES_DIR,'{}.json'.format(url_guid)),'r') as f:
