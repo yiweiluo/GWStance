@@ -24,7 +24,7 @@ with open('householder_stems.txt','r') as f:
 print('Length of householder stems:',len(householder_stems))
 print(householder_stems[:3]+householder_stems[-3:])
 
-def get_fulltext(url_guid):
+def get_fulltext(url_guid,fulltext_dir):
     """Reads and returns file contents of text corresponding to a URL guid."""
     with open(os.path.join(fulltext_dir,url_guid+'.txt'),'r') as f:
         lines = f.readlines()
@@ -211,10 +211,16 @@ if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--debug', action="store_true", default=None,
                       help='whether to test run on smaller sample first')
+    arg_parser.add_argument('--path_to_df', type=str, default=None,
+                      help='/path/to/df')
+    arg_parser.add_argument('--output_dir', type=str, default=None,
+                      help='where to write batched output')
+    arg_parser.add_argument('--fulltext_dir', type=str, default=None,
+                      help='where to source fulltext')
 
     args = arg_parser.parse_args()
 
-    df = pd.read_csv(os.path.join(REMOTE_SCRAPE_DIR,'dedup_df.tsv'),sep='\t',header=0,index_col=0)
+    df = pd.read_pickle(os.path.join(REMOTE_SCRAPE_DIR,args.path_to_df))#,sep='\t',header=0,index_col=0)
     print('Length of df:',len(df))
 
     if args.debug:
@@ -224,8 +230,8 @@ if __name__ == "__main__":
 
 
     batch_no = 0
-    if not os.path.exists(REMOTE_PREPRO_DIR+'/extracted_quotes_{}'.format(batch_no)):
-        os.mkdir(REMOTE_PREPRO_DIR+'/extracted_quotes_{}'.format(batch_no))
+    if not os.path.exists(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'extracted_quotes_{}'.format(batch_no))):
+        os.mkdir(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'extracted_quotes_{}'.format(batch_no)))
 
 
     start_time = time.time()
@@ -234,7 +240,7 @@ if __name__ == "__main__":
         row = df.loc[row_ix]
         guid = row['guid']
         #print(ix,row_ix,guid)
-        text = get_fulltext(guid)
+        text = get_fulltext(guid,args.fulltext_dir)
         save_name = '{}.json'.format(guid)
         if len(text) > 0:
             labeled_sents,corefed_tokens = spacy_pipe(text)
@@ -244,7 +250,7 @@ if __name__ == "__main__":
         else:
             j = ""
 
-        with open(REMOTE_PREPRO_DIR+'/extracted_quotes_{}/{}'.format(batch_no,save_name),'w') as f:
+        with open(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'extracted_quotes_{}/{}'.format(batch_no,save_name)),'w') as f:
             f.write(j)
 
         #shutil.rmtree(REMOTE_SCRAPE_DIR+'/url_texts/{}.txt'.format(guid))
@@ -255,5 +261,5 @@ if __name__ == "__main__":
 
             # Divide into batches of 5000
             batch_no = ix
-            if not os.path.exists(os.path.join(REMOTE_PREPRO_DIR,'extracted_quotes_{}'.format(batch_no))):
-                os.mkdir(os.path.join(REMOTE_PREPRO_DIR+'/extracted_quotes_{}'.format(batch_no)))
+            if not os.path.exists(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'extracted_quotes_{}'.format(batch_no))):
+                os.mkdir(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'extracted_quotes_{}'.format(batch_no)))
