@@ -7,6 +7,7 @@ import shutil
 from nltk.tokenize import sent_tokenize
 import pickle
 from  collections import defaultdict
+import argparse
 
 import spacy
 nlp = spacy.load('en_core_web_sm')
@@ -177,16 +178,16 @@ def spacy_pipe(text):
                     children_queue.extend(new_children)
 
                 # Group indices by Quote component
-                quote_indices = set([c.i for c in children_queue+[emb_main_verb]])
-                verb_indices = set([c.i for c in verb_deps+[VERB]])
-                verb_prt_indices = set([c.i for c in verb_prts])
-                main_verb_indices = {VERB.i}
-                subj_indices = set([c.i for c in subj_children+[SUBJECT]]) if SUBJECT is not None else set()
-                main_subj_indices = {SUBJECT.i} if SUBJECT is not None else set()
-                neg_verb_indices = set([c.i for c in neg_children+[NEG]]) if NEG is not None else set()
-                main_neg_verb_indices = {NEG.i} if NEG is not None else set()
-                neg_subj_indices = set([c.i for c in subj_NEG_children+[subj_NEG]]) if subj_NEG is not None else set()
-                main_neg_subj_indices = {subj_NEG.i} if subj_NEG is not None else set()
+                quote_indices = [c.i for c in children_queue+[emb_main_verb]]
+                verb_indices = [c.i for c in verb_deps+[VERB]]
+                verb_prt_indices = [c.i for c in verb_prts]
+                main_verb_indices = [VERB.i]
+                subj_indices = [c.i for c in subj_children+[SUBJECT]] if SUBJECT is not None else []
+                main_subj_indices = [SUBJECT.i] if SUBJECT is not None else []
+                neg_verb_indices = [c.i for c in neg_children+[NEG]] if NEG is not None else []
+                main_neg_verb_indices = [NEG.i] if NEG is not None else []
+                neg_subj_indices = [c.i for c in subj_NEG_children+[subj_NEG]] if subj_NEG is not None else []
+                main_neg_subj_indices = [subj_NEG.i] if subj_NEG is not None else []
 
                 indices_per_label = {
                                      'neg_s':neg_subj_indices,
@@ -207,8 +208,19 @@ def spacy_pipe(text):
 
 
 if __name__ == "__main__":
-    df = pd.read_pickle(REMOTE_SCRAPE_DIR+'/temp_combined_df_with_ft_date_title_dedup.pkl')
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument('--debug', action="store_true", default=None,
+                      help='whether to test run on smaller sample first')
+
+    args = arg_parser.parse_args()
+
+    df = pd.read_csv(os.path.join(REMOTE_SCRAPE_DIR,'dedup_df.tsv'),sep='\t',header=0,index_col=0)
     print('Length of df:',len(df))
+
+    if args.debug:
+        end_ix = 5
+    else:
+        end_ix = len(df)
 
 
     batch_no = 0
@@ -217,7 +229,7 @@ if __name__ == "__main__":
 
 
     start_time = time.time()
-    for ix in range(5000,len(df)):
+    for ix in range(end_ix):
         row_ix = df.index[ix]
         row = df.loc[row_ix]
         guid = row['guid']
@@ -226,6 +238,7 @@ if __name__ == "__main__":
         save_name = '{}.json'.format(guid)
         if len(text) > 0:
             labeled_sents,corefed_tokens = spacy_pipe(text)
+            #print('corefed_tokens type:',type(corefed_tokens))
             j = json.dumps({"quote_tags":labeled_sents,
                    "coref_tags":corefed_tokens})
         else:
