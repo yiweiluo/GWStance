@@ -1,4 +1,5 @@
 climate	climat
+climactic	climact
 global	global
 warming	warm
 carbon	carbon
@@ -9,10 +10,13 @@ environment	environ
 co2	co2
 green	green
 ice	ice
+glacier	glacier
+glacial	glacial
 melt	melt
 sea	sea
 temperature	temperatur
 heat	heat
+hot	hot
 methane	methan
 greenhouse	greenhous
 arctic	arctic
@@ -35,6 +39,8 @@ economic	econom
 air	air
 pollution	pollut
 fire	fire
+wildfire	wildfir
+ipcc	ipcc
 epa	epa
 market	market
 scientist	scientist
@@ -63,3 +69,5 @@ coast	coast
 agriculture	agricultur
 water	water
 plant	plant
+weather	weather
+polar	polar
