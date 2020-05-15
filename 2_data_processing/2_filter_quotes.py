@@ -17,7 +17,22 @@ from nltk.tokenize import word_tokenize, sent_tokenize
 import spacy
 from spacy.lemmatizer import Lemmatizer, ADJ, NOUN, VERB
 
-from local_processors import mv_files
+# os.chdir('../')
+# print(os.getcwd())
+# print(os.listdir(os.getcwd()))
+# from local_processors import mv_files
+# os.chdir('./2_data_processing')
+
+def mv_files(subdir_name,outerdir_name):
+    """Moves contents of subdir_name (usually smaller batches) to outerdir_name."""
+    print('Moving contents of {} to {}...'.format(subdir_name,outerdir_name))
+    print('Size of outerdir:',len(os.listdir(outerdir_name)))
+    inner_fs = os.listdir(os.path.join(outerdir_name,subdir_name))
+    print('Size of subdir:',len(inner_fs))
+    for f in inner_fs:
+        os.rename(os.path.join(outerdir_name,subdir_name,f),os.path.join(outerdir_name,f))
+    print('New size of outerdir:',len(os.listdir(outerdir_name)))
+    shutil.rmtree(os.path.join(outerdir_name,subdir_name))
 
 nlp = spacy.load('en')
 lemmatizer = nlp.vocab.morphology.lemmatizer
@@ -40,7 +55,7 @@ def stem(s):
 
 def read_quote_json(url_guid,quotes_dir):
     """Reads json file containing quote objects associated with url_guid."""
-    with open(os.path.join(quote_dir,'{}.json'.format(url_guid)),'r') as f:
+    with open(os.path.join(quotes_dir,'{}.json'.format(url_guid)),'r') as f:
         contents = f.read()
         if len(contents) > 0:
             return json.loads(contents)
@@ -99,13 +114,14 @@ def main(df_path,output_dir,quotes_dir):
             good_v_quotes = []
             for sent_no in sents_with_quotes:
                 # Get quotes with main verb that is one of interest (in Householder list)
-                householder_main_v_quotes = get_householder_main_v_quotes(obj['quote_tags'][sent_no])
-                good_v_quotes.extend(list(zip([sent_no]*len(householder_main_v_quotes),householder_main_v_quotes)))
+                #householder_main_v_quotes = get_householder_main_v_quotes(obj['quote_tags'][sent_no])
+                quote_tag_dict_list = obj['quote_tags'][sent_no]
+                #good_v_quotes.extend(list(zip([sent_no]*len(householder_main_v_quotes),householder_main_v_quotes)))
+                good_v_quotes.extend([(sent_no,q_no,q_dict) for q_no,q_dict in enumerate(quote_tag_dict_list['quotes'])])
 
             # Now, get the quote text to classify stance, with url_guid + sent_no, so I can recover context
-            good_v_quote_texts = [(sent_no,q_no,[(obj['quote_tags'][sent_no]['idx2text'][idx],obj['coref_tags'][idx])
-                                            for (idx,label) in sorted(q_dict.items(),key=lambda x: int(x[0]))
-                                            if q_dict[idx] == 'q']) for sent_no,(q_no,q_dict) in good_v_quotes]
+            good_v_quote_texts = [(sent_no,q_no,[(obj['quote_tags'][sent_no]['idx2text'][str(idx)],obj['coref_tags'][str(idx)])
+                                            for idx in sorted(q_dict['q'],key=lambda x: int(x))]) for sent_no,q_no,q_dict in good_v_quotes]
 
 
             with open('./{}/all_quote_comps.csv'.format(output_dir), 'a', newline='') as csvfile:
@@ -145,8 +161,6 @@ def main(df_path,output_dir,quotes_dir):
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument('--debug', action="store_true", default=None,
-                      help='whether to test run on smaller sample first')
     arg_parser.add_argument('--path_to_df', type=str, default=None,
                       help='/path/to/df')
     arg_parser.add_argument('--output_dir', type=str, default=None,
@@ -161,6 +175,5 @@ if __name__ == "__main__":
              glob.glob(os.path.join(args.quotes_dir,'extracted_quotes_*')))
     for subdir_path in glob.glob(os.path.join(args.quotes_dir,'extracted_quotes_*')):
         mv_files(subdir_path.split('/')[-1],args.quotes_dir)
-        shutil.rmtree(subdir_path)
 
     main(args.path_to_df,args.output_dir,args.quotes_dir)
