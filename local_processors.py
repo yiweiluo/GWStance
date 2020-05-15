@@ -53,8 +53,8 @@ def mv_files(subdir_name,outerdir_name):
     print('New size of outerdir:',len(os.listdir(outerdir_name))) 
     shutil.rmtree(os.path.join(outerdir_name,subdir_name))
     
-def read_quote_json(url_guid):
-    with open(os.path.join(QUOTES_DIR,'{}.json'.format(url_guid)),'r') as f:
+def read_quote_json(url_guid,quotes_dir):
+    with open(os.path.join(quotes_dir,'{}.json'.format(url_guid)),'r') as f:
         contents = f.read()
         if len(contents) > 0:
             return json.loads(contents)
