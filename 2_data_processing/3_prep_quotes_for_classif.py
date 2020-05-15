@@ -33,8 +33,17 @@ if __name__ == "__main__":
     quotes_df['clean_quote'] = quotes_df['quote_text'].apply(prettify)
     quotes_df['clean_quote_coref'] = quotes_df['coref'].apply(prettify)
     print('Saving...')
-    quotes_df[['guid','sent_no','quote_no','clean_quote','clean_quote_coref']].to_csv('./output/keyword_filtered_comp_clauses_for_classif.tsv'
+
+    save_df = quotes_df[['guid','sent_no','quote_no','clean_quote','clean_quote_coref']]
+    save_df.to_csv('./output/keyword_filtered_comp_clauses_for_classif.tsv'
                                                                             ,sep='\t',header=True)
+    batch_size = 50000
+    os.mkdir('./output/batched')
+    for batch_no in range(round(len(save_df)/batch_size+0.5)):
+        os.mkdir('./output/batched/{}'.format(batch_no))
+        batch_df = save_df[batch_no*batch_size:batch_no*batch_size+batch_size]
+        batch_df.to_csv('./output/batched/{}/test.tsv'.format(batch_no),sep='\t',header=True)
+
     print('Done!\n')
 
     # Want to divide into batches for prediction?
