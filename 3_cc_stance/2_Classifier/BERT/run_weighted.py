@@ -444,6 +444,7 @@ def load_and_cache_examples(args, task, tokenizer, evaluate=False):
             #print('args.eval_on_test:',args.eval_on_test)
             print('args.eval_partition', args.eval_partition)
             print('examples:', examples[:3])
+            print('last examples:', examples[-3:])
         else:
             examples = processor.get_train_examples(args.data_dir, args.do_text_b)
         features = convert_examples_to_features(
