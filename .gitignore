@@ -1,4 +1,15 @@
 4_analyses//Log\ odds\ etc..ipynb
+1_data_scraping/*.pkl
+1_data_scraping/*.pkl
+1_data_scraping/*.pkl
+1_data_scraping/*.pkl
+1_data_scraping/*.pkl
+1_data_scraping/*.pkl
+1_data_scraping/*.pkl
+1_data_scraping/*.pkl
+1_data_scraping/*.pkl
+1_data_scraping/*.pkl
+1_data_scraping/*.pkl
 
 1_data_scraping/thenation_title_gueeses.pkl
 1_data_scraping/scrape_fulltext.py
