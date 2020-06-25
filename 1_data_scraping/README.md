@@ -10,7 +10,6 @@ Out of copyright concerns, we do not make the full text of the corresponding URL
 
 	You can use the default news domains that we used to retrieve news stories (`google_domains.txt` contains domains we fetched from using SerpApi, `mediacloud_ids.txt` contains domains we fetched from with the MediaCloud API), or you can modify these text files to add/remove domains as you like. Note, however, that MediaCloud requires an ID corresponding to a news domain to fetch from it (see their instructions [here](https://github.com/berkmancenter/mediacloud/blob/master/doc/api_2_0_spec/api_2_0_spec.md#grab-all-stories-in-the-new-york-times-during-october-2012)).
 
-Sample usage:
-
+	Sample usage:
 
 * `1_dedup_titles.py` regularizes the headlines of fetched URLs for deduplication purposes.
