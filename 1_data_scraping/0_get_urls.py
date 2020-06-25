@@ -11,6 +11,7 @@ import datetime
 import json
 from dateutil import parser
 from collections import defaultdict
+import shutil
 
 config = json.load(open('../config.json', 'r'))
 MC_API_KEY = config['MC_API_KEY']
@@ -106,6 +107,7 @@ def get_mc_urls(start_year=2000,start_mo=1,start_day=1,end_year=2020,end_mo=12,e
     df_all = df_all[df_all.language == 'en']
     df_all['clean_title'] = df_all.title.apply(lambda x: re.sub(r'[^a-zA-Z0-9\s]', '', x.lower()))
     df_all.to_pickle('mediacloud_df.pkl')
+    shutil.rmtree('./mediacloud')
 
 
 def get_serp_urls(l_domains,r_domains):
@@ -385,6 +387,7 @@ if __name__ == "__main__":
     arg_parser.add_argument('--mediacloud_end_day', type=int, default=31, help='End day threshold for stories')
     args = arg_parser.parse_args()
 
+    L_DOMAINS,R_DOMAINS = None,None
 
     print('Getting URLs...')
     if args.do_serp:
