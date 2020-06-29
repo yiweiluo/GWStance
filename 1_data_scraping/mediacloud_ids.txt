@@ -1,0 +1,135 @@
+media_id	name	leaning
+1112	Mother Jones	l
+1127	Raw Story	l
+107659	mintpressnews.com	l
+115	Daily Kos	l
+1133	Common Dreams	l
+56758	Alternet	l
+1757	Salon	l
+359084	Superglue: MSNBC	l
+140	Taegan Goddard's Political Wire	l
+113	Talking Points Memo	l
+1115	The Nation 	l
+31137	TheRealNews.com	l
+111	Think Progress  	l
+25363	nationalmemo.com	l
+58675	towleroad.com	l
+22332	Truthout	l
+26357	Upworthy	l
+23014	Truth Dig	l
+26363	opednews.com	l
+19334	Breitbart	r
+20357	CNS News	r
+18775	Daily Caller	r
+105100	Daily Signal	r
+117	Hot Air  	r
+25349	NewsMax	r
+25626	patriotpost.us	r
+19082	PJMedia	r
+128	Redstate 	r
+22088	The Blaze	r
+284361	blacknews	r
+150995	WND	r
+1145	drudgereport	r
+1092	FOX News	r
+1117	National Review	r
+28464	New York Sun	r
+19763	townhall.com	r
+1125	NewsBusters	r
+1040	Real Clear Politics	r
+21919	The American Spectator	r
+366646	unionleader.com	r
+101	Washington Times	r
+56	Arkansas Democrat-Gazette 	l
+25128	AZCentral	l
+85390	blogs.indystar.com	l
+9	Chicago Tribune	r
+26590	cincinnati.com	c
+1641	cleveland.com	l
+8	Daily News	l
+12	Dallas Morning News	r
+20262	freep.com	l
+39573	HonululuAdvertiser	l
+10	houstonchronicle	l
+6	LA Times	l
+36	Milwaukee Journal Sentinel 	l
+65422	mlive.com	c
+1	New York Times	l
+13	Newsday	l
+20120	nj.com	l
+7	NY Post	r
+54	Omaha World-Herald 	r
+79209	pilotonline.com	l
+45	Pittsburgh Post-Gazette 	r
+33	San Antonio Express News	l
+35	San Jose Mercury News	l
+268225	sandiegouniontribune.com	l
+24940	Seattle Times	l
+14	sfchronicle	l
+39	South Florida Sun-Sentinel	r
+27	St. Louis Post Dispatch	l
+52	St.Paul Pioneer-Press 	l
+19	Star Tribune 	l
+21934	suntimes.com	l
+22	Tampa Bay Times	l
+17	The Atlanta Journal Constitution	l
+34	The Baltimore Sun	l
+15	The Boston Globe	l
+57	The Buffalo News 	l
+41	The Columbus Dispatch	r
+31	The Denver Post	l
+59	The Hartford Courant 	l
+30	The Kansas City Star	l
+25	The Orange County Register	c
+38	The Orlando Sentinel	l
+26	The Sacramento Bee	l
+4	USA Today	l
+1150	Wall Street Journal	r
+2	Washington Post	l
+147903	247sports.com	
+18452	bgr.com	l
+24901	bleacherreport.com	
+18710	Business Insider	l
+4415	CNET	c
+22389	Deadspin	l
+18380	digitaltrends.com	
+70102	elitedaily.com	
+4469	Gizmodo	
+27502	Huffington Post	l
+35170	Marketwatch	r
+5527	Mashable!	l
+18268	Politico	c
+67737	SB Nation	
+19643	Slate.com	l
+1707	The Daily Beast	l
+107634	The Verge	l
+368082	theroot.com	l
+56051	TMZ	
+104828	Vox	l
+1752	cbs news	l
+1095	CNN	l
+1104	Forbes	r
+1149	MSNBC	l
+4419	Time	l
+6276	drudgereport	r
+1722	the_american_conservative	r
+6283	gateway_pundit	r
+129	reason	r
+26614	cbn	r
+91005	charismanews	r
+110589	commdiginews	r
+207206	conservative_review	r
+24829	conservative_treehouse	r
+24752	conservativedailynews	r
+69591	conservativefiringline	r
+106716	grabien	r
+26864	independentsentinel	r
+18515	infowars	r
+68764	libertyunyielding	r
+116	pajamas_media	r
+114116	progressivestoday	r
+69028	rare.us	r
+31827	sgtreport	r
+29786	shoebat	r
+146564	sonsoflibertymedia	r
+26856	newswithviews	r
