@@ -60,56 +60,6 @@ def parse_serpapi_results(d_list):
     return meta
 
 
-def get_mc_urls(start_year=2000,start_mo=1,start_day=1,end_year=2020,end_mo=12,end_day=31):
-    """
-    Generates `mediacloud_df.pkl`, a dataframe w/ output from MediaCloud.
-    :param int start_year: Year to begin collecting stories.
-    :param int start_mo: Month to begin collecting stories.
-    :param int start_day: Day to begin collecting stories.
-    :param int end_year: Year to end story collection.
-    :param int end_mo: Month to end story collection.
-    :param int end_day: Day to end story collection.
-    """
-    if not os.path.exists('./mediacloud'):
-        os.mkdir('./mediacloud')
-
-    for curr_outlet_ix in mc_ids.index:
-        curr_outlet_id = mc_ids.iloc[curr_outlet_ix]['media_id']
-        curr_outlet_stance = mc_ids.iloc[curr_outlet_ix]['leaning']
-        fetch_size = 5000
-        stories = []
-        last_processed_stories_id = 0
-        for start_year in range(start_year,end_year,5): # Start collecting stories from Jan. 1, 2000 by default
-            while len(stories) < 10000:
-                fetched_stories = mc.storyList('(climate AND chang*) OR (global AND warming) OR (carbon AND dioxide) OR (co2) OR (fossil AND fuel*) AND media_id:{}'.format(curr_outlet_id),
-                                               solr_filter=mc.publish_date_query(datetime.date(start_year,start_mo,start_day), datetime.date(start_year+4,end_mo,end_day)),
-                                               last_processed_stories_id=last_processed_stories_id, rows= fetch_size)
-                stories.extend(fetched_stories)
-                if len( fetched_stories) < fetch_size:
-                    break
-                last_processed_stories_id = stories[-1]['processed_stories_id']
-        if len(stories) > 0:
-            df = pd.DataFrame({key: [s[key] for s in stories] for key in mc_metadata})
-            df['topic'] = ['cc']*len(df)
-            df['stance'] = curr_outlet_stance
-            df.sort_values(by='publish_date')
-
-            OUTLET_NAME = df['media_name'].iloc[0].lower().replace(' ','_')
-            df.to_pickle(os.path.join('mediacloud','{}_df.pkl'.format(OUTLET_NAME)))
-            print('Done fetching stories from {} (outlet id = {}).'.format(OUTLET_NAME,curr_outlet_id))
-
-    # Merge into a single df; filter out stories not in English; clean titles.
-    dfs = []
-    for filename in glob.glob('mediacloud/*.pkl'):
-        df = pd.read_pickle(filename)
-        dfs.append(df)
-    df_all = pd.concat(dfs,ignore_index=True)
-    df_all = df_all[df_all.language == 'en']
-    df_all['clean_title'] = df_all.title.apply(lambda x: re.sub(r'[^a-zA-Z0-9\s]', '', x.lower()))
-    df_all.to_pickle('mediacloud_df.pkl')
-    shutil.rmtree('./mediacloud')
-
-
 def get_serp_urls(l_domains,r_domains):
     """
     Generates `google_search_res_climate_change_n.pkl`, a dictionary with outer keys for domains and inner keys for search terms.
@@ -135,7 +85,65 @@ def get_serp_urls(l_domains,r_domains):
     print('Done!')
 
 
-def create_filtered_df(l_domains=None,r_domains=None):
+def get_mc_urls(start_year=1,start_mo=1,start_day=1,end_year=2020,end_mo=12,end_day=31):
+    """
+    Generates `mediacloud_df.pkl`, a dataframe w/ output from MediaCloud.
+    :param int start_year: Year to begin collecting stories.
+    :param int start_mo: Month to begin collecting stories.
+    :param int start_day: Day to begin collecting stories.
+    :param int end_year: Year to end story collection.
+    :param int end_mo: Month to end story collection.
+    :param int end_day: Day to end story collection.
+    """
+    if not os.path.exists('./mediacloud'):
+        os.mkdir('./mediacloud')
+
+    date_range_str = '{}_{}_{}_to_{}_{}_{}'.format(start_year,start_mo,start_day,end_year,end_mo,end_day)
+    #print(date_range_str)
+    if not os.path.exists(os.path.join('mediacloud',date_range_str)):
+        os.mkdir(os.path.join('mediacloud',date_range_str))
+
+        for curr_outlet_ix in mc_ids.index:
+            curr_outlet_id = mc_ids.iloc[curr_outlet_ix]['media_id']
+            curr_outlet_stance = mc_ids.iloc[curr_outlet_ix]['leaning']
+            fetch_size = 5000
+            stories = []
+            last_processed_stories_id = 0
+            for start_year in range(start_year,end_year,5): # Start collecting stories from Jan. 1, 2000 by default
+                while len(stories) < 10000:
+                    fetched_stories = mc.storyList('(climate AND chang*) OR (global AND warming) OR (carbon AND dioxide) OR (co2) OR (fossil AND fuel*) AND media_id:{}'.format(curr_outlet_id),
+                                                   solr_filter=mc.publish_date_query(datetime.date(start_year,start_mo,start_day), datetime.date(start_year+4,end_mo,end_day)),
+                                                   last_processed_stories_id=last_processed_stories_id, rows= fetch_size)
+                    stories.extend(fetched_stories)
+                    if len( fetched_stories) < fetch_size:
+                        break
+                    last_processed_stories_id = stories[-1]['processed_stories_id']
+            if len(stories) > 0:
+                df = pd.DataFrame({key: [s[key] for s in stories] for key in mc_metadata})
+                df['topic'] = ['cc']*len(df)
+                df['stance'] = curr_outlet_stance
+                df.sort_values(by='publish_date')
+
+                OUTLET_NAME = df['media_name'].iloc[0].lower().replace(' ','_')
+                df.to_pickle(os.path.join('mediacloud',date_range_str,'{}_df.pkl'.format(OUTLET_NAME)))
+                print('Done fetching stories from {} (outlet id = {}).'.format(OUTLET_NAME,curr_outlet_id))
+
+        # Merge into a single df; filter out stories not in English; clean titles.
+        dfs = []
+        for filename in glob.glob('mediacloud/{}/*.pkl'.format(date_range_str)):
+            df = pd.read_pickle(filename)
+            dfs.append(df)
+        if len(dfs) > 0:
+            df_all = pd.concat(dfs,ignore_index=True)
+            df_all = df_all[df_all.language == 'en']
+            df_all['clean_title'] = df_all.title.apply(lambda x: re.sub(r'[^a-zA-Z0-9\s]', '', x.lower()))
+            df_all.to_pickle('mediacloud_df_{}.pkl'.format(date_range_str))
+        else:
+            print('No MediaCloud stories found in selected date range.')
+        shutil.rmtree(os.path.join('mediacloud',date_range_str))
+
+
+def create_filtered_df(l_domains=None,r_domains=None,mc_date_range_str=None):
     """Creates intermediate df for collected URLs, applying filtering, regularization, and deduplication."""
 
     BLACKLIST_URL_INIT_STRS = set(['rss.','feeds.','rssfeeds.'])
@@ -324,8 +332,8 @@ def create_filtered_df(l_domains=None,r_domains=None):
                                 filtered_topics.append(topic)
                                 filtered_is_AP.append(is_AP)
 
-    if args.do_mediacloud:
-        mediacloud_cc_urls = pd.read_pickle('mediacloud_df.pkl')
+    if args.do_mediacloud and os.path.exists('mediacloud_df_{}.pkl'.format(mc_date_range_str)):
+        mediacloud_cc_urls = pd.read_pickle('mediacloud_df_{}.pkl'.format(mc_date_range_str))
 
         for ix in mediacloud_cc_urls.index:
             row = mediacloud_cc_urls.loc[ix]
@@ -368,8 +376,8 @@ def create_filtered_df(l_domains=None,r_domains=None):
     combined_df = combined_df.sort_values(['title'],axis=0)
     combined_df = combined_df.drop_duplicates(subset='url',keep='first')
     print('Intermediate df shape:',combined_df.shape)
-    print('Saving intermediate df to "temp_combined_df.pkl"...')
-    combined_df.to_pickle('temp_combined_df.pkl')
+    print('Saving intermediate df to "temp_combined_df_{}.pkl"...'.format(mc_date_range_str))
+    combined_df.to_pickle('temp_combined_df_{}.pkl'.format(mc_date_range_str))
 
 
 if __name__ == "__main__":
@@ -418,6 +426,7 @@ if __name__ == "__main__":
 
         #get_serp_urls(L_DOMAINS,R_DOMAINS)
 
+    mc_date_range_str = ''
     if args.do_mediacloud:
 
         # Set up MediaCloud API
@@ -432,9 +441,14 @@ if __name__ == "__main__":
         mc_ids = pd.read_csv('./mediacloud_ids.txt',sep='\t',header=0)
         mc_ids.reset_index(drop=True, inplace=True)
 
-        get_mc_urls(args.mediacloud_start_year,args.mediacloud_start_month,args.mediacloud_start_day,
-        args.mediacloud_end_year,args.mediacloud_end_month,args.mediacloud_end_day)
+        mc_date_range_str = '{}_{}_{}_to_{}_{}_{}'.format(args.mediacloud_start_year,args.mediacloud_start_month,
+        args.mediacloud_start_day,args.mediacloud_end_year,args.mediacloud_end_month,args.mediacloud_end_day)
+        print(mc_date_range_str)
+        print('Fetching stories from {}/{}/{} to {}/{}/{} from MediaCloud...'.format(args.mediacloud_start_year,args.mediacloud_start_month,
+        args.mediacloud_start_day,args.mediacloud_end_year,args.mediacloud_end_month,args.mediacloud_end_day))
+        get_mc_urls(start_year=args.mediacloud_start_year,start_mo=args.mediacloud_start_month,start_day=args.mediacloud_start_day,
+        end_year=args.mediacloud_end_year,end_mo=args.mediacloud_end_month,end_day=args.mediacloud_end_day)
     print('Done retrieving URLs!')
 
     print('Creating intermediate dataframe...')
-    create_filtered_df(set(L_DOMAINS),set(R_DOMAINS)) if L_DOMAINS is not None and R_DOMAINS is not None else create_filtered_df()
+    create_filtered_df(set(L_DOMAINS),set(R_DOMAINS),mc_date_range_str) if L_DOMAINS is not None and R_DOMAINS is not None else create_filtered_df(mc_date_range_str=mc_date_range_str)
