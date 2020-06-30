@@ -1,6 +1,6 @@
 {
   "MC_API_KEY": "",
-  "SERP_API_KEY": "48fd8adb13e54ea81ad60a36f30330933a63b5a787e1f593ee4a8343b7b91dd7",
+  "SERP_API_KEY": "",
   "SEED": 42,
   "REMOTE_SCRAPE_DIR": "/u/scr/yiweil/sci_debates/scraping",
   "REMOTE_PREPRO_DIR": "/u/scr/yiweil/sci_debates/prepro",
