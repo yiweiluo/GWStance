@@ -16,14 +16,14 @@ Sample usage:
 
 ```
 python 0_get_urls.py \
-	--do_serp \
-	--do_mediacloud \
-	--mediacloud_start_year 2019 \
-	--mediacloud_start_month 12 \
-	--mediacloud_start_day 1 \
-	--mediacloud_end_year 2020 \
-	--mediacloud_end_month 4 \
-	--mediacloud_end_day 30
+	--do_serp \ 			# whether to run SerpAPI URL retrieval
+	--do_mediacloud \		# whether to run MediaCloud URL retrieval
+	--mediacloud_start_year 2019 \ 	# start year threshold for MediaCloud (default 2000)
+	--mediacloud_start_month 12 \	# start month threshold for MediaCloud (default 1)
+	--mediacloud_start_day 1 \	# start day threshold for MediaCloud (default 1)
+	--mediacloud_end_year 2020 \	# end year threshold for MediaCloud (default 2020)
+	--mediacloud_end_month 4 \	# end month threshold for MediaCloud (default 12)
+	--mediacloud_end_day 30		# end day threshold for MediaCloud (default 31)
 ```
 
 ## Deduplicating articles
