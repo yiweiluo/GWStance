@@ -42,7 +42,7 @@ def do_serpapi(domain,keyword):
 def parse_serpapi_results(d_list):
     """
     Script for parsing results returned from do_serpapi().
-    :param d_list: List of dictionaries returned by do_serpapi().
+    :param d_list: list of dictionaries returned by do_serpapi().
     :return: list of URLs with meta information (title, publish date)
     """
     meta = []
@@ -62,7 +62,8 @@ def parse_serpapi_results(d_list):
 
 def get_serp_urls(l_domains,r_domains):
     """
-    Generates `google_search_res_climate_change_n.pkl`, a dictionary with outer keys for domains and inner keys for search terms.
+    Generates `google_search_res_climate_change_<current date>.pkl`, a dictionary with outer keys for domains and inner keys for search terms,
+    where <current date> records the date of the API call.
     """
 
     # Initialize default nested dict with outer keys for each media domain and inner keys for each keyword.
@@ -76,10 +77,9 @@ def get_serp_urls(l_domains,r_domains):
             URLS_PER_DOMAIN[DOMAIN][KW] = results
 
     # Save nested dict
-    existing = glob.glob('google_search_res_climate_change*')
-    num_existing = len(existing)
-    save_prefix = 'google_search_res_climate_change_{}'.format(num_existing)
-    save_name = '{}.pkl'.format(save_prefix)
+    curr_date = datetime.date.today()
+    str_curr_date = curr_date.strftime("%m_%d_%Y")
+    save_name = 'google_search_res_climate_change_{}.pkl'.format(str_curr_date)
     print('Saving search results to {}...'.format(save_name))
     pickle.dump(URLS_PER_DOMAIN,open(save_name,'wb'))
     print('Done!')
@@ -99,7 +99,6 @@ def get_mc_urls(start_year=1,start_mo=1,start_day=1,end_year=2020,end_mo=12,end_
         os.mkdir('./mediacloud')
 
     date_range_str = '{}_{}_{}_to_{}_{}_{}'.format(start_year,start_mo,start_day,end_year,end_mo,end_day)
-    #print(date_range_str)
     if not os.path.exists(os.path.join('mediacloud',date_range_str)):
         os.mkdir(os.path.join('mediacloud',date_range_str))
 
@@ -168,7 +167,6 @@ def create_filtered_df(l_domains=None,r_domains=None,mc_date_range_str=None):
         return url[-4:] == '.pdf'
 
     from urllib.parse import urlparse
-
     def get_hostname(url, uri_type='both'):
         """Get the host name from the url"""
         parsed_uri = urlparse(url)
@@ -424,7 +422,7 @@ if __name__ == "__main__":
         print('L_DOMAINS:',L_DOMAINS)
         print('R_DOMAINS:',R_DOMAINS)
 
-        #get_serp_urls(L_DOMAINS,R_DOMAINS)
+        get_serp_urls(L_DOMAINS,R_DOMAINS)
 
     mc_date_range_str = ''
     if args.do_mediacloud:
@@ -443,7 +441,6 @@ if __name__ == "__main__":
 
         mc_date_range_str = '{}_{}_{}_to_{}_{}_{}'.format(args.mediacloud_start_year,args.mediacloud_start_month,
         args.mediacloud_start_day,args.mediacloud_end_year,args.mediacloud_end_month,args.mediacloud_end_day)
-        print(mc_date_range_str)
         print('Fetching stories from {}/{}/{} to {}/{}/{} from MediaCloud...'.format(args.mediacloud_start_year,args.mediacloud_start_month,
         args.mediacloud_start_day,args.mediacloud_end_year,args.mediacloud_end_month,args.mediacloud_end_day))
         get_mc_urls(start_year=args.mediacloud_start_year,start_mo=args.mediacloud_start_month,start_day=args.mediacloud_start_day,
