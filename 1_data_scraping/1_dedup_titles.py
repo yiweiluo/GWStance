@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+
+import argparse
 import re
 import pandas as pd
 import os
@@ -45,7 +48,14 @@ def is_same(u1,u2):
 
 
 if __name__ == "__main__":
-    combined_df_ft = pd.read_pickle(REMOTE_SCRAPE_DIR+'/temp_combined_df_with_ft_date_title.pkl')
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument('--input_df_filename', type=str, default=None,
+                      help='/path/to/df/with/urls/and/titles')
+    arg_parser.add_argument('--output_df_filename', type=str, default=None,
+                                        help='/path/to/saved/df/with/urls/and/titles')
+    args = arg_parser.parse_args()
+
+    combined_df_ft = pd.read_pickle(os.path.join(REMOTE_SCRAPE_DIR,args.input_df_filename))
     outlet_groups = combined_df_ft.groupby('domain')
     print(combined_df_ft.shape)
 
@@ -67,8 +77,8 @@ if __name__ == "__main__":
                          combined_df_ft.loc[index2].reg_title))
                     combined_df_ft.at[index1,'reg_title'] = t2
 
-        combined_df_ft.to_pickle(REMOTE_SCRAPE_DIR+'/temp_combined_df_with_ft_date_title_dedup.pkl')
+        combined_df_ft.to_pickle(os.path.join(REMOTE_SCRAPE_DIR,'temp_dedup_df.pkl'))
 
     combined_df_ft = combined_df_ft.drop_duplicates('reg_title',keep='first')
-    print('Finished! Saving...')
-    combined_df_ft.to_pickle(REMOTE_SCRAPE_DIR+'/temp_combined_df_with_ft_date_title_dedup.pkl')
+    print('Finished! Saving deduplicated df to {}...'.format(os.path.join(REMOTE_SCRAPE_DIR,args.output_df_filename)))
+    combined_df_ft.to_pickle(os.path.join(REMOTE_SCRAPE_DIR,args.output_df_filename))
