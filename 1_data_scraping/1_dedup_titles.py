@@ -58,8 +58,11 @@ if __name__ == "__main__":
     args = arg_parser.parse_args()
 
     combined_df_ft = pd.read_pickle(os.path.join(REMOTE_SCRAPE_DIR,args.input_df_filename)) if args.use_remote else pd.read_pickle(args.input_df_filename)
+    print('Read in data with shape {}.'.format(combined_df_ft.shape))
+    print('Regularizing titles...')
+    combined_df_ft['reg_title'] = combined_df_ft['title'].apply(regularize_title)
+    print('Grouping by outlet sources...')
     outlet_groups = combined_df_ft.groupby('domain')
-    print(combined_df_ft.shape)
 
     for outlet in outlet_groups.first().index:
         outlet_df = outlet_groups.get_group(outlet)
