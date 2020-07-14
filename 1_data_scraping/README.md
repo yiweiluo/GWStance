@@ -1,6 +1,8 @@
 # Data details
 
-Out of copyright concerns, we do not make the full text of the corresponding URLs, nor the code for scraping the text of the URLs available. However, we release the full set of URLs and corresponding meta information (article headline, publish date, etc.) in `dedup_df.tsv`. 
+This directory contains `dedup_df.tsv`, the dataframe containing URLs and meta-data on the full set of unique articles (title, publish date, outlet source) that we use in our analysis. Out of copyright concerns, we do not make the full text of the corresponding URLs, nor the code for scraping the text of the URLs available. 
+
+We also provide scripts and helper files for obtaining and deduplicating additional article URLs, if you want to get your own data from different time ranges, using different keyword search terms, etc. 
 
 ## Getting URLs of climate change articles
 
