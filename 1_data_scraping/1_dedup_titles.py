@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import argparse
 import re
 import pandas as pd
@@ -56,8 +55,10 @@ if __name__ == "__main__":
     arg_parser.add_argument('--output_df_filename', type=str, default=None,
                                         help='/path/to/saved/df/with/urls/and/titles')
     args = arg_parser.parse_args()
+    from_name = os.path.join(REMOTE_SCRAPE_DIR,args.input_df_filename) if args.use_remote else args.input_df_filename
+    save_name = os.path.join(REMOTE_SCRAPE_DIR,args.output_df_filename) if args.use_remote else args.output_df_filename
 
-    combined_df_ft = pd.read_pickle(os.path.join(REMOTE_SCRAPE_DIR,args.input_df_filename)) if args.use_remote else pd.read_pickle(args.input_df_filename)
+    combined_df_ft = pd.read_pickle(from_name)
     print('Read in data with shape {}.'.format(combined_df_ft.shape))
     print('Regularizing titles...')
     combined_df_ft['reg_title'] = combined_df_ft['title'].apply(regularize_title)
@@ -82,15 +83,6 @@ if __name__ == "__main__":
                          combined_df_ft.loc[index2].reg_title))
                     combined_df_ft.at[index1,'reg_title'] = t2
 
-        if args.use_remote:
-            combined_df_ft.to_pickle(os.path.join(REMOTE_SCRAPE_DIR,'temp_dedup_df.pkl'))
-        else:
-            combined_df_ft.to_pickle('temp_dedup_df.pkl')
-
     combined_df_ft = combined_df_ft.drop_duplicates('reg_title',keep='first')
-    if args.use_remote:
-        save_name = os.path.join(REMOTE_SCRAPE_DIR,args.output_df_filename)
-    else:
-        save_name = args.output_df_filename
     print('Finished! Saving deduplicated df to {}...'.format(save_name))
     combined_df_ft.to_pickle(save_name)
