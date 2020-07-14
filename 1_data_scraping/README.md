@@ -28,4 +28,12 @@ python 0_get_urls.py \
 
 ## Deduplicating articles
 
-`1_dedup_titles.py` regularizes the headlines of fetched URLs for deduplication purposes.
+We deduplicate articles based on the edit distance of their associated titles, after regularization. You can use the pre-deduplicated data we obtain from running `1_dedup_titles.py` on titles we scraped (``), or you can scrape your own titles as input to `1_dedup_titles.py`. 
+
+Sample usage:
+```
+python 1_dedup_tites.py \
+	--input_df_filename \		# where to read in pre-deduplicated data
+	--output_df_filename 		# where to save deduplicated data
+```
+
