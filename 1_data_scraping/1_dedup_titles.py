@@ -4,6 +4,7 @@ import argparse
 import re
 import pandas as pd
 import os
+import json
 
 config = json.load(open('../config.json', 'r'))
 REMOTE_SCRAPE_DIR = config['REMOTE_SCRAPE_DIR']
