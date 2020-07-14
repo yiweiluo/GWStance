@@ -79,8 +79,9 @@ if __name__ == "__main__":
                 if is_same(t1,t2):
                     print('Match found!')
                     # Set reg_title of t1 to be t2
-                    print("Changing df title value from '{}' to '{}'".format(combined_df_ft.loc[index1].reg_title,
-                         combined_df_ft.loc[index2].reg_title))
+                    print("Changing df title value from '{}' to '{}'".format(t1,t2))
+                    print('Previous row:', combined_df_ft.loc[index1])
+                    print('Match row:', combined_df_ft.loc[index2])
                     combined_df_ft.at[index1,'reg_title'] = t2
 
     combined_df_ft = combined_df_ft.drop_duplicates('reg_title',keep='first')
