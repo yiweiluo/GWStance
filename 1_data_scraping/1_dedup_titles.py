@@ -88,5 +88,5 @@ if __name__ == "__main__":
         save_name = os.path.join(REMOTE_SCRAPE_DIR,args.output_df_filename)
     else:
         save_name = args.output_df_filename
-    print('Finished! Saving deduplicated df to {}...'.format(save_name)
+    print('Finished! Saving deduplicated df to {}...'.format(save_name))
     combined_df_ft.to_pickle(save_name)
