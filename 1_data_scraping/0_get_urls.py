@@ -66,7 +66,7 @@ def get_serp_urls(l_domains,r_domains):
     """
     if not os.path.exists('./serp_api'):
         os.mkdir('./serp_api')
-        
+
     # Query each domain for each keyword
     for DOMAIN in l_domains + r_domains:
         for KW in CC_KEYWORDS:
@@ -84,7 +84,7 @@ def merge_serp_urls():
     URLS_PER_DOMAIN = defaultdict(dict)
 
     # Merge serp API results into a single nested dict.
-    for filename in glob.glob('serp_api/{}/*.pkl'.format(date_range_str)):
+    for filename in glob.glob('serp_api/*.pkl'):
         res = pickle.load(open(filename,'rb'))
         domain_kw = filename.split('/')[-1][:-4]
         domain,kw = domain_kw.split('_')
@@ -436,7 +436,7 @@ if __name__ == "__main__":
         print('L_DOMAINS:',L_DOMAINS)
         print('R_DOMAINS:',R_DOMAINS)
 
-        get_serp_urls(L_DOMAINS,R_DOMAINS)
+        #get_serp_urls(L_DOMAINS,R_DOMAINS)
         merge_serp_urls()
 
     mc_date_range_str = ''
