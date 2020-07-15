@@ -2,13 +2,13 @@
 
 This directory contains `dedup_df.tsv`, the dataframe containing URLs and meta-data on the full set of unique articles (title, publish date, outlet source) that we use in our analysis. Out of copyright concerns, we do not make the full text of the corresponding URLs, nor the code for scraping the text of the URLs available. 
 
-We also provide scripts and helper files for obtaining and deduplicating additional article URLs, if you want to get your own data from different time ranges, using different keyword search terms, etc. 
+We do provide scripts and helper files for obtaining and deduplicating additional article URLs, if you want to get your own data from different time ranges, using different keyword search terms, etc. 
 
 ## Getting URLs of climate change articles
 
 `0_get_urls.py` makes use of two separate APIs to fetch URLs of news articles related to climate change:
-	* the MediaCloud Python client (https://github.com/mitmedialab/MediaCloud-API-Client), 
-	* SerpApi (https://serpapi.com/search-api), which scrapes Google search results from querying climate change-related keywords on various websites
+* the MediaCloud Python client (https://github.com/mitmedialab/MediaCloud-API-Client), 
+* SerpApi (https://serpapi.com/search-api), which scrapes Google search results from querying climate change-related keywords on various websites
 
 To run `0_get_urls.py`, you need to get API keys for both. You can register for a MediaCloud API key for free; SerpAPI is only free within a limited trial period. Once you have gotten API keys, either copy them to the respective fields in `config.json` (in the root directory), or save them to files named 'MC_API_KEY.txt' and 'SERP_API_KEY.txt', respectively, in your local copy of this sub-directory.
 
