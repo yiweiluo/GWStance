@@ -12,6 +12,8 @@ import json
 from dateutil import parser
 from collections import defaultdict
 import shutil
+from requests.exceptions import SSLError
+import time
 
 config = json.load(open('../config.json', 'r'))
 MC_API_KEY = config['MC_API_KEY']
@@ -32,10 +34,20 @@ def do_serpapi(domain,keyword):
     client.params_dict["start"] = (page_no-1)*10                  # Update pagination
 
     dict_list = []
-    while 'error' not in client.get_dict(): # Get results as long as more pages exist
-        dict_list.append(client.get_dict())
+
+    try:
+        api_req = client.get_dict()
+    except SSLError:
+        time.sleep(240)
+
+    while 'error' not in api_req: # Get results as long as more pages exist
+        dict_list.append(api_req)
         page_no += 10
         client.params_dict["start"] = (page_no-1)*10
+        try:
+            api_req = client.get_dict()
+        except SSLError:
+            time.sleep(240)
 
     return dict_list
 
@@ -320,7 +332,7 @@ def create_filtered_df(l_domains=None,r_domains=None,mc_date_range_str=None):
     filtered_is_AP = []
 
     if args.do_serp:
-        google_pkl = glob.glob("google_search_res_climate_change_07_15_2020*")
+        google_pkl = glob.glob("google_search_res_climate_change_*")
         for g_pkl in google_pkl:
             google_cc_urls = pickle.load(open(g_pkl,'rb'))
 
@@ -436,7 +448,7 @@ if __name__ == "__main__":
         print('L_DOMAINS:',L_DOMAINS)
         print('R_DOMAINS:',R_DOMAINS)
 
-        #get_serp_urls(L_DOMAINS,R_DOMAINS)
+        get_serp_urls(L_DOMAINS,R_DOMAINS)
         merge_serp_urls()
 
     mc_date_range_str = ''
