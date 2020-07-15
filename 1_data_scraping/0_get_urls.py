@@ -35,23 +35,29 @@ def do_serpapi(domain,keyword):
 
     dict_list = []
 
-    try:
-        api_req = client.get_dict()
-    except SSLError:
-        print('Max requests reached--sleeping for 5 min')
-        time.sleep(300)
-        api_req = client.get_dict()
-
-    while 'error' not in api_req: # Get results as long as more pages exist
-        dict_list.append(api_req)
-        page_no += 10
-        client.params_dict["start"] = (page_no-1)*10
+    while True:
         try:
             api_req = client.get_dict()
         except SSLError:
             print('Max requests reached--sleeping for 5 min')
             time.sleep(300)
-            api_req = client.get_dict()
+        else:
+            print('Enough sleeping!')
+            break
+
+    while 'error' not in api_req: # Get results as long as more pages exist
+        dict_list.append(api_req)
+        page_no += 10
+        client.params_dict["start"] = (page_no-1)*10
+        while True:
+            try:
+                api_req = client.get_dict()
+            except SSLError:
+                print('Max requests reached--sleeping for 5 min')
+                time.sleep(300)
+            else:
+                print('Enough sleeping!')
+                break
 
     return dict_list
 
@@ -435,7 +441,7 @@ if __name__ == "__main__":
                 SERP_API_KEY = f.read().strip()
 
         query_params = {"location":"United States", "device":"desktop", "hl":"en", "gl":"us", "serp_api_key":SERP_API_KEY}
-        CC_KEYWORDS = ['climate_change','global_warming','fossil_fuels','carbon_dioxide','co2']
+        CC_KEYWORDS = ['climate_change']#,'global_warming']#,'fossil_fuels','carbon_dioxide','co2']
         client = GoogleSearchResults(query_params)
 
         # Read in list of domains and political leanings for SerpAPI
