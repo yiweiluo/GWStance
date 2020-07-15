@@ -25,7 +25,7 @@ python 0_get_urls.py \
 	--mediacloud_start_day 1 \	# start day threshold for MediaCloud (default 1)
 	--mediacloud_end_year 2020 \	# end year threshold for MediaCloud (default 2020)
 	--mediacloud_end_month 4 \	# end month threshold for MediaCloud (default 12)
-	--mediacloud_end_day 30		# end day threshold for MediaCloud (default 31)
+	--mediacloud_end_day 12		# end day threshold for MediaCloud (default 31)
 ```
 
 ## Deduplicating articles
