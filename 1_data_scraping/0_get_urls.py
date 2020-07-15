@@ -87,7 +87,7 @@ def merge_serp_urls():
     for filename in glob.glob('serp_api/*.pkl'):
         res = pickle.load(open(filename,'rb'))
         domain_kw = filename.split('/')[-1][:-4]
-        domain,kw = domain_kw.split('_')
+        domain,kw = domain_kw.split('_')[0],domain_kw.split('_')[1]
         URLS_PER_DOMAIN[domain][kw] = res
 
     # Save nested dict
