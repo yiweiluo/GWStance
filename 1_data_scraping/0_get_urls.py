@@ -38,8 +38,8 @@ def do_serpapi(domain,keyword):
     try:
         api_req = client.get_dict()
     except SSLError:
-        print('Max requests reached--sleeping for 4 min')
-        time.sleep(240)
+        print('Max requests reached--sleeping for 5 min')
+        time.sleep(300)
         api_req = client.get_dict()
 
     while 'error' not in api_req: # Get results as long as more pages exist
@@ -49,8 +49,8 @@ def do_serpapi(domain,keyword):
         try:
             api_req = client.get_dict()
         except SSLError:
-            print('Max requests reached--sleeping for 4 min')
-            time.sleep(240)
+            print('Max requests reached--sleeping for 5 min')
+            time.sleep(300)
             api_req = client.get_dict()
 
     return dict_list
