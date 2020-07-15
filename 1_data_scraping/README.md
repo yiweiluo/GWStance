@@ -30,7 +30,7 @@ python 0_get_urls.py \
 
 ## Deduplicating articles
 
-We deduplicate articles based on the edit distance of their associated titles, after regularization. You can use the pre-deduplicated data we obtain from running `1_dedup_titles.py` on titles we scraped (``), or you can scrape your own titles as input to `1_dedup_titles.py`. 
+We deduplicate articles from the same media outlet based on the edit distance of their associated titles, after regularization. You can use the pre-deduplicated article meta-data we obtain (``) as input to `1_dedup_titles.py`, or, if you have your own dataset of articles you want to use, you should scrape your own article meta-data as input to `1_dedup_titles.py`. 
 
 Sample usage:
 ```
