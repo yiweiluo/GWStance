@@ -458,7 +458,7 @@ if __name__ == "__main__":
         print('L_DOMAINS:',L_DOMAINS)
         print('R_DOMAINS:',R_DOMAINS)
 
-        #get_serp_urls(L_DOMAINS,R_DOMAINS)
+        get_serp_urls(L_DOMAINS,R_DOMAINS)
         merge_serp_urls()
 
     mc_date_range_str = ''
