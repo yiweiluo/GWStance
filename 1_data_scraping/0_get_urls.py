@@ -27,13 +27,14 @@ def do_serpapi(domain,keyword):
     keyword = keyword.replace('_',' ').replace('+',' ').replace('-',' ')
     client.params_dict["q"] = "site:{} {}".format(domain,keyword) # Update query to restrict to particular site
     print('Searching w/ query: {}...'.format(client.params_dict["q"]))
+    client.params_dict["num"] = 100
     page_no = 1
     client.params_dict["start"] = (page_no-1)*10                  # Update pagination
 
     dict_list = []
     while 'error' not in client.get_dict(): # Get results as long as more pages exist
         dict_list.append(client.get_dict())
-        page_no += 1
+        page_no += 10
         client.params_dict["start"] = (page_no-1)*10
 
     return dict_list

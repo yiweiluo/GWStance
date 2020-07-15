@@ -85,5 +85,5 @@ if __name__ == "__main__":
                     combined_df_ft.at[index1,'reg_title'] = t2
 
     combined_df_ft = combined_df_ft.drop_duplicates('reg_title',keep='first')
-    print('Finished! Saving deduplicated df to {}...'.format(save_name))
+    print('Finished! New shape: {}. Saving deduplicated df to {}...'.format(combined_df_ft.shape,save_name))
     combined_df_ft.to_pickle(save_name)
