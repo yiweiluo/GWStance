@@ -64,6 +64,9 @@ def parse_serpapi_results(d_list):
 def get_serp_urls(l_domains,r_domains):
     """
     """
+    if not os.path.exists('./serp_api'):
+        os.mkdir('./serp_api')
+        
     # Query each domain for each keyword
     for DOMAIN in l_domains + r_domains:
         for KW in CC_KEYWORDS:
