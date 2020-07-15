@@ -320,7 +320,7 @@ def create_filtered_df(l_domains=None,r_domains=None,mc_date_range_str=None):
     filtered_is_AP = []
 
     if args.do_serp:
-        google_pkl = glob.glob("google_search_res_climate_change*")
+        google_pkl = glob.glob("google_search_res_climate_change_07_15_2020*")
         for g_pkl in google_pkl:
             google_cc_urls = pickle.load(open(g_pkl,'rb'))
 
