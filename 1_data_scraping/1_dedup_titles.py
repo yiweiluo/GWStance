@@ -91,6 +91,6 @@ if __name__ == "__main__":
                         print('Match row:', combined_df_ft.loc[index2])
                         combined_df_ft.at[index1,'reg_title'] = t2
 
-    combined_df_ft = combined_df_ft.drop_duplicates('reg_title',keep='first')
+    combined_df_ft = combined_df_ft.drop_duplicates(subset=['domain','reg_title'],keep='first')
     print('Finished! New shape: {}. Saving deduplicated df to {}...'.format(combined_df_ft.shape,save_name))
     combined_df_ft.to_pickle(save_name)
