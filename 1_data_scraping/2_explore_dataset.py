@@ -367,6 +367,7 @@ def create_data_report(df):
     print('\nDistribution of AP (True) vs. non-AP (False) articles:')
     print('\t{}'.format(dated_df.is_AP.value_counts()))
 
+    %matplotlib inline
     print('\nDistribution of article outlets:')
     dated_df['pretty_domain'] = dated_df['domain'].apply(prettify_domain)
     dated_df['pretty_domain'].value_counts().plot.pie()
@@ -389,7 +390,6 @@ def create_data_report(df):
     for side in ['pro','anti']:
         df = pd.DataFrame(columns=['outlet']+list(range(2007,2021)))
         for outlet in top_domains[side]:
-            #print(outlet)
             row = [outlet]
             counts = dated_df.loc[dated_df.pretty_domain == outlet].year.value_counts()
             row.extend([counts[int(c)] if c in counts else 0 for c in range(2007,2021)])
@@ -421,15 +421,14 @@ def create_data_report(df):
         [l.set_visible(False) for (i,l) in enumerate(ax.xaxis.get_ticklabels()) if i % n != 0]
     ax1.legend()
     handles, labels = ax1.get_legend_handles_labels()
-    # reorderLegend(ax1,['Christian Science Monitor','Washington Post','Buzzfeed','Vox','Think Progress',
-    #                 'Democracy Now','Mother Jones','The Nation','New York Times','other'],
-    #              title='Media outlet',fontsize=24,title_fontsize=26)
+    reorderLegend(ax1,['Washington Post','Vox','Common Dreams','Think Progress','New York Times',
+    'Star Tribune','Huffpost','Daily Kos','Mother Jones','other'],
+                 title='Media outlet',fontsize=24,title_fontsize=26)
     ax2.legend()
     handles, labels = ax2.get_legend_handles_labels()
-    # reorderLegend(ax2,['Redstate','American Thinker',
-    # 'Daily Caller','Breitbart','Newsmax','Infowars',
-    # 'Washington Times','Fox','Forbes','other'],
-    #              title='Media outlet',fontsize=24,title_fontsize=26)
+    reorderLegend(ax2,['Breitbart','Washington Times','Daily Caller','Washington Examiner',
+    'American Thinker','Newsmax','Market Watch','Forbes','Chicago Tribune','other'],
+                 title='Media outlet',fontsize=24,title_fontsize=26)
 
     for n, ax in enumerate([ax1,ax2]):
         ax.text(-0.03, 1.05, '{})'.format(string.ascii_lowercase[n]), transform=ax.transAxes,
