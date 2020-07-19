@@ -62,14 +62,14 @@ if __name__ == "__main__":
     print('Read in data with shape {}.'.format(combined_df_ft.shape))
     print('Regularizing titles...')
     combined_df_ft['reg_title'] = combined_df_ft['title'].apply(regularize_title)
-    combined_df_ft = combined_df_ft.drop_duplicates('reg_title',keep='first')
-    print('Dropping duplicates... new df shape:',combined_df_ft.shape)
     print('Grouping by outlet sources...')
     outlet_groups = combined_df_ft.groupby('domain')
 
     for outlet in outlet_groups.first().index:
         outlet_df = outlet_groups.get_group(outlet)
         print('Processing {} with {} URLS'.format(outlet,len(outlet_df)))
+        outlet_df = outlet_df.drop_duplicates('reg_title',keep='first')
+        print('Dropping duplicates by regularized titles, new shape:',outlet_df.shape)
         for ix1 in range(len(outlet_df.index)-1):
             for ix2 in range(ix1+1,len(outlet_df.index)):
                 index1 = outlet_df.index[ix1]
