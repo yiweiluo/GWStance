@@ -28,6 +28,8 @@ python 0_get_urls.py \
 	--mediacloud_end_day 12		# end day threshold for MediaCloud (default 31)
 ```
 
+Running the above creates intermediary files storing the results of fetching stories with SerpAPI and MediaCloud, as well as a dataframe containing the combined results with article URLs and meta-information (`output/temp_combined_df_2000_1_1_to_2020_4_12.pkl`).
+
 ## Deduplicating articles
 
 We deduplicate articles from the same media outlet based on their publish dates and the edit distance of their associated titles, after regularization. You can use the pre-deduplicated article meta-data we obtain (`temp_combined_df_2000_1_1_to_2020_4_12.pkl`) as input to `1_dedup_titles.py`, or, if you have your own dataset of articles you want to use, you should scrape your own article meta-data as input to `1_dedup_titles.py`. 
