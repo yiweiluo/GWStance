@@ -62,6 +62,8 @@ if __name__ == "__main__":
     print('Read in data with shape {}.'.format(combined_df_ft.shape))
     print('Regularizing titles...')
     combined_df_ft['reg_title'] = combined_df_ft['title'].apply(regularize_title)
+    combined_df_ft = combined_df_ft.drop_duplicates('reg_title',keep='first')
+    print('Dropping duplicates... new df shape:',combined_df_ft.shape)
     print('Grouping by outlet sources...')
     outlet_groups = combined_df_ft.groupby('domain')
 
