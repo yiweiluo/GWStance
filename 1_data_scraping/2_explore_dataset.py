@@ -367,7 +367,6 @@ def create_data_report(df):
     print('\nDistribution of AP (True) vs. non-AP (False) articles:')
     print('\t{}'.format(dated_df.is_AP.value_counts()))
 
-    %matplotlib inline
     print('\nDistribution of article outlets:')
     dated_df['pretty_domain'] = dated_df['domain'].apply(prettify_domain)
     dated_df['pretty_domain'].value_counts().plot.pie()
