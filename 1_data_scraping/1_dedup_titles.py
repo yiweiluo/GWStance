@@ -73,7 +73,7 @@ if __name__ == "__main__":
         for ix1 in range(len(outlet_df.index)-1):
             for ix2 in range(ix1+1,len(outlet_df.index)):
                 date1 = outlet_df.iloc[ix1]['date']
-                date2 = outlet_df.iloc[ix1]['date']
+                date2 = outlet_df.iloc[ix2]['date']
                 if date1 == date2: # Only worth checking for sameness if published different dates
 
                     index1 = outlet_df.index[ix1]
