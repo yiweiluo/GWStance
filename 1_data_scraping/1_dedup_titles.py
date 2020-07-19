@@ -4,6 +4,7 @@ import re
 import pandas as pd
 import os
 import json
+from pyxdameraulevenshtein import damerau_levenshtein_distance
 
 config = json.load(open('../config.json', 'r'))
 REMOTE_SCRAPE_DIR = config['REMOTE_SCRAPE_DIR']
@@ -39,7 +40,7 @@ def d_l_dist(s1, s2):
 
 def is_same(u1,u2):
     """Determine whether Djk ≤ 0.2 × Min.[|Tj|,|Tk|]"""
-    D_jk = d_l_dist(u1,u2)
+    D_jk = damerau_levenshtein_distance(u1,u2)
     t_j = len(u1)
     t_k = len(u2)
     min_ = min(t_j,t_k)
