@@ -75,8 +75,8 @@ if __name__ == "__main__":
                 index1 = outlet_df.index[ix1]
                 index2 = outlet_df.index[ix2]
                 #print('Comparing titles of {} and {}...'.format(index1,index2))
-                t1 = outlet_df.loc[index1].reg_title
-                t2 = outlet_df.loc[index2].reg_title
+                t1 = outlet_df.iloc[ix1].reg_title
+                t2 = outlet_df.iloc[ix2].reg_title
                 #print('Titles: {}, {}'.format(t1,t2))
                 if is_same(t1,t2):
                     print('Match found!')
