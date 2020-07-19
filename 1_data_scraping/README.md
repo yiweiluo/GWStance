@@ -35,7 +35,7 @@ We deduplicate articles from the same media outlet based on their publish dates 
 Sample usage:
 ```
 python 1_dedup_tites.py \
-	--input_df_filename \		# where to read in pre-deduplicated data
-	--output_df_filename 		# where to save deduplicated data
+	--input_df_filename temp_combined_df_2000_1_1_to_2020_4_12.pkl \	# where to read in pre-deduplicated data
+	--output_df_filename dedup_combined_df_2000_1_1_to_2020_4_12.pkl	# where to save deduplicated data
 ```
 
