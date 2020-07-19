@@ -72,19 +72,23 @@ if __name__ == "__main__":
         print('Dropping duplicates by regularized titles, new shape:',outlet_df.shape)
         for ix1 in range(len(outlet_df.index)-1):
             for ix2 in range(ix1+1,len(outlet_df.index)):
-                index1 = outlet_df.index[ix1]
-                index2 = outlet_df.index[ix2]
-                #print('Comparing titles of {} and {}...'.format(index1,index2))
-                t1 = outlet_df.iloc[ix1].reg_title
-                t2 = outlet_df.iloc[ix2].reg_title
-                #print('Titles: {}, {}'.format(t1,t2))
-                if is_same(t1,t2):
-                    print('Match found!')
-                    # Set reg_title of t1 to be t2
-                    print("Changing df title value from '{}' to '{}'".format(t1,t2))
-                    print('Previous row:', combined_df_ft.loc[index1])
-                    print('Match row:', combined_df_ft.loc[index2])
-                    combined_df_ft.at[index1,'reg_title'] = t2
+                date1 = outlet_df.iloc[ix1]['date']
+                date2 = outlet_df.iloc[ix1]['date']
+                if date1 == date2: # Only worth checking for sameness if published different dates
+
+                    index1 = outlet_df.index[ix1]
+                    index2 = outlet_df.index[ix2]
+                    #print('Comparing titles of {} and {}...'.format(index1,index2))
+                    t1 = outlet_df.iloc[ix1].reg_title
+                    t2 = outlet_df.iloc[ix2].reg_title
+                    #print('Titles: {}, {}'.format(t1,t2))
+                    if is_same(t1,t2):
+                        print('Match found!')
+                        # Set reg_title of t1 to be t2
+                        print("Changing df title value from '{}' to '{}'".format(t1,t2))
+                        print('Previous row:', combined_df_ft.loc[index1])
+                        print('Match row:', combined_df_ft.loc[index2])
+                        combined_df_ft.at[index1,'reg_title'] = t2
 
     combined_df_ft = combined_df_ft.drop_duplicates('reg_title',keep='first')
     print('Finished! New shape: {}. Saving deduplicated df to {}...'.format(combined_df_ft.shape,save_name))
