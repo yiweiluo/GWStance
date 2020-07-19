@@ -41,3 +41,6 @@ python 1_dedup_tites.py \
 	--output_df_filename dedup_combined_df_2000_1_1_to_2020_4_12.pkl	# where to save deduplicated data
 ```
 
+## Exploring article stats
+
+We remove articles without an associated publish date
