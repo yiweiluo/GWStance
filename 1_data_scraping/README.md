@@ -43,4 +43,10 @@ python 1_dedup_tites.py \
 
 ## Exploring article stats
 
-We remove articles without an associated publish date
+We remove articles without an associated publish date and report on/visualize general article stats using `2_explore_dataset.py`.
+
+Sample usage:
+```
+python 2_explore_dataset.py \
+	--input_data_filename output/dedup_combined_df_2000_1_1_to_2020_4_12.pkl \	# where to read in data
+```
