@@ -2,6 +2,7 @@
 
 import pandas as pd
 import os
+import argparse
 # os.chdir('..')
 # from local_processors import fulltext_exists,get_fulltext
 # os.chdir('./1_data_scraping')
@@ -18,7 +19,7 @@ def get_fulltext(url_guid,fulltext_dir):
             return lines[0]
         return ""
     return ""
-    
+
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
