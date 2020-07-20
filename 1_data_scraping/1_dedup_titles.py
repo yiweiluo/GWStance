@@ -46,7 +46,7 @@ def is_same(u1,u2):
     min_ = min(t_j,t_k)
     return D_jk < 0.2*min_
 
-    
+
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--use_remote', action="store_true", help='whether script is being run on remote cluster')
@@ -91,7 +91,7 @@ if __name__ == "__main__":
     combined_df_ft = combined_df_ft.drop_duplicates(subset=['domain','reg_title'],keep='first')
     print('Finished! New shape: {}.'.format(combined_df_ft.shape))
     print('Adding GUIDs based on reset index in dataframe...')
-    combined_df_ft.reset_index((drop=True,inplace=True))
+    combined_df_ft.reset_index(drop=True,inplace=True)
     combined_df_ft['guid'] = ['url_no_{}'.format(i) for i in range(len(combined_df_ft))]
     print('Saving deduplicated df to {}...'.format(save_name))
     combined_df_ft.to_pickle(save_name)
