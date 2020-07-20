@@ -10,10 +10,10 @@ Sample usage:
 
 ```
 python 1_extract_quotes.py \
-	--debug \ 			# whether to test run on smaller sample
-	--input_df_filename output/filtered_dedup_combined_df_2000_1_1_to_2020_4_12.pkl \		# where to read in dataset df
-	--output_dir url_quotes \ 	# where to write jsons with extracted annotations
-	--fulltext_dir url_texts 	# where to read in article full texts
+	--debug \ 									# whether to test run on smaller sample
+	--input_df_filename ../1_data_scraping/output/filtered_dedup_combined_df_2000_1_1_to_2020_4_12.pkl \ # where to read in dataset df
+	--output_dir url_quotes \ 							# where to write jsons with extracted annotations
+	--fulltext_dir url_texts 							# where to read in article full texts
 ```
 
 Running the above writes a `json` for every article with .
