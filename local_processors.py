@@ -11,7 +11,6 @@ from urllib.request import urlopen
 import shutil
 
 def soupify(url):
-
     try:
         req = urllib.request.Request(url, headers={'User-Agent' : "Magic Browser"})
         con = urllib.request.urlopen( req )
