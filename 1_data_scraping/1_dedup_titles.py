@@ -7,8 +7,12 @@ import json
 from pyxdameraulevenshtein import damerau_levenshtein_distance
 config = json.load(open('../config.json', 'r'))
 REMOTE_SCRAPE_DIR = config['REMOTE_SCRAPE_DIR']
+
+
 def regularize_title(t):
     return re.sub("[^A-Za-z0-9.,']+", ' ', t.lower().strip()).strip()
+
+
 def d_l_dist(s1, s2):
     """Compute Damerau-Levenshtein distance between s1 and s2"""
     d = {}
@@ -32,6 +36,8 @@ def d_l_dist(s1, s2):
             if i and j and s1[i]==s2[j-1] and s1[i-1] == s2[j]:
                 d[(i,j)] = min (d[(i,j)], d[i-2,j-2] + cost) # transposition
     return d[lenstr1-1,lenstr2-1]
+
+
 def is_same(u1,u2):
     """Determine whether Djk ≤ 0.2 × Min.[|Tj|,|Tk|]"""
     D_jk = damerau_levenshtein_distance(u1,u2)
@@ -39,6 +45,8 @@ def is_same(u1,u2):
     t_k = len(u2)
     min_ = min(t_j,t_k)
     return D_jk < 0.2*min_
+
+    
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--use_remote', action="store_true", help='whether script is being run on remote cluster')
