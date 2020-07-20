@@ -1,4 +1,5 @@
 spacy
+neuralcoref
 pandas
 numpy
 Newspaper
