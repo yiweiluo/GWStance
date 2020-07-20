@@ -355,7 +355,7 @@ def unique_everseen(seq, key=None):
 
 
 def create_data_report(dated_df):
-    print('Creating report for df with shape {}'.format(df.shape))
+    print('Creating report for df with shape {}'.format(dated_df.shape))
 
     print('\nDistribution of article leanings:')
     stance_dict = {'anti':'R-leaning','pro':'L-leaning','between':'Center'}
