@@ -354,35 +354,32 @@ def unique_everseen(seq, key=None):
     return [x for x,k in zip(seq,key) if not (k in seen or seen_add(k))]
 
 
-def create_data_report(df):
+def create_data_report(dated_df):
     print('Creating report for df with shape {}'.format(df.shape))
-    # print('Removing rows with null date...')
-    # dated_df = df.loc[~pd.isnull(df.date)].copy()
-    # print('\tNew df shape:',dated_df.shape)
 
     print('\nDistribution of article leanings:')
     stance_dict = {'anti':'R-leaning','pro':'L-leaning','between':'Center'}
-    print('\t{}'.format(df.stance.apply(lambda x: stance_dict[x]).value_counts()))
+    print('\t{}'.format(dated_df.stance.apply(lambda x: stance_dict[x]).value_counts()))
 
     print('\nDistribution of AP (True) vs. non-AP (False) articles:')
-    print('\t{}'.format(df.is_AP.value_counts()))
+    print('\t{}'.format(dated_df.is_AP.value_counts()))
 
     print('\nDistribution of article outlets:')
-    df['pretty_domain'] = df['domain'].apply(prettify_domain)
-    df['pretty_domain'].value_counts().plot.pie()
+    dated_df['pretty_domain'] = dated_df['domain'].apply(prettify_domain)
+    dated_df['pretty_domain'].value_counts().plot.pie()
     plt.show()
 
     print('\nDistribution of articles over time:')
-    df['year'] = [d.to_pydatetime().year
-                             for d in df.date]
-    df['month'] = [d.to_pydatetime().month
-                             for d in df.date]
-    df.loc[df.year.isin(range(2000,2021))].year.plot.hist()
+    dated_df['year'] = [d.to_pydatetime().year
+                             for d in dated_df.date]
+    dated_df['month'] = [d.to_pydatetime().month
+                             for d in dated_df.date]
+    dated_df.loc[dated_df.year.isin(range(2000,2021))].year.plot.hist()
 
     print('\nDistribution of article outlets over time:')
-    top_domains = {'pro':set(df.loc[df.stance == 'pro'].\
+    top_domains = {'pro':set(dated_df.loc[dated_df.stance == 'pro'].\
     pretty_domain.value_counts().index[:9]),
-                   'anti':set(df.loc[df.stance == 'anti'].\
+                   'anti':set(dated_df.loc[dated_df.stance == 'anti'].\
     pretty_domain.value_counts().index[:9])}
 
     dfs = {}
@@ -390,15 +387,15 @@ def create_data_report(df):
         df = pd.DataFrame(columns=['outlet']+list(range(2007,2021)))
         for outlet in top_domains[side]:
             row = [outlet]
-            counts = df.loc[df.pretty_domain == outlet].year.value_counts()
+            counts = dated_df.loc[dated_df.pretty_domain == outlet].year.value_counts()
             row.extend([counts[int(c)] if c in counts else 0 for c in range(2007,2021)])
             row_df = pd.DataFrame(row).T
             row_df.columns = df.columns
             df = df.append(row_df,
                            ignore_index=True)
         row = ['other']
-        counts = dated_df.loc[(df.stance == side) &
-                                 (~df.pretty_domain.isin(top_domains[side]))].year.value_counts()
+        counts = dated_df.loc[(dated_df.stance == side) &
+                                 (~dated_df.pretty_domain.isin(top_domains[side]))].year.value_counts()
         row.extend([counts[int(c)] if c in counts else 0 for c in range(2007,2021)])
         row_df = pd.DataFrame(row).T
         row_df.columns = df.columns
