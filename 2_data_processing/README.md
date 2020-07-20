@@ -9,18 +9,14 @@
 Sample usage:
 
 ```
-python 0_get_urls.py \
-	--do_serp \ 			# whether to run SerpAPI URL retrieval
-	--do_mediacloud \		# whether to run MediaCloud URL retrieval
-	--mediacloud_start_year 2019 \ 	# start year threshold for MediaCloud (default 2000)
-	--mediacloud_start_month 12 \	# start month threshold for MediaCloud (default 1)
-	--mediacloud_start_day 1 \	# start day threshold for MediaCloud (default 1)
-	--mediacloud_end_year 2020 \	# end year threshold for MediaCloud (default 2020)
-	--mediacloud_end_month 4 \	# end month threshold for MediaCloud (default 12)
-	--mediacloud_end_day 12		# end day threshold for MediaCloud (default 31)
+python 1_extract_quotes.py \
+	--debug \ 			# whether to test run on smaller sample
+	--input_df_filename output/filtered_dedup_combined_df_2000_1_1_to_2020_4_12.pkl \		# where to read in dataset df
+	--output_dir url_quotes \ 	# where to write jsons with extracted annotations
+	--fulltext_dir url_texts 	# where to read in article full texts
 ```
 
-Running the above creates intermediary files storing the results of fetching stories with SerpAPI and MediaCloud, as well as a dataframe containing the combined results with article URLs and meta-information (`output/temp_combined_df_2000_1_1_to_2020_4_12.pkl`).
+Running the above writes a `json` for every article with .
 
 ## Deduplicating articles
 

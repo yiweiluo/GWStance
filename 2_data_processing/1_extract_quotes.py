@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import pandas as pd
 import numpy as np
@@ -17,7 +19,6 @@ neuralcoref.add_to_pipe(nlp)
 config = json.load(open('../config.json', 'r'))
 REMOTE_PREPRO_DIR = config['REMOTE_PREPRO_DIR']
 REMOTE_SCRAPE_DIR = config['REMOTE_SCRAPE_DIR']
-fulltext_dir = os.path.join(REMOTE_SCRAPE_DIR,'url_texts')
 
 with open('householder_stems.txt','r') as f:
     householder_stems = f.read().splitlines()
@@ -51,7 +52,7 @@ def is_rel_pronoun(tok):
     tok = tok.lower().strip()
     return tok in REL_PRONOUNS
 
-PRONOUNS = set(['he','she','it','they','him','her','them','his','her','its','their',
+PRONOUNS = set(['he','she','it','they','him','her','them','his','its','their',
                'himself','herself','itself','theirselves','themselves','hers','theirs'])
 def is_pronoun(tok):
     tok = tok.lower().strip()
@@ -211,7 +212,7 @@ if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--debug', action="store_true", default=None,
                       help='whether to test run on smaller sample first')
-    arg_parser.add_argument('--path_to_df', type=str, default=None,
+    arg_parser.add_argument('--input_df_filename', type=str, default=None,
                       help='/path/to/df')
     arg_parser.add_argument('--output_dir', type=str, default=None,
                       help='where to write batched output')
@@ -220,7 +221,7 @@ if __name__ == "__main__":
 
     args = arg_parser.parse_args()
 
-    df = pd.read_pickle(os.path.join(REMOTE_SCRAPE_DIR,args.path_to_df))#,sep='\t',header=0,index_col=0)
+    df = pd.read_pickle(os.path.join(REMOTE_SCRAPE_DIR,args.input_df_filename))#,sep='\t',header=0,index_col=0)
     print('Length of df:',len(df))
 
     if args.debug:
