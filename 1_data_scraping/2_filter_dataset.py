@@ -2,7 +2,7 @@
 
 import pandas as pd
 import os
-from local processors import fulltext_exists,get_fulltext
+from local_processors import fulltext_exists,get_fulltext
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
