@@ -2,9 +2,23 @@
 
 import pandas as pd
 import os
-os.chdir('..')
-from local_processors import fulltext_exists,get_fulltext
-os.chdir('./1_data_scraping')
+# os.chdir('..')
+# from local_processors import fulltext_exists,get_fulltext
+# os.chdir('./1_data_scraping')
+
+def fulltext_exists(url_guid,fnames_set):
+    return '{}.txt'.format(url_guid) in fnames_set
+
+
+def get_fulltext(url_guid,fulltext_dir):
+    if fulltext_exists(url_guid):
+        with open(os.path.join(fulltext_dir,url_guid+'.txt'),'r') as f:
+            lines = f.readlines()
+        if len(lines) > 0:
+            return lines[0]
+        return ""
+    return ""
+    
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
