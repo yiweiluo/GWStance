@@ -356,9 +356,9 @@ def unique_everseen(seq, key=None):
 
 def create_data_report(df):
     print('Creating report for df with shape {}'.format(df.shape))
-    print('Removing rows with null date...')
-    dated_df = df.loc[~pd.isnull(df.date)].copy()
-    print('\tNew df shape:',dated_df.shape)
+    # print('Removing rows with null date...')
+    # dated_df = df.loc[~pd.isnull(df.date)].copy()
+    # print('\tNew df shape:',dated_df.shape)
 
     print('\nDistribution of article leanings:')
     stance_dict = {'anti':'R-leaning','pro':'L-leaning','between':'Center'}
@@ -438,7 +438,7 @@ def create_data_report(df):
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument('--input_data_filename', type=str, default='output/dedup_combined_df_2000_1_1_to_2020_4_12.pkl', help='/path/to/dataset/to/explore')
+    arg_parser.add_argument('--input_data_filename', type=str, default='output/filtered_dedup_combined_df_2000_1_1_to_2020_4_12.pkl', help='/path/to/dataset/to/explore')
     args = arg_parser.parse_args()
 
     dedup_df = pd.read_pickle(args.input_data_filename)
