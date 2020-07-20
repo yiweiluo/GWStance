@@ -2,7 +2,9 @@
 
 import pandas as pd
 import os
+os.chdir('..')
 from local_processors import fulltext_exists,get_fulltext
+os.chdir('./1_data_scraping')
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()

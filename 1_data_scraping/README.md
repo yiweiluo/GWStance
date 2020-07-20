@@ -39,7 +39,7 @@ If you do wish to run the script, you can use the article meta-data we provide (
 Sample usage:
 ```
 python 1_dedup_tites.py \
-	--input_df_filename temp_combined_df_2000_1_1_to_2020_4_12.pkl \	# where to read in pre-deduplicated data
+	--input_df_filename output/temp_combined_df_2000_1_1_to_2020_4_12.pkl \	# where to read in pre-deduplicated data
 	--output_df_filename dedup_combined_df_2000_1_1_to_2020_4_12.pkl	# where to save deduplicated data
 ```
 
@@ -52,7 +52,7 @@ You can use the pre-filtered data we provide (`output/filtered_dedup_combined_df
 Sample usage:
 ```
 python 2_filter_dataset.py \
-	--input_df_filename dedup_combined_df_2000_1_1_to_2020_4_12.pkl \		# where to read in dataset
+	--input_df_filename output/dedup_combined_df_2000_1_1_to_2020_4_12.pkl \		# where to read in dataset
 	--output_df_filename filtered_dedup_combined_df_2000_1_1_to_2020_4_12.pkl \	# where to save filtered data
 	--url_text_dir url_texts 							# where to find the scraped article full texts
 ```
