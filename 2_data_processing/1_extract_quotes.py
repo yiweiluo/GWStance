@@ -281,7 +281,7 @@ if __name__ == "__main__":
         if len(text) > 0:
             if args.debug:
                 labeled_sents,corefed_tokens,sample_output = spacy_pipe(text,verbose=True)
-                with open(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'sample_output_{}.txt'.format(guid)),'wb') as f:
+                with open(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'sample_output_{}.txt'.format(guid)),'w') as f:
                     f.write(sample_output)
             else:
                 labeled_sents,corefed_tokens = spacy_pipe(text,verbose=verbose)
