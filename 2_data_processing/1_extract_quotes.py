@@ -218,7 +218,7 @@ def spacy_pipe(text,verbose=False):
                 labeled_sents[sent_no]["quotes"].append(indices_per_label)
 
         if verbose:
-            sample_output += 'Original sentence: ' + ' '.join([tok.text for tok in sent]) + '\n'
+            sample_output += '\nOriginal sentence: ' + ' '.join([tok.text for tok in sent]) + '\n'
             sample_output += 'Corefed sentence: ' + ' '.join([corefed_tokens[tok.i]
                                                 if corefed_tokens[tok.i] is not None
                                                 else tok.text for tok in sent]) + '\n'
