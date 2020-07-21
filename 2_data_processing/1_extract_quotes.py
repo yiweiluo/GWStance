@@ -59,7 +59,7 @@ def spacy_pipe(text,verbose=False):
     # Step 0. Run pipeline.
     doc = nlp(text)
     print('text:',text)
-    print('num sents:',len(doc.sents))
+    print('num sents:',len(list(doc.sents)))
     for sent in doc:
         for tok in sent:
             print(tok.text,tok.dep_)
