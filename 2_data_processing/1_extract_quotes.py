@@ -35,7 +35,7 @@ def get_fulltext(url_guid,fulltext_dir):
 
 def is_good_verb_dep(dep):
     return dep[:3] == 'aux' or dep[:3] == 'adv' or dep == 'det' or dep == 'rel' or dep == 'prep' or \
-dep[-3:] == 'obj' or dep[-3:] == 'mod' or (dep[-4:] == 'comp' and dep != 'ccomp')
+        dep[-3:] == 'obj' or dep[-3:] == 'mod' or (dep[-4:] == 'comp' and dep != 'ccomp')
 
 def is_verb_prt(dep):
     return dep == 'prt'
@@ -90,7 +90,7 @@ def spacy_pipe(text):
         labeled_sents[sent_no]["idx2lemma"] = {tok.i: tok.lemma_ for tok in sent}
         labeled_sents[sent_no]["quotes"] = [] # We will add dicts with {tok.idx: tok.label} (key, value) pairs.
 
-        VERBS = list(np.unique([token.head for token in sent if token.dep_ == 'ccomp']))
+        VERBS = set([token.head for token in sent if token.dep_ == 'ccomp'])
         VERBS = [v for v in VERBS if v.lemma_ in householder_stems]
 
         # Extract everything else for each VERB
