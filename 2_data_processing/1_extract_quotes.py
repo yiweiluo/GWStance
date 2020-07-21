@@ -232,9 +232,15 @@ def spacy_pipe(text,verbose=False):
                                                            if corefed_tokens[i] is not None
                                                            else id2text[i]
                                                            for i in sorted(quote[key])])
+                        print('{}:\t'.format(key)+' '.join([corefed_tokens[i]
+                                                           if corefed_tokens[i] is not None
+                                                           else id2text[i]
+                                                           for i in sorted(quote[key])]))
                     else:
                         sample_output += '{}:\t'.format(key)+' '.join([id2text[i]
                                                             for i in sorted(quote[key])])
+                        print('{}:\t'.format(key)+' '.join([id2text[i]
+                                                            for i in sorted(quote[key])]))
             return labeled_sents,corefed_tokens,sample_output
 
     return labeled_sents,corefed_tokens
