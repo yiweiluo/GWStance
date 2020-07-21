@@ -216,24 +216,26 @@ def spacy_pipe(text,verbose=False):
                 labeled_sents[sent_no]["quotes"].append(indices_per_label)
 
         if verbose:
-            print('Original sentence:',' '.join([tok.text for tok in sent]))
-            print('\n')
-            print('Corefed sentence:',' '.join([corefed_tokens[tok.i]
+            sample_output = ""
+            sample_output += ('Original sentence:',' '.join([tok.text for tok in sent]))
+            sample_output += ('\n')
+            sample_output += ('Corefed sentence:',' '.join([corefed_tokens[tok.i]
                                                 if corefed_tokens[tok.i] is not None
                                                 else tok.text for tok in sent]))
             id2text = labeled_sents[sent_no]["idx2text"]
             quotes = labeled_sents[sent_no]["quotes"]
             for quote in quotes:
-                print('\n***** new quote ******')
+                sample_output += ('\n***** new quote ******')
                 for key in quote:
                     if 's' in key:
-                        print('{}:\t'.format(key),' '.join([corefed_tokens[i]
+                        sample_output += ('{}:\t'.format(key),' '.join([corefed_tokens[i]
                                                            if corefed_tokens[i] is not None
                                                            else id2text[i]
                                                            for i in sorted(quote[key])]))
                     else:
-                        print('{}:\t'.format(key),' '.join([id2text[i]
+                        sample_output += ('{}:\t'.format(key),' '.join([id2text[i]
                                                             for i in sorted(quote[key])]))
+            return labeled_sents,corefed_tokens,sample_output
 
     return labeled_sents,corefed_tokens
 
@@ -262,10 +264,8 @@ if __name__ == "__main__":
 
     if args.debug:
         end_ix = 5
-        verbose=True
     else:
         end_ix = len(df)
-        verbose=False
 
     batch_no = 0
     if not os.path.exists(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'extracted_quotes_{}'.format(batch_no))):
@@ -279,7 +279,12 @@ if __name__ == "__main__":
         text = get_fulltext(guid,args.fulltext_dir)
         save_name = '{}.json'.format(guid)
         if len(text) > 0:
-            labeled_sents,corefed_tokens = spacy_pipe(text,verbose=verbose)
+            if args.debug:
+                labeled_sents,corefed_tokens,sample_output = spacy_pipe(text,verbose=True)
+                with open(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'sample_output_{}.txt'.format(guid)),'wb') as f:
+                    f.write(sample_output)
+            else:
+                labeled_sents,corefed_tokens = spacy_pipe(text,verbose=verbose)
             j = json.dumps({"quote_tags":labeled_sents,
                    "coref_tags":corefed_tokens})
         else:
