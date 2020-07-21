@@ -61,8 +61,7 @@ def spacy_pipe(text,verbose=False):
     print('text:',text)
     print('num sents:',len(list(doc.sents)))
     for sent in doc:
-        for tok in sent:
-            print(tok.text,tok.dep_)
+        print(sent)
 
     # Step 1. Figure out which tokens to tag w/ coreferring token
     to_coref = {}
