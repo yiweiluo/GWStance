@@ -212,7 +212,13 @@ def spacy_pipe(text,verbose=False):
 
                 labeled_sents[sent_no]["quotes"].append(indices_per_label)
 
+        sample_output = None
         if verbose:
+            sample_output = ""
+            sample_output += 'Original sentence: ' + ' '.join([tok.text for tok in sent]) + '\n'
+            sample_output += 'Corefed sentence: ' + ' '.join([corefed_tokens[tok.i]
+                                                if corefed_tokens[tok.i] is not None
+                                                else tok.text for tok in sent])
             print('Original sentence:',' '.join([tok.text for tok in sent]))
             print('\n')
             print('Corefed sentence:',' '.join([corefed_tokens[tok.i]
@@ -222,17 +228,24 @@ def spacy_pipe(text,verbose=False):
             quotes = labeled_sents[sent_no]["quotes"]
             for quote in quotes:
                 print('\n***** new quote ******')
+                sample_output += '\n***** new quote ******'
                 for key in quote:
                     if 's' in key:
                         print('{}:\t'.format(key),' '.join([corefed_tokens[i]
                                                            if corefed_tokens[i] is not None
                                                            else id2text[i]
                                                            for i in sorted(quote[key])]))
+                        sample_output += '{}:\t'.format(key) + ' '.join([corefed_tokens[i]
+                                                           if corefed_tokens[i] is not None
+                                                           else id2text[i]
+                                                           for i in sorted(quote[key])])
                     else:
                         print('{}:\t'.format(key),' '.join([id2text[i]
                                                             for i in sorted(quote[key])]))
+                        sample_output += '{}:\t'.format(key) + ' '.join([id2text[i]
+                                                            for i in sorted(quote[key])])
 
-    return labeled_sents,corefed_tokens
+    return labeled_sents,corefed_tokens,sample_output
 
 
 
@@ -280,7 +293,7 @@ if __name__ == "__main__":
                 with open(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'sample_output_{}.txt'.format(guid)),'w') as f:
                     f.write(sample_output)
             else:
-                labeled_sents,corefed_tokens = spacy_pipe(text,verbose=verbose)
+                labeled_sents,corefed_tokens,sample_output = spacy_pipe(text)
             j = json.dumps({"quote_tags":labeled_sents,
                    "coref_tags":corefed_tokens})
         else:
