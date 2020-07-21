@@ -269,7 +269,7 @@ if __name__ == "__main__":
 
     batch_no = 0
     if not os.path.exists(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'extracted_quotes_{}'.format(batch_no))):
-        os.mkdir(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'extracted_quotes_{}'.format(batch_no)))
+        os.makedirs(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'extracted_quotes_{}'.format(batch_no)))
 
     start_time = time.time()
     for ix in range(end_ix):
