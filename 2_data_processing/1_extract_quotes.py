@@ -59,6 +59,10 @@ def spacy_pipe(text,verbose=False):
     # Step 0. Run pipeline.
     doc = nlp(text)
     print('text:',text)
+    print('num sents:',len(doc.sents))
+    for sent in doc:
+        for tok in sent:
+            print(tok.text,tok.dep_)
 
     # Step 1. Figure out which tokens to tag w/ coreferring token
     to_coref = {}
