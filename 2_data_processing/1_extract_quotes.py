@@ -283,7 +283,7 @@ if __name__ == "__main__":
         row = df.loc[row_ix]
         guid = row['guid']
         text = get_fulltext(guid,args.fulltext_dir)
-        print(text)
+        #print(text)
         save_name = '{}.json'.format(guid)
         if len(text) > 0:
             if args.debug:
