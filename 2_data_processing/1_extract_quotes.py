@@ -95,6 +95,7 @@ def spacy_pipe(text,verbose=False):
         # these represent the main verbs in embedded sentences.
         VERBS = set([token.head for token in sent if token.dep_ == 'ccomp'])
         VERBS = [v for v in VERBS if v.lemma_ in householder_stems]
+        print("VERBS:",VERBS)
 
         # Extract everything else for each VERB
         for VERB in VERBS:
