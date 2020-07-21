@@ -214,6 +214,7 @@ def spacy_pipe(text,verbose=False):
                                     'q': quote_indices}
 
                 labeled_sents[sent_no]["quotes"].append(indices_per_label)
+                print("Indices:',indices_per_label)
 
         if verbose:
             sample_output = ""
