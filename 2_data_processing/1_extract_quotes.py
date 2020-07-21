@@ -86,6 +86,7 @@ def spacy_pipe(text,verbose=False):
     labeled_sents = defaultdict(dict) # To fill with list of doc.sents, with annotated versions of tokens
 
     for sent_no,sent in enumerate(doc.sents):
+        print('sent:',sent)
 
         labeled_sents[sent_no]["idx2text"] = {tok.i: tok.text for tok in sent}
         labeled_sents[sent_no]["idx2lemma"] = {tok.i: tok.lemma_ for tok in sent}
