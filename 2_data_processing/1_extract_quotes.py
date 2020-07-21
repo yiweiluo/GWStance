@@ -83,19 +83,23 @@ def spacy_pipe(text,verbose=False):
         else:
             corefed_tokens[token.i] = None
 
-    # Step 3. Go through each sentence in the doc, tag relevant parts as Q, V, S, or N
-    labeled_sents = defaultdict(dict) # To fill with list of doc.sents, with tagged versions of tokens
+    # Step 3. Go through each sentence in the doc, annotate relevant parts.
+    labeled_sents = defaultdict(dict) # To fill with list of doc.sents, with annotated versions of tokens
     for sent_no,sent in enumerate(doc.sents):
+
         labeled_sents[sent_no]["idx2text"] = {tok.i: tok.text for tok in sent}
         labeled_sents[sent_no]["idx2lemma"] = {tok.i: tok.lemma_ for tok in sent}
         labeled_sents[sent_no]["quotes"] = [] # We will add dicts with {tok.idx: tok.label} (key, value) pairs.
 
+        # Step A. Get all verbs inside complement clauses, corresponding to
+        # main verbs of embedded statements.
         VERBS = set([token.head for token in sent if token.dep_ == 'ccomp'])
         VERBS = [v for v in VERBS if v.lemma_ in householder_stems]
 
         # Extract everything else for each VERB
         for VERB in VERBS:
-            # Extract the rest of the quoting verb
+
+            # Step B. Extract the rest of the quoting verb.
             verb_deps = [x for x in VERB.children if is_good_verb_dep(x.dep_)]
             verb_prts = [x for x in VERB.children if is_verb_prt(x.dep_)]
 
@@ -127,10 +131,12 @@ def spacy_pipe(text,verbose=False):
                 root_deps.extend(new_children)
             verb_deps.extend([x for x in root_deps if x != VERB and x not in verb_deps])
 
+            # Step C. Find negation on main verb and subject of main verb.
             NEG,subj_NEG,neg_children,subj_NEG_children = None,None,None,None
             SUBJECT,subj_children = None,None
 
             for child in ROOT.children:
+
                 # First pass at finding subject of verb
                 if child.dep_[:5] == 'nsubj' or child.dep_ == 'expl':
                     SUBJECT = child
@@ -144,7 +150,6 @@ def spacy_pipe(text,verbose=False):
                     for x in neg_children:
                         new_children = [c for c in x.children]
                         neg_children.extend(new_children)
-                    #IS_NEG = ROOT in NEG.head.children or ROOT == NEG.head
 
             # Second pass at finding subject
             if (SUBJECT is None) and ROOT.dep_[-2:] == 'cl':
@@ -160,7 +165,7 @@ def spacy_pipe(text,verbose=False):
 #                 if (SUBJECT is None) and ROOT.dep_[-2:] == 'cl':
 #                     SUBJECT = ROOT.head if ROOT.head.pos_ == 'NOUN' or ROOT.head.pos_ == 'PROPN' else None
 
-            # Get rest of subject tokens
+            # Step D. Get rest of subject tokens.
             if SUBJECT is not None:
                 subj_children = [c for c in SUBJECT.children if is_good_subj_dep(c.dep_)]
                 subj_NEG = [c for c in subj_children if c.dep_ == 'neg']
@@ -177,17 +182,16 @@ def spacy_pipe(text,verbose=False):
                     new_children = [c for c in x.children if is_good_subj_dep(c.dep_)]
                     subj_children.extend(new_children)
 
-            # Find embedded comp. clause
+            # Step E. Find embedded comp. clause
             emb_main_verbs = [c for c in VERB.children if c.dep_ == 'ccomp']
 
             for emb_main_verb in emb_main_verbs:
-                # Recursively get all children of main verb of embedded clause
                 children_queue = [x for x in emb_main_verb.children]
                 for x in children_queue:
                     new_children = [c for c in x.children]
                     children_queue.extend(new_children)
 
-                # Group indices by Quote component
+                # Step F. Group indices by Quote component
                 quote_indices = [c.i for c in children_queue+[emb_main_verb]]
                 verb_indices = [c.i for c in verb_deps+[VERB]]
                 verb_prt_indices = [c.i for c in verb_prts]
@@ -217,7 +221,7 @@ def spacy_pipe(text,verbose=False):
             sample_output += 'Original sentence: ' + ' '.join([tok.text for tok in sent]) + '\n'
             sample_output += 'Corefed sentence: ' + ' '.join([corefed_tokens[tok.i]
                                                 if corefed_tokens[tok.i] is not None
-                                                else tok.text for tok in sent])
+                                                else tok.text for tok in sent]) + '\n'
             print('Original sentence:',' '.join([tok.text for tok in sent]))
             print('\n')
             print('Corefed sentence:',' '.join([corefed_tokens[tok.i]
@@ -227,7 +231,7 @@ def spacy_pipe(text,verbose=False):
             quotes = labeled_sents[sent_no]["quotes"]
             for quote in quotes:
                 print('\n***** new quote ******')
-                sample_output += '\n***** new quote ******'
+                sample_output += '\n***** new quote ******\n'
                 for key in quote:
                     if 's' in key:
                         print('{}:\t'.format(key),' '.join([corefed_tokens[i]
