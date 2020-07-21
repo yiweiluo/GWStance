@@ -56,8 +56,9 @@ def is_pronoun(tok):
 
 
 def spacy_pipe(text,verbose=False):
-    # Step 0. Run pipeline.
+    # Step 0. Run pipeline and prepare sample output for debugging.
     doc = nlp(text)
+    sample_output = ""
 
     # Step 1. Figure out which tokens to tag w/ coreferring token
     to_coref = {}
@@ -212,9 +213,7 @@ def spacy_pipe(text,verbose=False):
 
                 labeled_sents[sent_no]["quotes"].append(indices_per_label)
 
-        sample_output = None
         if verbose:
-            sample_output = ""
             sample_output += 'Original sentence: ' + ' '.join([tok.text for tok in sent]) + '\n'
             sample_output += 'Corefed sentence: ' + ' '.join([corefed_tokens[tok.i]
                                                 if corefed_tokens[tok.i] is not None
