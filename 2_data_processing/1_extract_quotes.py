@@ -217,24 +217,24 @@ def spacy_pipe(text,verbose=False):
 
         if verbose:
             sample_output = ""
-            sample_output += ('Original sentence:',' '.join([tok.text for tok in sent]))
-            sample_output += ('\n')
-            sample_output += ('Corefed sentence:',' '.join([corefed_tokens[tok.i]
+            sample_output += 'Original sentence:'+' '.join([tok.text for tok in sent])
+            sample_output += '\n'
+            sample_output += 'Corefed sentence:'+' '.join([corefed_tokens[tok.i]
                                                 if corefed_tokens[tok.i] is not None
-                                                else tok.text for tok in sent]))
+                                                else tok.text for tok in sent])
             id2text = labeled_sents[sent_no]["idx2text"]
             quotes = labeled_sents[sent_no]["quotes"]
             for quote in quotes:
-                sample_output += ('\n***** new quote ******')
+                sample_output += '\n***** new quote ******'
                 for key in quote:
                     if 's' in key:
-                        sample_output += ('{}:\t'.format(key),' '.join([corefed_tokens[i]
+                        sample_output += '{}:\t'.format(key)+' '.join([corefed_tokens[i]
                                                            if corefed_tokens[i] is not None
                                                            else id2text[i]
-                                                           for i in sorted(quote[key])]))
+                                                           for i in sorted(quote[key])])
                     else:
-                        sample_output += ('{}:\t'.format(key),' '.join([id2text[i]
-                                                            for i in sorted(quote[key])]))
+                        sample_output += '{}:\t'.format(key)+' '.join([id2text[i]
+                                                            for i in sorted(quote[key])])
             return labeled_sents,corefed_tokens,sample_output
 
     return labeled_sents,corefed_tokens
