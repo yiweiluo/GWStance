@@ -217,9 +217,9 @@ def spacy_pipe(text,verbose=False):
 
         if verbose:
             sample_output = ""
-            sample_output += 'Original sentence:'+' '.join([tok.text for tok in sent])
+            sample_output += 'Original sentence: '+' '.join([tok.text for tok in sent])
             sample_output += '\n'
-            sample_output += 'Corefed sentence:'+' '.join([corefed_tokens[tok.i]
+            sample_output += 'Corefed sentence: '+' '.join([corefed_tokens[tok.i]
                                                 if corefed_tokens[tok.i] is not None
                                                 else tok.text for tok in sent])
             id2text = labeled_sents[sent_no]["idx2text"]
@@ -277,6 +277,7 @@ if __name__ == "__main__":
         row = df.loc[row_ix]
         guid = row['guid']
         text = get_fulltext(guid,args.fulltext_dir)
+        print(text)
         save_name = '{}.json'.format(guid)
         if len(text) > 0:
             if args.debug:
