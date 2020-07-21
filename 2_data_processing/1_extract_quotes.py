@@ -20,10 +20,6 @@ config = json.load(open('../config.json', 'r'))
 REMOTE_PREPRO_DIR = config['REMOTE_PREPRO_DIR']
 REMOTE_SCRAPE_DIR = config['REMOTE_SCRAPE_DIR']
 
-with open('householder_stems.txt','r') as f:
-    householder_stems = f.read().splitlines()
-print('Length of householder stems:',len(householder_stems))
-print(householder_stems[:3]+householder_stems[-3:])
 
 def get_fulltext(url_guid,fulltext_dir):
     """Reads and returns file contents of text corresponding to a URL guid."""
@@ -59,7 +55,7 @@ def is_pronoun(tok):
     return tok in PRONOUNS
 
 
-def spacy_pipe(text):
+def spacy_pipe(text,verbose=False):
     # Step 0. Run pipeline.
     doc = nlp(text)
 
@@ -78,24 +74,32 @@ def spacy_pipe(text):
     # Step 2. Annotate those tokens with coreferring tokens
     corefed_tokens = {}
     for token in doc:
-        if token.i in to_coref and to_coref[token.i]:
-            corefed_tokens[token.i] = token._.coref_clusters[0].main.text
+        if token.i in to_coref:
+            if to_coref[token.i]:
+                corefed_tokens[token.i] = token._.coref_clusters[0].main.text
+            else:
+                corefed_tokens[token.i] = ''
         else:
             corefed_tokens[token.i] = None
 
-    # Step 3. Go through each sentence in the doc, tag relevant parts as Q, V, S, or N
-    labeled_sents = defaultdict(dict) # To fill with list of doc.sents, with tagged versions of tokens
+    # Step 3. Go through each sentence in the doc, annotating relevant parts
+    labeled_sents = defaultdict(dict) # To fill with list of doc.sents, with annotated versions of tokens
+
     for sent_no,sent in enumerate(doc.sents):
+
         labeled_sents[sent_no]["idx2text"] = {tok.i: tok.text for tok in sent}
         labeled_sents[sent_no]["idx2lemma"] = {tok.i: tok.lemma_ for tok in sent}
         labeled_sents[sent_no]["quotes"] = [] # We will add dicts with {tok.idx: tok.label} (key, value) pairs.
 
+        # Step A. Get verbs that are in complement clauses, then filter to Householder stems--
+        # these represent the main verbs in embedded sentences.
         VERBS = set([token.head for token in sent if token.dep_ == 'ccomp'])
         VERBS = [v for v in VERBS if v.lemma_ in householder_stems]
 
         # Extract everything else for each VERB
         for VERB in VERBS:
-            # Extract the rest of the quoting verb
+
+            # Step C. Extract the rest of the quoting verb
             verb_deps = [x for x in VERB.children if is_good_verb_dep(x.dep_)]
             verb_prts = [x for x in VERB.children if is_verb_prt(x.dep_)]
 
@@ -114,44 +118,52 @@ def spacy_pipe(text):
                 if ROOT.dep_ == 'relcl' and ROOT.head.lemma_ in householder_stems:
                     ROOT = ROOT.head
                     verb_deps.append(ROOT)
-                else:
-                    pass
             else:
                 while not is_ROOT(ROOT):
                     ROOT = ROOT.head
-                assert is_ROOT(ROOT)
                 if ROOT.dep_ == 'relcl' and ROOT.head.lemma_ in householder_stems:
                     ROOT = ROOT.head
                 verb_deps.append(ROOT)
 
-                root_deps = [x for x in ROOT.children if is_good_verb_dep(x.dep_)]
-                for x in root_deps:
-                    new_children = [c for c in x.children if is_good_verb_dep(c.dep_)]
-                    root_deps.extend(new_children)
+            root_deps = [x for x in ROOT.children if is_good_verb_dep(x.dep_)]
+            for x in root_deps:
+                new_children = [c for c in x.children if is_good_verb_dep(c.dep_)]
+                root_deps.extend(new_children)
+            verb_deps.extend([x for x in root_deps if x != VERB and x not in verb_deps])
 
-                verb_deps.extend([x for x in root_deps if x != VERB and x not in verb_deps])
-
-            NEG,subj_NEG,IS_NEG,neg_children,subj_NEG_children = None,None,None,None,None
+            # Step D. Get the subject and negation on main verbs.
+            NEG,subj_NEG,neg_children,subj_NEG_children = None,None,None,None
             SUBJECT,subj_children = None,None
 
             for child in ROOT.children:
+
+                # First pass at finding subject of verb
                 if child.dep_[:5] == 'nsubj' or child.dep_ == 'expl':
                     SUBJECT = child
                     if SUBJECT.head.dep_ == 'relcl' and is_rel_pronoun(SUBJECT.text): # we're dealing with the subject of a rel clause
                         SUBJECT = SUBJECT.head.head
 
+                # Find negation on verb
                 if child.dep_[:3] == 'neg':
                     NEG = child
                     neg_children = [c for c in NEG.children if c != ROOT]
                     for x in neg_children:
                         new_children = [c for c in x.children]
                         neg_children.extend(new_children)
-                    IS_NEG = ROOT in NEG.head.children or ROOT == NEG.head
 
+            # Second pass at finding subject
             if (SUBJECT is None) and ROOT.dep_[-2:] == 'cl':
                 SUBJECT = ROOT.head if ROOT.head.pos_ == 'NOUN' or ROOT.head.pos_ == 'PROPN' else None
 
-            # Get rest of subject tokens
+            # Third pass: If VERB is conjoined to another verb, subject is shared
+            if (SUBJECT is None) and (VERB.dep_ == 'conj' and VERB.head.dep_ == 'ROOT'):
+                for c in VERB.head.children:
+                    if c.dep_[:5] == 'nsubj' or c.dep_ == 'expl':
+                        SUBJECT = c
+                        if SUBJECT.head.dep_ == 'relcl' and is_rel_pronoun(SUBJECT.text): # we're dealing with the subject of a rel clause
+                            SUBJECT = SUBJECT.head.head
+
+            # Step E. Get rest of subject tokens and negation on subject
             if SUBJECT is not None:
                 subj_children = [c for c in SUBJECT.children if is_good_subj_dep(c.dep_)]
                 subj_NEG = [c for c in subj_children if c.dep_ == 'neg']
@@ -168,17 +180,16 @@ def spacy_pipe(text):
                     new_children = [c for c in x.children if is_good_subj_dep(c.dep_)]
                     subj_children.extend(new_children)
 
-            # Find embedded comp. clause
+            # Step F. Find embedded comp. clause.
             emb_main_verbs = [c for c in VERB.children if c.dep_ == 'ccomp']
 
             for emb_main_verb in emb_main_verbs:
-                # Recursively get all children of main verb of embedded clause
                 children_queue = [x for x in emb_main_verb.children]
                 for x in children_queue:
                     new_children = [c for c in x.children]
                     children_queue.extend(new_children)
 
-                # Group indices by Quote component
+                # Step G. Group indices by Quote component
                 quote_indices = [c.i for c in children_queue+[emb_main_verb]]
                 verb_indices = [c.i for c in verb_deps+[VERB]]
                 verb_prt_indices = [c.i for c in verb_prts]
@@ -204,6 +215,26 @@ def spacy_pipe(text):
 
                 labeled_sents[sent_no]["quotes"].append(indices_per_label)
 
+        if verbose:
+            print('Original sentence:',' '.join([tok.text for tok in sent]))
+            print('\n')
+            print('Corefed sentence:',' '.join([corefed_tokens[tok.i]
+                                                if corefed_tokens[tok.i] is not None
+                                                else tok.text for tok in sent]))
+            id2text = labeled_sents[sent_no]["idx2text"]
+            quotes = labeled_sents[sent_no]["quotes"]
+            for quote in quotes:
+                print('\n***** new quote ******')
+                for key in quote:
+                    if 's' in key:
+                        print('{}:\t'.format(key),' '.join([corefed_tokens[i]
+                                                           if corefed_tokens[i] is not None
+                                                           else id2text[i]
+                                                           for i in sorted(quote[key])]))
+                    else:
+                        print('{}:\t'.format(key),' '.join([id2text[i]
+                                                            for i in sorted(quote[key])]))
+
     return labeled_sents,corefed_tokens
 
 
@@ -218,34 +249,37 @@ if __name__ == "__main__":
                       help='where to write batched output')
     arg_parser.add_argument('--fulltext_dir', type=str, default=None,
                       help='where to source fulltext')
-
     args = arg_parser.parse_args()
+
+    print('Getting Householder stems for verb filtering...')
+    with open('householder_stems.txt','r') as f:
+        householder_stems = f.read().splitlines()
+    print('\tNumber of Householder stems:',len(householder_stems))
+    print('\tSample stems:',householder_stems[:3]+householder_stems[-3:])
 
     df = pd.read_pickle(os.path.join(REMOTE_SCRAPE_DIR,args.input_df_filename))#,sep='\t',header=0,index_col=0)
     print('Length of df:',len(df))
 
     if args.debug:
         end_ix = 5
+        verbose=True
     else:
         end_ix = len(df)
-
+        verbose=False
 
     batch_no = 0
     if not os.path.exists(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'extracted_quotes_{}'.format(batch_no))):
         os.mkdir(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'extracted_quotes_{}'.format(batch_no)))
-
 
     start_time = time.time()
     for ix in range(end_ix):
         row_ix = df.index[ix]
         row = df.loc[row_ix]
         guid = row['guid']
-        #print(ix,row_ix,guid)
         text = get_fulltext(guid,args.fulltext_dir)
         save_name = '{}.json'.format(guid)
         if len(text) > 0:
-            labeled_sents,corefed_tokens = spacy_pipe(text)
-            #print('corefed_tokens type:',type(corefed_tokens))
+            labeled_sents,corefed_tokens = spacy_pipe(text,verbose=verbose)
             j = json.dumps({"quote_tags":labeled_sents,
                    "coref_tags":corefed_tokens})
         else:
