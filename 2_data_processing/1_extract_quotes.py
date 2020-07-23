@@ -270,11 +270,13 @@ if __name__ == "__main__":
     print('\tNumber of Householder stems:',len(householder_stems))
     print('\tSample stems:',householder_stems[:3]+householder_stems[-3:])
 
+    print('Reading in dataframe of articles...')
     df = pd.read_pickle(os.path.join(REMOTE_SCRAPE_DIR,args.input_df_filename))#,sep='\t',header=0,index_col=0)
     print('Length of df:',len(df))
 
     if args.debug:
         end_ix = 5
+        print("Debug mode ON. Sample output for the first 5 articles will be written to .txt files prefixed with 'sample_output_'.")
     else:
         end_ix = len(df)
 
