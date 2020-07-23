@@ -62,17 +62,19 @@ Running the above writes a `.json` (using the naming convention `'url_no_{}.json
 }
 ```
 
-## Deduplicating articles
+## Filtering extracted Opinions
 
-`1_dedup_titles.py` deduplicates articles from the same media outlet based on their publish dates and the edit distance of their associated titles, after regularization. You can use the deduplicated output we provide (`output/dedup_combined_df_2000_1_1_to_2020_4_12.pkl`) directly, without running the deduplication script (which can be slow). 
-
-If you do wish to run the script, you can use the article meta-data we provide (`output/temp_combined_df_2000_1_1_to_2020_4_12.pkl`) or your own output from `0_get_urls.py` as input. 
+`2_filter_quotes.py` applies the following criteria to filter extracted opinions:
+1. The extracted Predicate must be a Householder verb,
+2. The extracted Opinion cannot be an indirect question,
+3. The extracted Opinion must contain one of N climate change/global warming-related keywords. 
 
 Sample usage:
 ```
 python 1_dedup_tites.py \
-	--input_df_filename output/temp_combined_df_2000_1_1_to_2020_4_12.pkl \	# where to read in pre-deduplicated data
-	--output_df_filename dedup_combined_df_2000_1_1_to_2020_4_12.pkl	# where to save deduplicated data
+	--path_to_df ../1_data_scraping/curr_dedup_df.tsv \	# where to read in dataframe of articles
+	--output_dir ./output \					# where to write filtered data
+	--quotes_dir ./new_extracted_quotes			# directory containing extracted Opinions
 ```
 
 ## Filtering articles
