@@ -99,7 +99,7 @@ def main(output_dir,quotes_dir,filter_dict,stop_ix):
 
     # Set-up CSV with quote comp clauses
     fieldnames = ['guid', 'sent_no', 'quote_no', 'quote_text', 'coref']
-    with open('./{}/all_quote_comps.csv'.format(output_dir), 'w', newline='') as csvfile:
+    with open(os.path.join(output_dir,'all_quote_comps.csv'), 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
 
@@ -205,4 +205,6 @@ if __name__ == "__main__":
     for filter_type in FILTER_WORDS:
         print('\tNumber of {}:'.format(filter_type),len(FILTER_WORDS[filter_type]))
 
+    if not os.path.exists(args.output_dir):
+        os.mkdir(args.output_dir)
     main(args.output_dir,args.quotes_dir,FILTER_WORDS,end_ix)
