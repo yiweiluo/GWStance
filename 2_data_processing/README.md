@@ -28,31 +28,30 @@ Running the above writes a `.json` for every article with the following structur
 ```yaml
 {
    "quote_tags": {
-	"0": {								# index of sentence within article, as a `str`
-	   "idx2text": {"0": "Almost", "1": "no", "2": "rational", "3": "people", ... }, 									# dict mapping each token's index within the document to the token's text
-	   "idx2lemma": {"0": "almost", "1": "no", "2": "rational", "3": "person", ...},  									# dict mapping each token's index within the document to the token's lemmatized text
-	   "quotes": [							# list of dicts containing annotations for all (Source, Predicate, Opinion) tuples (plus additional modifiers) that occur in the sentence
-		{
-			"neg_s": [0, 1],				# indices of negation tokens modifying the Source (e.g. "**Almost no** rational people would point out that climate change is a hoax.")
-			"main_neg_s": [1],				# index of the head negation token modifying the Source (e.g. "Almost **no** rational people would point out that climate change is a hoax.")    
-			"s": [2, 3],					# indices of Source tokens (e.g. "Almost no **rational people** would point out that climate change is a hoax.")
-			"main_s": [3],					# index of the head Source token (e.g. "Almost no rational **people** would point out that climate change is a hoax.")
-			"neg_v": [],					# indices of the Predicate negation tokens
-			"main_neg_v": [],				# index of the head Predicate negation token
-			"v": [4, 5, 6],					# indices of the Predicate tokens (e.g. "Almost no rational people **would point out** that climate change is a hoax.")
-			"main_v": [5],					# index of the head Predicate token (e.g. "Almost no rational people would **point** out that climate change is a hoax.")
-			"v_prt": [6],					# indices of tokens that are particles attached to the Predicate (e.g. "Almost no rational people would point **out** that climate change is a hoax.")
-			"q": [7, 8, 9, 10, 11, 12, 13, 14]		# indices of tokens that are part of the embedded Opinion (e.g. "Almost no rational people would point out **that climate change is a hoax.**")
-		    },
-		    { 
-			...
-		    }
-		]
- 	   }
-	},
-	"1": {
-	...
-	}
+		    "0": {								# index of sentence within article, as a `str`
+	   		     "idx2text": {"0": "Almost", "1": "no", "2": "rational", "3": "people", ... }, 									# dict mapping each token's index within the document to the token's text
+	   		     "idx2lemma": {"0": "almost", "1": "no", "2": "rational", "3": "person", ...},  									# dict mapping each token's index within the document to the token's lemmatized text
+	   		     "quotes": [     						# list of dicts containing annotations for all (Source, Predicate, Opinion) tuples (plus additional modifiers) that occur in the sentence
+					    {
+						"neg_s": [0, 1],			# indices of negation tokens modifying the Source (e.g. "**Almost no** rational people would point out that climate change is a hoax.")
+						"main_neg_s": [1],			# index of the head negation token modifying the Source (e.g. "Almost **no** rational people would point out that climate change is a hoax.")    
+						"s": [2, 3],				# indices of Source tokens (e.g. "Almost no **rational people** would point out that climate change is a hoax.")
+						"main_s": [3],				# index of the head Source token (e.g. "Almost no rational **people** would point out that climate change is a hoax.")		
+						"neg_v": [],				# indices of the Predicate negation tokens
+						"main_neg_v": [],			# index of the head Predicate negation token
+						"v": [4, 5, 6],				# indices of the Predicate tokens (e.g. "Almost no rational people **would point out** that climate change is a hoax.")
+						"main_v": [5],				# index of the head Predicate token (e.g. "Almost no rational people would **point** out that climate change is a hoax.")
+						"v_prt": [6],				# indices of tokens that are particles attached to the Predicate (e.g. "Almost no rational people would point **out** that climate change is a hoax.")
+						"q": [7, 8, 9, 10, 11, 12, 13, 14]	# indices of tokens that are part of the embedded Opinion (e.g. "Almost no rational people would point out **that climate change is a hoax.**")
+		    			    },
+		    			    { 
+						...
+		    			    }
+				       ]        
+ 	   		 },
+		    "1": {
+			    ...
+	                 }
    },
    "coref_tags": {							# dict mapping the index of each token in the document to its co-refering string, if present
 	"0": null,
