@@ -47,11 +47,11 @@ Running the above writes a `.json` for every article with the following structur
 		    			    { 
 						...
 		    			    }
-				       ]        
- 	   		 },
+			     ]        
+ 	   	    },
 		    "1": {
 			    ...
-	                 }
+	            }
    },
    "coref_tags": {							# dict mapping the index of each token in the document to its co-refering string, if present
 	"0": null,
