@@ -103,7 +103,7 @@ def main(output_dir,quotes_dir,filter_dict,stop_ix):
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
 
-    for n,url_guid in enumerate(df.guid[:stop_ix]):
+    for n,url_guid in enumerate(df.guid[1:stop_ix]):
 
         # Read in parsed results
         obj = read_quote_json(url_guid,quotes_dir)
