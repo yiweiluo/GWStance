@@ -91,8 +91,7 @@ def get_householder_main_v_quotes(quote_tag_dict_list,debug=False):
     return good_quotes
 
 
-
-def main(output_dir,quotes_dir,filter_dict,stop_ix):
+def main(output_dir,quotes_dir,filter_dict,stop_ix,debug=False):
     """Writes complement clauses of quotes (filtered down to those with a Householder stem as the quoting verb) to 'all_quote_comps.csv'.
     Then, finds stems of all tokens in filtered complement clauses. Finally, removes indirect questions and filters comp. clauses again
     by keyword stems and writes to `keyword_filtered_comp_clauses.tsv`."""
@@ -118,7 +117,7 @@ def main(output_dir,quotes_dir,filter_dict,stop_ix):
             good_v_quotes = []
             for sent_no in sents_with_quotes:
                 # Get quotes with main verb that is one of interest (in Householder list)
-                householder_main_v_quotes = get_householder_main_v_quotes(obj['quote_tags'][sent_no])
+                householder_main_v_quotes = get_householder_main_v_quotes(obj['quote_tags'][sent_no],debug=debug)
                 quote_tag_dict_list = obj['quote_tags'][sent_no]
                 good_v_quotes.extend(list(zip([sent_no]*len(householder_main_v_quotes),householder_main_v_quotes)))
                 #good_v_quotes.extend([(sent_no,q_no,q_dict) for q_no,q_dict in enumerate(quote_tag_dict_list['quotes'])])
@@ -209,4 +208,4 @@ if __name__ == "__main__":
 
     if not os.path.exists(args.output_dir):
         os.mkdir(args.output_dir)
-    main(args.output_dir,args.quotes_dir,FILTER_WORDS,end_ix)
+    main(args.output_dir,args.quotes_dir,FILTER_WORDS,end_ix,debug=args.debug)
