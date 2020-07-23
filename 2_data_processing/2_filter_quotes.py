@@ -124,8 +124,10 @@ def main(output_dir,quotes_dir,filter_dict,stop_ix):
                 #good_v_quotes.extend([(sent_no,q_no,q_dict) for q_no,q_dict in enumerate(quote_tag_dict_list['quotes'])])
 
             # Now, get the quote text to classify stance, with url_guid + sent_no, so I can recover context
-            good_v_quote_texts = [(sent_no,q_no,[(obj['quote_tags'][sent_no]['idx2text'][str(idx)],obj['coref_tags'][str(idx)])
-                                            for idx in sorted(q_dict['q'],key=lambda x: int(x))]) for sent_no,q_no,q_dict in good_v_quotes]
+            good_v_quote_texts = [[(sent_no,q_no,[(quote_obj['quote_tags'][str(sent_no)]['idx2text'][str(idx)],
+                                       quote_obj['coref_tags'][str(idx)])
+                                            for idx in sorted(q_dict['q'],key=lambda x: int(x))])
+                       for sent_no,(q_no,q_dict) in good_v_quotes]]
 
 
             with open('./{}/all_quote_comps.csv'.format(output_dir), 'a', newline='') as csvfile:
