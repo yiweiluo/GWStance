@@ -78,7 +78,7 @@ def get_householder_main_v_quotes(quote_tag_dict_list,debug=False):
         full_main_vs = set(full_main_vs)
         #main_v_lemmas_small = [x for x in main_v_lemmas if x not in AUX]
         if debug:
-            print('quote_dict':q_dict)
+            print('quote_dict:',q_dict)
             print('\tMain verb lemmas:',main_v_lemmas)
             print('\tFull main verb lemmas:',full_main_vs)
         householder_intersec = full_main_vs.intersection(householder_verbs)
