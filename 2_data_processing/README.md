@@ -7,20 +7,20 @@
 `1_extract_quotes.py` implements our dependency parse-based algorithm for extracting embedded [Opinion]{.smallcaps} spans (e.g. *Scientists believe that [**climate change requires immediate action**]*), [Sources]{.smallcaps} (e.g. *Scientists*) and [Predicates]{.smallcaps} (e.g. *believe*) from a given article. 
 
 To run this script, you will need:
-	1. A dataframe containing the set of articles you want to analyze, for which you have two options:
-		* Option A: The original dataset we use in the paper, provided as `curr_dedup_df.tsv` in `1_data_scraping`;
-		* Option B: A different set that you collect from running the scripts provided in `1_data_scraping`.
+1. A dataframe containing the set of articles you want to analyze, for which you have two options:
+	* Option A: The original dataset we use in the paper, provided as `curr_dedup_df.tsv` in `1_data_scraping`;
+	* Option B: A different set that you collect from running the scripts provided in `1_data_scraping`.
 	The path to this dataframe will be specified via the `--input_df_filename` command line argument.
-	1. The full text of each article saved as a `.txt` file, named according to the convention `url_no_{}.format(guid)` (e.g. `url_no_7.txt`), where `guid` is a global unique identifier indexed to each article and stored as its own column in the article dataframe. The path to the directory containing the text files will be specified via the `--fulltext_dir` command line argument.
+1. The full text of each article saved as a `.txt` file, named according to the convention `url_no_{}.format(guid)` (e.g. `url_no_7.txt`), where `guid` is a global unique identifier indexed to each article and stored as its own column in the article dataframe. The path to the directory containing the text files will be specified via the `--fulltext_dir` command line argument.
 
 Sample usage:
 
 ```
 python 1_extract_quotes.py \
-	--debug \ 									# whether to test run on smaller sample 
-	--input_df_filename ../1_data_scraping/output/filtered_dedup_combined_df_2000_1_1_to_2020_4_12.pkl \ # where to read in article dataset df
-	--output_dir url_quotes \ 							# where to write jsons with extracted annotations
-	--fulltext_dir url_texts 							# where to read in article full texts
+	--debug \ 					# whether to test run on smaller sample 
+	--input_df_filename ../1_data_scraping/output/filtered_dedup_combined_df_2000_1_1_to_2020_4_12.pkl \ 	# where to read in article dataset df
+	--output_dir url_quotes \ 			# where to write jsons with extracted annotations
+	--fulltext_dir url_texts 			# where to read in article full texts
 ```
 
 Running the above writes a `.json` for every article with the following structure:
@@ -29,8 +29,8 @@ Running the above writes a `.json` for every article with the following structur
 {
    "quote_tags": {
 	"0": {								# index of sentence within article, as a `str`
-	   "idx2text": {"0": "Almost", "1": "no", "2": "rational", "3": "people", ... }, 	# dict mapping each token's index within the sentence to the token's text
-	   "idx2lemma": {"0": "almost", "1": "no", "2": "rational", "3": "person", ...},  	# dict mapping each token's index within the sentence to the token's lemmatized text
+	   "idx2text": {"0": "Almost", "1": "no", "2": "rational", "3": "people", ... }, 									# dict mapping each token's index within the document to the token's text
+	   "idx2lemma": {"0": "almost", "1": "no", "2": "rational", "3": "person", ...},  									# dict mapping each token's index within the document to the token's lemmatized text
 	   "quotes": [							# list of dicts containing annotations for all (Source, Predicate, Opinion) tuples (plus additional modifiers) that occur in the sentence
 		{
 			"neg_s": [0, 1],				# indices of negation tokens modifying the Source (e.g. "**Almost no** rational people would point out that climate change is a hoax.")
@@ -42,7 +42,7 @@ Running the above writes a `.json` for every article with the following structur
 			"v": [4, 5, 6],					# indices of the Predicate tokens (e.g. "Almost no rational people **would point out** that climate change is a hoax.")
 			"main_v": [5],					# index of the head Predicate token (e.g. "Almost no rational people would **point** out that climate change is a hoax.")
 			"v_prt": [6],					# indices of tokens that are particles attached to the Predicate (e.g. "Almost no rational people would point **out** that climate change is a hoax.")
-			"q": [7, 8, 9, 10, 11, 12, 13, 14]		# indices of tokens that are part of the embedded Opinion
+			"q": [7, 8, 9, 10, 11, 12, 13, 14]		# indices of tokens that are part of the embedded Opinion (e.g. "Almost no rational people would point out **that climate change is a hoax.**")
 		    },
 		    { 
 			...
@@ -61,6 +61,7 @@ Running the above writes a `.json` for every article with the following structur
 	...
    }
 }
+```
 
 ## Deduplicating articles
 
