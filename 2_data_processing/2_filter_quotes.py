@@ -57,7 +57,7 @@ def read_quote_json(url_guid,quotes_dir):
         return None
 
 
-def contains_keyword(stem_set,filter_dict):
+def contains_keyword(stem_set):
     """Returns True if stem_set contains a climate change-related keyword stem"""
     return len(set(stem_set).intersection(filter_dict['keyword_stems'])) > 0
 
