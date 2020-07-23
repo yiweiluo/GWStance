@@ -57,7 +57,7 @@ def read_quote_json(url_guid,quotes_dir):
         return None
 
 
-def contains_keyword(stem_set):
+def contains_keyword(stem_set,filter_dict):
     """Returns True if stem_set contains a climate change-related keyword stem"""
     return len(set(stem_set).intersection(filter_dict['keyword_stems'])) > 0
 
@@ -158,7 +158,7 @@ def main(output_dir,quotes_dir,filter_dict,stop_ix):
     print('Filtering comp. clauses by keywords...')
     quotes_df['quote_stem_list'] = quotes_df['quote_stems'].apply(read_stem_str)
     quotes_df['quote_stem_list_coref'] = quotes_df['quote_stems_coref'].apply(read_stem_str)
-    keyword_coref_quotes_df = quotes_df.loc[quotes_df['quote_stem_list_coref'].apply(contains_keyword)].copy()
+    keyword_coref_quotes_df = quotes_df.loc[quotes_df['quote_stem_list_coref'].apply(contains_keyword,args=(filter_dict))].copy()
     print('Found {} comp. clauses with keywords.\n'.format(len(keyword_coref_quotes_df)))
     print('Saving...')
     keyword_coref_quotes_df.to_csv('./{}/keyword_filtered_comp_clauses.tsv'.format(output_dir),sep='\t',header=True)
