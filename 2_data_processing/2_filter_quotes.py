@@ -85,7 +85,7 @@ def get_householder_main_v_quotes(quote_tag_dict_list,debug=False):
         if len(householder_intersec) > 0:
             if debug:
                 print('\t\tIn Householder set!')
-                print('\t\t'+householder_intersec)
+                print('\t\t{}'.format(householder_intersec))
             good_quotes.append((q_no,q_dict))
 
     return good_quotes
