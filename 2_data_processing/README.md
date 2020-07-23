@@ -11,7 +11,7 @@ To run this script, you will need:
 	* Option A: The original dataset we use in the paper, provided as `curr_dedup_df.tsv` in `1_data_scraping`;
 	* Option B: A different set that you collect from running the scripts provided in `1_data_scraping`.
 	The path to this dataframe will be specified via the `--input_df_filename` command line argument.
-1. The full text of each article saved as a `.txt` file, named according to the convention `url_no_{}.format(guid)` (e.g. `url_no_7.txt`), where `guid` is a global unique identifier indexed to each article and stored as its own column in the article dataframe. The path to the directory containing the text files will be specified via the `--fulltext_dir` command line argument.
+1. The full text of each article saved as a `.txt` file, named according to the convention `'url_no_{}.txt'.format(guid)` (e.g. `url_no_7.txt`), where `guid` is a global unique identifier indexed to each article and stored as its own column in the article dataframe. The path to the directory containing the text files will be specified via the `--fulltext_dir` command line argument.
 
 Sample usage:
 
@@ -23,7 +23,7 @@ python 1_extract_quotes.py \
 	--fulltext_dir url_texts 			# where to read in article full texts
 ```
 
-Running the above writes a `.json` for every article with the following structure:
+Running the above writes a `.json` (using the naming convention `'url_no_{}.json'.format(guid)`) for every article with the following structure:
 
 ```yaml
 {
