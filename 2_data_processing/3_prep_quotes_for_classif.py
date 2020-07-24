@@ -52,7 +52,7 @@ if __name__ == "__main__":
     # save_df.to_csv('./output/keyword_filtered_comp_clauses_for_classif.tsv'
     #                                                                          ,sep='\t',header=True)
     batch_size = 50000
-    os.mkdir(os.path.join(args.output_dir,'batched'))
+    os.makedirs(os.path.join(args.output_dir,'batched'))
     for batch_no in range(round(len(save_df)/batch_size+0.5)):
         os.mkdir(os.path.join(args.output_dir,'batched',str(batch_no)))
         batch_df = save_df[batch_no*batch_size:batch_no*batch_size+batch_size]
