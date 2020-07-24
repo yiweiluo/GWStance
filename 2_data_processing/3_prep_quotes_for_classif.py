@@ -34,7 +34,9 @@ if __name__ == "__main__":
     arg_parser.add_argument('--path_to_input', type=str, default=os.path.join('output','keyword_filtered_comp_clauses.tsv'),
                       help='where to read in the filtered output from `2_filter_quotes.py`')
     arg_parser.add_argument('--output_dir', type=str, default=None,
-                      help='where to write output')
+                      help='where to write batched output')
+    arg_parser.add_argument('--batch_size', type=int, default=5000,
+                      help='size of batches')
 
     args = arg_parser.parse_args()
 
@@ -51,8 +53,8 @@ if __name__ == "__main__":
     save_df = quotes_df[['guid','sent_no','quote_no','clean_quote','clean_quote_coref']]
     # save_df.to_csv('./output/keyword_filtered_comp_clauses_for_classif.tsv'
     #                                                                          ,sep='\t',header=True)
-    batch_size = 50000
-    os.makedirs(os.path.join(args.output_dir,'batched'))
+    batch_size = args.batch_size
+    os.makedirs(args.output_dir)
     for batch_no in range(round(len(save_df)/batch_size+0.5)):
         os.mkdir(os.path.join(args.output_dir,'batched',str(batch_no)))
         batch_df = save_df[batch_no*batch_size:batch_no*batch_size+batch_size]
