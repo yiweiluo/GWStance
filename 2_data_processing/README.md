@@ -4,7 +4,7 @@ This directory contains scripts and helper files for extracting (Source, Predica
 
 ## Extracting embedded opinion clauses from article texts
 
-`1_extract_quotes.py` implements our dependency parse-based algorithm for extracting embedded <span style="font-size:75%;">Opinion</span> spans (e.g. *Scientists believe that [**climate change requires immediate action**]*), Sources (e.g. **Scientists**) and Predicates (e.g. **believe**) from a given article. 
+`1_extract_quotes.py` implements our dependency parse-based algorithm for extracting embedded <span style="font-size:75%;">Opinion</span> spans (e.g. *Scientists believe that [**climate change requires immediate action**]*), Sources (e.g. ***Scientists***) and Predicates (e.g. ***believe***) from a given article. 
 
 To run this script, you will need:
 1. A dataframe containing the set of articles you want to analyze, for which you have two options:
