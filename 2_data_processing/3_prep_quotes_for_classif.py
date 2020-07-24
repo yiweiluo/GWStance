@@ -56,8 +56,8 @@ if __name__ == "__main__":
     batch_size = args.batch_size
     os.makedirs(args.output_dir)
     for batch_no in range(round(len(save_df)/batch_size+0.5)):
-        os.mkdir(os.path.join(args.output_dir,'batched',str(batch_no)))
+        os.mkdir(os.path.join(args.output_dir,str(batch_no)))
         batch_df = save_df[batch_no*batch_size:batch_no*batch_size+batch_size]
-        batch_df.to_csv(os.path.join(args.output_dir,'batched',str(batch_no),'test.tsv'),sep='\t',header=True)
+        batch_df.to_csv(os.path.join(args.output_dir,str(batch_no),'test.tsv'),sep='\t',header=True)
 
     print('Done!\n')
