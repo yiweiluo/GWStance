@@ -35,7 +35,7 @@ if __name__ == "__main__":
                       help='where to read in the filtered output from `2_filter_quotes.py`')
     arg_parser.add_argument('--output_dir', type=str, default=None,
                       help='where to write batched output')
-    arg_parser.add_argument('--batch_size', type=int, default=5000,
+    arg_parser.add_argument('--batch_size', type=int, default=50000,
                       help='size of batches')
 
     args = arg_parser.parse_args()
