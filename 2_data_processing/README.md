@@ -1,6 +1,6 @@
 # Data processing
 
-[Intro blurb] 
+This directory contains scripts and helper files for extracting (Source, Predicate, Opinion) tuples from the full text of articles, then filtering extracted tuples according to the criteria described in our paper, and finally preparing the Opinion spans for input into our climate stance classifier.
 
 ## Extracting embedded opinion clauses from article texts
 
@@ -77,11 +77,9 @@ python 1_dedup_tites.py \
 	--quotes_dir ./new_extracted_quotes			# directory containing extracted Opinions
 ```
 
-## Filtering articles
+## Preparing Opinion spans for stance classification
 
-You can use the pre-filtered data we provide (`output/filtered_dedup_combined_df_2000_1_1_to_2020_4_12.pkl`) or run `2_filter_dataset.py` on your own input dataset.
-
-`2_filter_dataset.py` finds articles from the input dataset that have an associated publication date and that have non-empty article text. To use this script, you need to first have the full article texts of the articles in your dataset scraped and saved as individual `.txt` files with the filename adhering to the format `url_no_N`, where `N` is a global unique ID associated with each article. (Out of copyright concerns, we do not make the full text of the dataset we provide available.) 
+Since our climate stance classifier was trained on Opinion spans transformed with white space removal, initial "that" removal, and acronym substitution, we use `3_prep_quotes_for_classif.py` to apply the same transformations to the extracted Opinion spans. The script also divides the transformed Opinion spans into batches for classification.
 
 Sample usage:
 ```
@@ -89,14 +87,4 @@ python 2_filter_dataset.py \
 	--input_df_filename output/dedup_combined_df_2000_1_1_to_2020_4_12.pkl \	# where to read in dataset
 	--output_df_filename filtered_dedup_combined_df_2000_1_1_to_2020_4_12.pkl \	# where to save filtered data
 	--url_text_dir url_texts 							# where to find the scraped article full texts
-```
-
-## Exploring article stats
-
-`3_explore_dataset.py` creates a report of the basic meta-information obtained for all articles in an dataset.
-
-Sample usage:
-```
-python 3_explore_dataset.py \
-	--input_data_filename  output/filtered_dedup_combined_df_2000_1_1_to_2020_4_12.pkl \	# where to read in data
 ```
