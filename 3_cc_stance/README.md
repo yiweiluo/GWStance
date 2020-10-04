@@ -1,6 +1,6 @@
 # Climate change stance detection
 
-`1_MTurk` contains the annotations (`full_annotations.tsv`) and subject demographic info (`full_subj_info.tsv`) that we obtain from 5 rounds of data collection through Amazon Mechanical Turk. Additional file details:
+`1_MTurk` contains the annotations (`full_annotations.tsv`) and anonymized subject demographic info (`anon_subj_info.tsv`) that we obtain from 5 rounds of data collection through Amazon Mechanical Turk. Additional file details:
 
 * `full_annotations.tsv` has the following fields for each item: 
   * `sentence` (text shown to annotators), 
@@ -12,7 +12,7 @@
   * `disagree`, `agree`, `neutral` (respective probabilities that the true label is the one given by the column name, as estimated by our item-response model),
   * `MACE_pred` (true label as estimated by [MACE](https://github.com/dirkhovy/mace))
 
-* `full_subj_info.tsv` has the following fields for each annotator:
+* `anon_subj_info.tsv` has the following fields for each annotator:
   * `startDate` (date of annotation)
   * `startTime` (time at which HIT was begun)
   * `endTime` (time at which HIT was completed)
