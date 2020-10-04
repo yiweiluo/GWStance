@@ -3,6 +3,7 @@ import os
 import argparse
 import pandas as pd
 import numpy as np
+import json
 from collections import Counter,defaultdict
 from scipy import stats
 import statsmodels.api as sm
@@ -480,7 +481,7 @@ if __name__ == "__main__":
     # Load lexicons
     WORD_CATS = load_lexicons()
 
-    
+
     for analysis_df,analysis_df_name in analysis_dfs:
         get_coverage_proportions(set(WORD_CATS['AFFIRM']),set(WORD_CATS['DOUBT']),analysis_df_,analysis_df_name,verbose=False)
         res = compute_and_plot_device_biases('abs_quote_stance',analysis_df_,analysis_df_name,WORD_CATS)
