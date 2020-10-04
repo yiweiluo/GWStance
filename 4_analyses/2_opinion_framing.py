@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 
 from utils import log_odds_ratio,log_odds
 
-config = json.loads(open('../config.json', 'r'))
+config = json.load(open('../config.json', 'r'))
 
 
 def load_lexicons():
