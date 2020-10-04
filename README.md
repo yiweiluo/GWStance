@@ -20,6 +20,7 @@ This repository contains code and data for the paper:
 	5. `neutral`: ditto for the "neutral" label
 	6. `guid`: a unique ID for each sentence
 	7. `in_held_out_test`: whether the sentence was used in our held-out-test set for model and baseline evaluation
+
 Note: The first 5 rows are the 5 screen sentences we use to make sure that annotators correctly understand the task, and thus do not have estimated probability distributions.
 * The sequence of code to replicate our results can be found in the individual READMEs of the numbered sub-directories.
 
