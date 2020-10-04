@@ -4,6 +4,7 @@ import argparse
 import pandas as pd
 import numpy as np
 import json
+import pickle
 from collections import Counter,defaultdict
 from scipy import stats
 import statsmodels.api as sm
@@ -456,6 +457,24 @@ if __name__ == "__main__":
     print("\nCreating dataframes for analysis...")
     analysis_dfs = []
     main_df = pd.read_pickle(args.path_to_input)
+
+    # Named Entity analyses
+    fuzzy_match_df = pd.read_csv('fuzzy_match_for_refactor.tsv',sep='\t',index_col=0)
+    subj2canonical = dict(zip(fuzzy_match_df['fuzzy_match'],fuzzy_match_df['canonical']))
+
+    NE_stance_dict = pickle.load(open('NE_stance_dict.pkl','rb'))
+    PRO_CC_ENTS = [x for x in NE_stance_dict if 'cc' in NE_stance_dict[x] and
+                         NE_stance_dict[x]['cc'] == 'pro']
+    ANTI_CC_ENTS = [x for x in NE_stance_dict if 'cc' in NE_stance_dict[x] and
+                            NE_stance_dict[x]['cc'] == 'anti']
+    ent2stance = {}
+    ent2stance.update({ent: 'pro' for ent in PRO_CC_ENTS})
+    ent2stance.update({ent: 'anti' for ent in ANTI_CC_ENTS})
+    main_df['main_s_resolved'] = main_df['main_s_lemma'].apply(lambda x: subj2canonical[x.lower()]
+                                                          if type(x)==str and x.lower() in subj2canonical else x)
+    main_df['main_s_stance'] = main_df['main_s_resolved'].apply(lambda x: ent2stance[x]
+                                                                if x in ent2stance else None)
+
     print("Limiting analysis dataframe to Opinions not in the scope of negation...")
     analysis_df = main_df.loc[main_df.neg_type=='no_neg'].copy()
     print("New shape:",analysis_df.shape)
@@ -463,6 +482,8 @@ if __name__ == "__main__":
     analysis_df = analysis_df.loc[analysis_df.abs_quote_stance!='neutral'].copy()
     print("New shape:",analysis_df.shape)
     analysis_dfs.append((analysis_df,'full'))
+
+
 
     if args.do_subsampled:
         print("Creating subsampled analysis df excluding top 5 LL/RL outlets...")
@@ -488,7 +509,32 @@ if __name__ == "__main__":
     # Load lexicons
     WORD_CATS = load_lexicons()
 
-    print("Generating plots of opinion-framing patterns...")
     for analysis_df_,analysis_df_name in analysis_dfs:
+        print("\nAnalyzing {} dataset...".format(analysis_df_name))
+        print("\nGenerating plots of opinion-framing patterns...")
         get_coverage_proportions(set(WORD_CATS['AFFIRM']),set(WORD_CATS['DOUBT']),analysis_df_,analysis_df_name,verbose=False)
         res = compute_and_plot_device_biases('abs_quote_stance',analysis_df_,analysis_df_name,WORD_CATS)
+
+        print("\nGetting sub-frame with Opinions attributed to entity with a stance label...")
+        study2_analysis_df = analysis_df_.loc[~pd.isnull(analysis_df_['main_s_stance'])].copy()
+        print("\tshape:",study2_analysis_df.shape)
+
+        study2_analysis_df['main_s_stance_int'] = study2_analysis_df['main_s_stance'].apply(
+            lambda x: {'pro':1,'anti':-1}[x] if x == 'pro' or x == 'anti' else 0)
+        study2_analysis_df['abs_quote_stance_int'] = study2_analysis_df['abs_quote_stance'].apply(
+            lambda x: {'pro':1,'anti':-1}[x] if x == 'pro' or x == 'anti' else 0)
+        faithful_df = study2_analysis_df.loc[study2_analysis_df['main_s_stance']==
+                                        study2_analysis_df['abs_quote_stance']]
+        unfaithful_df = study2_analysis_df.loc[(study2_analysis_df['main_s_stance_int']==
+                                        study2_analysis_df['abs_quote_stance_int']*-1) &
+                                          (study2_analysis_df['main_s_stance_int']!=0)]
+        faithful_df_outlet_counts = faithful_df['outlet_stance'].value_counts()
+        unfaithful_df_outlet_counts = unfaithful_df['outlet_stance'].value_counts()
+        n_faithful_LL, n_faithful_RL = faithful_df_outlet_counts['pro'], faithful_df_outlet_counts['anti']
+        n_unfaithful_LL, n_unfaithful_RL = unfaithful_df_outlet_counts['pro'], unfaithful_df_outlet_counts['anti']
+
+        print('Within Opinions attributed to known stance Source:')
+        print('\tPercentage of unfaithfully attributed Opinions in LL:',
+              round(n_unfaithful_LL/(n_faithful_LL+n_unfaithful_LL),2))
+        print('\tPercentage of unfaithfully attributed Opinions in RL:',
+              round(n_unfaithful_RL/(n_faithful_RL+n_unfaithful_RL),2))

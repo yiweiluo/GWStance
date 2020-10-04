@@ -170,8 +170,6 @@ Unnamed: 0	fuzzy_match	canonical
 168	IPCC scientists	Intergovernmental Panel on Climate Change
 169	IPCC researchers	Intergovernmental Panel on Climate Change
 170	the UN's Intergovernmental Panel on Climate Change	Intergovernmental Panel on Climate Change
-172	climate	Intergovernmental Panel on Climate Change
-173	climate change	Intergovernmental Panel on Climate Change
 175	ipcc	Intergovernmental Panel on Climate Change
 176	the ipcc’s leaked draft report	Intergovernmental Panel on Climate Change
 177	ipcc models	Intergovernmental Panel on Climate Change
@@ -259,7 +257,6 @@ Unnamed: 0	fuzzy_match	canonical
 261	The former nasa employee	NASA
 262	The nasa statement	NASA
 263	This nasa simulation	NASA
-264	#NAME?	Naomi Oreskes
 265	[al] gore	Al Gore
 266	al gore	Al Gore
 267	al gore's	Al Gore
@@ -276,7 +273,6 @@ Unnamed: 0	fuzzy_match	canonical
 278	nobel peace prize winner al gore	Al Gore
 279	– al gore	Al Gore
 280	— al gore	Al Gore
-281	#name?	Naomi Oreskes
 282	Al gore	Al Gore
 283	Al gore's	Al Gore
 284	Al gore’s	Al Gore
@@ -360,7 +356,6 @@ Unnamed: 0	fuzzy_match	canonical
 362	the nation’s leading climate scientist, james hansen	James Hansen
 363	— prominent climate scientist james hansen	James Hansen
 364	Climate-change expert james hansen	James Hansen
-365	Dr. andrew lacis, a colleague of nasa chief alarmist dr. james hansen	James Hansen
 366	Example: james hansen, michael shellenberger, and stewart brand	Stewart Brand
 367	Hansen	James Hansen
 368	James e. hansen	James Hansen
