@@ -210,7 +210,7 @@ def weighted_chisquare(w,w_type,s_type,M,df_):
 
     return chisquare(obs,exp)
 
-def get_high_freq_devices(device_type,affirm_words,doubt_words,verb_words,df_):
+def get_high_freq_devices(device_type,affirm_words,doubt_words,verb_words,df_,verbose=False):
     """
     Returns the set of high frequency framing devices occurring at least 10 times in RL and LL.
 
@@ -225,7 +225,8 @@ def get_high_freq_devices(device_type,affirm_words,doubt_words,verb_words,df_):
         device = 'main_v_lemma'
         LL_counts = df_.loc[df_.outlet_stance=='pro'][device].value_counts()
         RL_counts = df_.loc[df_.outlet_stance=='anti'][device].value_counts()
-        print('Vocab size of {}s in LL, RL:'.format(device_type),len(LL_counts),len(RL_counts))
+        if verbose:
+            print('Vocab size of {}s in LL, RL:'.format(device_type),len(LL_counts),len(RL_counts))
 
         high_freq_devices = {}
         for cat in ['affirm','doubt']:
@@ -235,7 +236,8 @@ def get_high_freq_devices(device_type,affirm_words,doubt_words,verb_words,df_):
                               v in RL_counts and RL_counts[v] >= 10 and
                              LL_counts[v] >= 10]
             high_freq_devices[cat] = high_freq_cat_verbs
-            print('Number of {} verbs, high freq. {} verbs:'.format(cat,cat),
+            if verbose:
+                print('Number of {} verbs, high freq. {} verbs:'.format(cat,cat),
                   len(cat_verbs),len(high_freq_cat_verbs))
 
     elif device_type == 'mod':
@@ -248,7 +250,8 @@ def get_high_freq_devices(device_type,affirm_words,doubt_words,verb_words,df_):
         RL_adjs = [item for sublist in RL_adjs for item in sublist]
         LL_counts = Counter(LL_adjs)
         RL_counts = Counter(RL_adjs)
-        print('Vocab size of {}s in LL, RL:'.format(device_type),len(LL_counts),len(RL_counts))
+        if verbose:
+            print('Vocab size of {}s in LL, RL:'.format(device_type),len(LL_counts),len(RL_counts))
 
         high_freq_devices = {}
         for cat in ['affirm','doubt']:
@@ -258,7 +261,8 @@ def get_high_freq_devices(device_type,affirm_words,doubt_words,verb_words,df_):
                               v in RL_counts and RL_counts[v] >= 1 and
                              LL_counts[v] >= 1]
             high_freq_devices[cat] = high_freq_cat_adjs
-            print('Number of {} modifiers, high freq. {} modifiers:'.format(cat,cat),
+            if verbose:
+                print('Number of {} modifiers, high freq. {} modifiers:'.format(cat,cat),
                   len(cat_adjs),len(high_freq_cat_adjs))
     else:
         return None
@@ -447,6 +451,7 @@ if __name__ == "__main__":
         os.mkdir(os.path.join(curr_output_dir,'figs'))
 
     # Load and prepare quote analysis dfs
+    print("\nCreating dataframes for analysis...")
     analysis_dfs = []
     main_df = pd.read_pickle(args.path_to_input)
     print("Limiting analysis dataframe to Opinions not in the scope of negation...")
@@ -481,7 +486,7 @@ if __name__ == "__main__":
     # Load lexicons
     WORD_CATS = load_lexicons()
 
-
-    for analysis_df,analysis_df_name in analysis_dfs:
+    print("Generating plots of opinion-framing patterns...")
+    for analysis_df_,analysis_df_name in analysis_dfs:
         get_coverage_proportions(set(WORD_CATS['AFFIRM']),set(WORD_CATS['DOUBT']),analysis_df_,analysis_df_name,verbose=False)
         res = compute_and_plot_device_biases('abs_quote_stance',analysis_df_,analysis_df_name,WORD_CATS)
