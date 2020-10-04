@@ -1,9 +1,10 @@
 {
   "MC_API_KEY": "",
-  "SERP_API_KEY": "",
+  "SERP_API_KEY": "f35236f69bd8c7c75ab300b63d26de516fdf609a76205b8e49692aa3ac9fa553",
   "SEED": 42,
   "REMOTE_SCRAPE_DIR": "/u/scr/yiweil/sci_debates/scraping",
   "REMOTE_PREPRO_DIR": "/u/scr/yiweil/sci_debates/prepro",
   "BASE_DIR": "/Users/yiweiluo/scientific-debates",
+  "SCRAPE_DIR": "/Users/yiweiluo/sci-debates-tester/scientific-debates/1_data_scraping/",
   "QUOTES_DIR": "url_quotes"
 }
