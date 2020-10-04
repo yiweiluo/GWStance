@@ -447,6 +447,8 @@ if __name__ == "__main__":
     args = arg_parser.parse_args()
 
     curr_output_dir = 'curr_output'
+    if not os.path.exists(curr_output_dir):
+        os.mkdir(curr_output_dir)
     if not os.path.exists(os.path.join(curr_output_dir,'figs')):
         os.mkdir(os.path.join(curr_output_dir,'figs'))
 
