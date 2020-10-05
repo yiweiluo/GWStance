@@ -92,7 +92,7 @@ def has_neg(context_dict):
 
 if __name__=="__main__":
 
-    articles_df = pd.read_pickle('/Users/yiweiluo/sci-debates-tester/scientific-debates/1_data_scraping/output/filtered_dedup_combined_df_2000_1_1_to_2020_4_12.pkl')
+    articles_df = pd.read_pickle('../1_data_scraping/output/filtered_dedup_combined_df_2000_1_1_to_2020_4_12.pkl')
     src_guid2attrs = dict()
     for attr in ['stance','domain','date','is_AP']:
         src_guid2attrs[attr] = dict(zip(articles_df['guid'],articles_df[attr]))
@@ -101,12 +101,12 @@ if __name__=="__main__":
         """Function for getting attributes of source article given article guid"""
         return {attr: src_guid2attrs[attr][src_guid] for attr in src_guid2attrs}
 
-    orig = pd.read_csv('/Users/yiweiluo/sci-debates-tester/scientific-debates/2_data_processing/output/keyword_filtered_comp_clauses.tsv',
+    orig = pd.read_csv('../2_data_processing/output/keyword_filtered_comp_clauses.tsv',
                       sep='\t',header=0,index_col=0)
     orig.reset_index(drop=True,inplace=True)
 
     print("Reading in batched BERT predictions...")
-    PRED_DIR = "/Users/yiweiluo/sci-debates-tester/scientific-debates/3_cc_stance/2_Classifier/BERT_preds"
+    PRED_DIR = "../3_cc_stance/2_Classifier/BERT_preds"
     pred_files = glob.glob(os.path.join(PRED_DIR,'batch_*_pred.tsv'))
     print('\tFound {} prediction files.'.format(len(pred_files)))
     all_preds = [pd.read_csv(pred_file,sep='\t',header=0) for pred_file in pred_files]
@@ -152,7 +152,7 @@ if __name__=="__main__":
         src_q_no_.append(src_q_no)
 
         context = get_context(src_guid,src_sent_no,src_q_no,
-                              '/Users/yiweiluo/sci-debates-tester/scientific-debates/2_data_processing/new_extracted_quotes/')
+                              '../2_data_processing/new_extracted_quotes/')
         main_v_text = context['main_v'][0]
         verb_tense_.append(get_verb_tense(main_v_text))
 

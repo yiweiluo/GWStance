@@ -457,6 +457,12 @@ if __name__ == "__main__":
     print("\nCreating dataframes for analysis...")
     analysis_dfs = []
     main_df = pd.read_pickle(args.path_to_input)
+    main_df['s_lemmas'] = main_df['s_lemmas'].apply(lambda x: json.loads(x))
+    main_df['advs'] = main_df['advs'].apply(lambda x: json.loads(x))
+    main_df['modals'] = main_df['modals'].apply(lambda x: json.loads(x))
+    main_df['other_verbs'] = main_df['other_verbs'].apply(lambda x: json.loads(x))
+    main_df['mwe_tok_s_lemmas'] = main_df['mwe_tok_s_lemmas'].apply(lambda x: set(json.loads(x)))
+    main_df['abs_quote_stance'] = main_df['abs_quote_stance'].apply(lambda x: {0: 'anti', 1: 'neutral', 2: 'pro'}[x])
 
     # Named Entity analyses
     fuzzy_match_df = pd.read_csv('fuzzy_match_for_refactor.tsv',sep='\t',index_col=0)
