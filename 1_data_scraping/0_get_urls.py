@@ -410,8 +410,11 @@ def create_filtered_df(l_domains=None,r_domains=None,mc_date_range_str=None):
     combined_df = combined_df.sort_values(['title'],axis=0)
     combined_df = combined_df.drop_duplicates(subset='url',keep='first')
     print('Intermediate df shape:',combined_df.shape)
-    print('Saving intermediate df to "temp_combined_df_{}.pkl"...'.format(mc_date_range_str))
-    combined_df.to_pickle('temp_combined_df_{}.pkl'.format(mc_date_range_str))
+
+    if not os.path.exists('output'):
+        os.mkdir('output')
+    print('Saving intermediate df to "output/temp_combined_df_{}.pkl"...'.format(mc_date_range_str))
+    combined_df.to_pickle('output/temp_combined_df_{}.pkl'.format(mc_date_range_str))
 
 
 if __name__ == "__main__":
