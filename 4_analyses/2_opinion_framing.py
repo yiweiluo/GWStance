@@ -31,52 +31,6 @@ def load_lexicons():
 
     return WORD_CATS
 
-def get_coverage_proportions(affirm_words,doubt_words,df_,df_desc,verbose=False):
-    """
-    Generates barplots showing self-affirmation vs. opponent-doubt coverage across RL and LL.
-
-    :param affirm_words: set of strs with affirming devices to use in finding self-affirming discourse
-    :param doubt_words: set of strs with doubting devices to use in finding opponent-doubting discourse
-    :df_: dataframe with labeled opinions, outlet source, and framing context
-    :param df_desc: str description of df_ for figure naming purposes
-    """
-
-    framed_df = df_.loc[df_['main_v_lemma'].isin(affirm_words | doubt_words)]
-    self_affirm_df = framed_df.loc[(framed_df['main_v_lemma'].isin(affirm_words)) &
-                                   (framed_df['rel_quote_stance']=='own')]
-    opponent_doubt_df = framed_df.loc[(framed_df['main_v_lemma'].isin(doubt_words)) &
-                                      (framed_df['rel_quote_stance']=='opposing')]
-
-    N_LL = len(framed_df.loc[framed_df.outlet_stance=='pro'])
-    N_RL = len(framed_df.loc[framed_df.outlet_stance=='anti'])
-
-    if verbose:
-        print(framed_df.shape,self_affirm_df.shape,opponent_doubt_df.shape)
-        print("N_LL, N_RL:",N_LL,N_RL)
-
-    coverage_proportion_df = pd.DataFrame(
-    {
-        "med_slant":['LL','LL','RL','RL'],
-        "prop":[len(self_affirm_df.loc[self_affirm_df.outlet_stance=='pro'])/N_LL,
-                len(opponent_doubt_df.loc[opponent_doubt_df.outlet_stance=='pro'])/N_LL,
-                len(self_affirm_df.loc[self_affirm_df.outlet_stance=='anti'])/N_RL,
-                len(opponent_doubt_df.loc[opponent_doubt_df.outlet_stance=='anti'])/N_RL],
-        "coverage_type":['Self-Affirming','Opponent-Doubt','Self-Affirming','Opponent-Doubt']
-    })
-
-    fig,ax = plt.subplots(figsize=(10,5))
-    sns.barplot(x="prop",y="med_slant",data=coverage_proportion_df,hue="coverage_type",orient='h',ax=ax)
-    sns.despine()
-    ax.set_xlabel('')
-    ax.set_ylabel('')
-    leg = ax.legend(loc="lower right", bbox_to_anchor=(1.21,0.1),fontsize=32)
-    leg.get_frame().set_linewidth(3)
-    ax.set_title('Proportions of coverage types across media',fontsize=33)
-    plt.yticks(fontsize=36)
-    plt.tight_layout()
-    fig.savefig(os.path.join(curr_output_dir,'figs','coverage_asym_{}.pdf'.format(df_desc)))
-
-
 def log_odds_w_s_M(w,w_type,s,s_type,M,df_,verbose=False):
     """
     Computes log odds of device 𝑤 framing an Opinion with stance 𝑠 (in media with slant 𝑀).
@@ -269,6 +223,51 @@ def get_high_freq_devices(device_type,affirm_words,doubt_words,verb_words,df_,ve
         return None
 
     return high_freq_devices
+
+def get_coverage_proportions(affirm_words,doubt_words,df_,df_desc,verbose=False):
+    """
+    Generates barplots showing self-affirmation vs. opponent-doubt coverage across RL and LL.
+
+    :param affirm_words: set of strs with affirming devices to use in finding self-affirming discourse
+    :param doubt_words: set of strs with doubting devices to use in finding opponent-doubting discourse
+    :df_: dataframe with labeled opinions, outlet source, and framing context
+    :param df_desc: str description of df_ for figure naming purposes
+    """
+
+    framed_df = df_.loc[df_['main_v_lemma'].isin(affirm_words | doubt_words)]
+    self_affirm_df = framed_df.loc[(framed_df['main_v_lemma'].isin(affirm_words)) &
+                                   (framed_df['rel_quote_stance']=='own')]
+    opponent_doubt_df = framed_df.loc[(framed_df['main_v_lemma'].isin(doubt_words)) &
+                                      (framed_df['rel_quote_stance']=='opposing')]
+
+    N_LL = len(framed_df.loc[framed_df.outlet_stance=='pro'])
+    N_RL = len(framed_df.loc[framed_df.outlet_stance=='anti'])
+
+    if verbose:
+        print(framed_df.shape,self_affirm_df.shape,opponent_doubt_df.shape)
+        print("N_LL, N_RL:",N_LL,N_RL)
+
+    coverage_proportion_df = pd.DataFrame(
+    {
+        "med_slant":['LL','LL','RL','RL'],
+        "prop":[len(self_affirm_df.loc[self_affirm_df.outlet_stance=='pro'])/N_LL,
+                len(opponent_doubt_df.loc[opponent_doubt_df.outlet_stance=='pro'])/N_LL,
+                len(self_affirm_df.loc[self_affirm_df.outlet_stance=='anti'])/N_RL,
+                len(opponent_doubt_df.loc[opponent_doubt_df.outlet_stance=='anti'])/N_RL],
+        "coverage_type":['Self-Affirming','Opponent-Doubt','Self-Affirming','Opponent-Doubt']
+    })
+
+    fig,ax = plt.subplots(figsize=(10,5))
+    sns.barplot(x="prop",y="med_slant",data=coverage_proportion_df,hue="coverage_type",orient='h',ax=ax)
+    sns.despine()
+    ax.set_xlabel('')
+    ax.set_ylabel('')
+    leg = ax.legend(loc="lower right", bbox_to_anchor=(1.21,0.1),fontsize=32)
+    leg.get_frame().set_linewidth(3)
+    ax.set_title('Proportions of coverage types across media',fontsize=33)
+    plt.yticks(fontsize=36)
+    plt.tight_layout()
+    fig.savefig(os.path.join(curr_output_dir,'figs','coverage_asym_{}.pdf'.format(df_desc)))
 
 def compute_and_plot_device_biases(opinion_type,df_,df_desc,word_cats,fdr=0.1,alpha=0.05):
     """
