@@ -12,7 +12,7 @@ This repository contains code and data for the paper:
 
 ## Repository structure
 
-* The dataset DeSMOG itself can be accessed via `desmog.tsv` in the main directory. The dataset contains tab-separated fields for each of the following:
+* Our dataset DeSMOG itself can be accessed via `desmog.tsv` in the main directory. The dataset contains tab-separated fields for each of the following:
 	1. `sentence`: the sentence 
 	2. `worker_0`, ..., `worker_7`: ratings from each of the 8 workers for the stance of the sentence
 	3. `disagree`: the probability that the sentence expresses disagreement with the target (that climate change/global warming is a serious concern), as estimated by our Bayesian model
@@ -20,6 +20,7 @@ This repository contains code and data for the paper:
 	5. `neutral`: ditto for the "neutral" label
 	6. `guid`: a unique ID for each sentence
 	7. `in_held_out_test`: whether the sentence was used in our held-out-test set for model and baseline evaluation
+* Our lexicons of framing devices are located in `4_analyses/lexicons`.
 
 Note: The first 5 rows are the 5 screen sentences we use to make sure that annotators correctly understand the task, and thus do not have estimated probability distributions.
 * The sequence of code to replicate our results can be found in the individual READMEs of the numbered sub-directories.
