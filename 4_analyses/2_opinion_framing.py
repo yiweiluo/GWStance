@@ -213,8 +213,8 @@ def get_high_freq_devices(device_type,affirm_words,doubt_words,verb_words,df_,ve
             cat_adjs = affirm_words.difference(verb_words) if cat == 'affirm' else \
                        doubt_words.difference(verb_words)
             high_freq_cat_adjs = [v for v in cat_adjs if v in LL_counts and
-                              v in RL_counts and RL_counts[v] >= 1 and
-                             LL_counts[v] >= 1]
+                              v in RL_counts and RL_counts[v] >= 10 and
+                             LL_counts[v] >= 10]
             high_freq_devices[cat] = high_freq_cat_adjs
             if verbose:
                 print('Number of {} modifiers, high freq. {} modifiers:'.format(cat,cat),
