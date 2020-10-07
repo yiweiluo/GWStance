@@ -436,7 +436,7 @@ if __name__ == "__main__":
 
     L_DOMAINS,R_DOMAINS = None,None
 
-    print('Getting URLs...TEST')
+    print('Getting URLs...')
     if args.do_serp:
         # Set up SerpAPI
         from serpapi.google_search_results import GoogleSearchResults
@@ -480,6 +480,7 @@ if __name__ == "__main__":
         mc_metadata = ['ap_syndicated','language','media_id','media_name','publish_date','title','guid','url','word_count']
         mc_ids = pd.read_csv('./mediacloud_ids.txt',sep='\t',header=0)
         mc_ids.reset_index(drop=True, inplace=True)
+        print('Shape of MC ids:',mc_ids.shape)
 
         mc_date_range_str = '{}_{}_{}_to_{}_{}_{}'.format(args.mediacloud_start_year,args.mediacloud_start_month,
         args.mediacloud_start_day,args.mediacloud_end_year,args.mediacloud_end_month,args.mediacloud_end_day)
