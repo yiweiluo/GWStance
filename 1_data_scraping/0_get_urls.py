@@ -137,10 +137,8 @@ def get_mc_urls(start_year=1,start_mo=1,start_day=1,end_year=2020,end_mo=12,end_
     date_range_str = '{}_{}_{}_to_{}_{}_{}'.format(start_year,start_mo,start_day,end_year,end_mo,end_day)
     if not os.path.exists(os.path.join('mediacloud',date_range_str)):
         os.mkdir(os.path.join('mediacloud',date_range_str))
-        print('Number of MC ids:',len(mc_ids.index))
         for curr_outlet_ix in mc_ids.index:
             curr_outlet_id = mc_ids.iloc[curr_outlet_ix]['media_id']
-            print('Current outlet id:',curr_outlet_id)
             curr_outlet_stance = mc_ids.iloc[curr_outlet_ix]['leaning']
             fetch_size = 5000
             stories = []
@@ -150,7 +148,6 @@ def get_mc_urls(start_year=1,start_mo=1,start_day=1,end_year=2020,end_mo=12,end_
                     fetched_stories = mc.storyList('(climate AND chang*) OR (global AND warming) OR (carbon AND dioxide) OR (co2) OR (fossil AND fuel*) AND media_id:{}'.format(curr_outlet_id),
                                                    solr_filter=mc.publish_date_query(datetime.date(start_year,start_mo,start_day), datetime.date(start_year+4,end_mo,end_day)),
                                                    last_processed_stories_id=last_processed_stories_id, rows= fetch_size)
-                    print('Number of fetched stories:',len(fetched_stories))
                     stories.extend(fetched_stories)
                     if len(fetched_stories) < fetch_size:
                         break
@@ -174,7 +171,7 @@ def get_mc_urls(start_year=1,start_mo=1,start_day=1,end_year=2020,end_mo=12,end_
             df_all = pd.concat(dfs,ignore_index=True)
             df_all = df_all[df_all.language == 'en']
             df_all['clean_title'] = df_all.title.apply(lambda x: re.sub(r'[^a-zA-Z0-9\s]', '', x.lower()))
-            df_all.to_pickle('mediacloud_df_{}.pkl'.format(date_range_str))
+            df_all.to_pickle('output/mediacloud_df_{}.pkl'.format(date_range_str))
         else:
             print('No MediaCloud stories found in selected date range.')
         shutil.rmtree(os.path.join('mediacloud',date_range_str))
@@ -480,7 +477,6 @@ if __name__ == "__main__":
         mc_metadata = ['ap_syndicated','language','media_id','media_name','publish_date','title','guid','url','word_count']
         mc_ids = pd.read_csv('./mediacloud_ids.txt',sep='\t',header=0)
         mc_ids.reset_index(drop=True, inplace=True)
-        print('Shape of MC ids:',mc_ids.shape)
 
         mc_date_range_str = '{}_{}_{}_to_{}_{}_{}'.format(args.mediacloud_start_year,args.mediacloud_start_month,
         args.mediacloud_start_day,args.mediacloud_end_year,args.mediacloud_end_month,args.mediacloud_end_day)
