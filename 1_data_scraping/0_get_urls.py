@@ -436,7 +436,7 @@ if __name__ == "__main__":
 
     L_DOMAINS,R_DOMAINS = None,None
 
-    print('Getting URLs...')
+    print('Getting URLs...TEST')
     if args.do_serp:
         # Set up SerpAPI
         from serpapi.google_search_results import GoogleSearchResults
