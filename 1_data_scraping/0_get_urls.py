@@ -140,6 +140,7 @@ def get_mc_urls(start_year=1,start_mo=1,start_day=1,end_year=2020,end_mo=12,end_
 
         for curr_outlet_ix in mc_ids.index:
             curr_outlet_id = mc_ids.iloc[curr_outlet_ix]['media_id']
+            print('Current outlet id:',curr_outlet_id)
             curr_outlet_stance = mc_ids.iloc[curr_outlet_ix]['leaning']
             fetch_size = 5000
             stories = []
@@ -149,8 +150,9 @@ def get_mc_urls(start_year=1,start_mo=1,start_day=1,end_year=2020,end_mo=12,end_
                     fetched_stories = mc.storyList('(climate AND chang*) OR (global AND warming) OR (carbon AND dioxide) OR (co2) OR (fossil AND fuel*) AND media_id:{}'.format(curr_outlet_id),
                                                    solr_filter=mc.publish_date_query(datetime.date(start_year,start_mo,start_day), datetime.date(start_year+4,end_mo,end_day)),
                                                    last_processed_stories_id=last_processed_stories_id, rows= fetch_size)
+                    print('Number of fetched stories:',len(fetched_stories))
                     stories.extend(fetched_stories)
-                    if len( fetched_stories) < fetch_size:
+                    if len(fetched_stories) < fetch_size:
                         break
                     last_processed_stories_id = stories[-1]['processed_stories_id']
             if len(stories) > 0:
