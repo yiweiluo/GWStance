@@ -137,7 +137,7 @@ def get_mc_urls(start_year=1,start_mo=1,start_day=1,end_year=2020,end_mo=12,end_
     date_range_str = '{}_{}_{}_to_{}_{}_{}'.format(start_year,start_mo,start_day,end_year,end_mo,end_day)
     if not os.path.exists(os.path.join('mediacloud',date_range_str)):
         os.mkdir(os.path.join('mediacloud',date_range_str))
-
+        print('Number of MC ids:',len(mc_ids.index))
         for curr_outlet_ix in mc_ids.index:
             curr_outlet_id = mc_ids.iloc[curr_outlet_ix]['media_id']
             print('Current outlet id:',curr_outlet_id)
