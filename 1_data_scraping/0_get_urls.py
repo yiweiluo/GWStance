@@ -365,8 +365,8 @@ def create_filtered_df(l_domains=None,r_domains=None,mc_date_range_str=None):
                                 filtered_topics.append(topic)
                                 filtered_is_AP.append(is_AP)
 
-    if args.do_mediacloud and os.path.exists('mediacloud_df_{}.pkl'.format(mc_date_range_str)):
-        mediacloud_cc_urls = pd.read_pickle('mediacloud_df_{}.pkl'.format(mc_date_range_str))
+    if args.do_mediacloud and os.path.exists('output/mediacloud_df_{}.pkl'.format(mc_date_range_str)):
+        mediacloud_cc_urls = pd.read_pickle('output/mediacloud_df_{}.pkl'.format(mc_date_range_str))
 
         for ix in mediacloud_cc_urls.index:
             row = mediacloud_cc_urls.loc[ix]
