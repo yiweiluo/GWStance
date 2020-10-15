@@ -8,9 +8,9 @@ This directory contains scripts and helper files for extracting (Source, Predica
 
 To run this script, you will need:
 1. A dataframe containing the set of articles you want to analyze, for which you have two options:
-	* Option A: The original dataset we use in the paper, provided as `curr_dedup_df.tsv` in `1_data_scraping`;
+	* Option A: The original dataset we use in the paper, provided as `filtered_dedup_combined_df_2000_1_1_to_2020_4_12.pkl` in `1_data_scraping/output`;
 	* Option B: A different set that you collect from running the scripts provided in `1_data_scraping`.
-	The path to this dataframe will be specified via the `--input_df_filename` command line argument.
+	The path to this dataframe will be specified via the `--input_df_filename` command line argument and the format should be a pickled pandas dataframe.
 1. The full text of each article saved as a `.txt` file, named according to the convention `'url_no_{}.txt'.format(guid)` (e.g. `url_no_7.txt`), where `guid` is a global unique identifier indexed to each article and stored as its own column in the article dataframe. The path to the directory containing the text files will be specified via the `--fulltext_dir` command line argument.
 
 Sample usage:
