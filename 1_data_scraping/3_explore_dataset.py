@@ -369,6 +369,7 @@ def create_data_report(dated_df):
     dated_df['pretty_domain'] = dated_df['domain'].apply(prettify_domain)
     fig = dated_df['pretty_domain'].value_counts().plot.pie()
     fig.get_figure().savefig('output/outlet_distribution.png')
+    plt.close(fig)
 
     print('\nDistribution of articles over time:')
     dated_df['year'] = [d.to_pydatetime().year
