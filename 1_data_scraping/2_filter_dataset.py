@@ -3,9 +3,6 @@
 import pandas as pd
 import os
 import argparse
-# os.chdir('..')
-# from local_processors import fulltext_exists,get_fulltext
-# os.chdir('./1_data_scraping')
 
 def fulltext_exists(url_guid,fnames_set):
     return '{}.txt'.format(url_guid) in fnames_set
@@ -46,4 +43,3 @@ if __name__ == "__main__":
     print('\tFinal df shape:',dedup_df_ft_date.shape)
     print('Saving filtered df to {}'.format(os.path.join('output',args.output_df_filename)))
     dedup_df_ft_date.to_pickle(os.path.join('output',args.output_df_filename))
-    
