@@ -360,7 +360,7 @@ def create_data_report(dated_df):
 
     print('\nDistribution of article leanings:')
     stance_dict = {'anti':'R-leaning','pro':'L-leaning','between':'Center'}
-    print(tabulate(dated_df.stance.apply(lambda x: stance_dict[x]).value_counts(), headers='keys', tablefmt='psql'))
+    print(tabulate(dated_df.stance.apply(lambda x: stance_dict[x]).value_counts())#, headers='keys', tablefmt='psql'))
 
     print('\nDistribution of AP (True) vs. non-AP (False) articles:')
     print(tabulate(dated_df.is_AP.value_counts()))
