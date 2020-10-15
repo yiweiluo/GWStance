@@ -8,7 +8,13 @@ This repository contains code and data for the paper:
 
 ## Getting started
 1. `pip install -r requirements.txt` (and make sure you are using Python 3.6)
-2. Update the `config.json` file 
+2. Re-install neuralcoref with the `--no-binary` option: 
+```
+pip uninstall neuralcoref
+pip install neuralcoref --no-binary neuralcoref
+```
+3. Download SpaCy's (small) English model: `python -m spacy download en`
+4. Update the `config.json` file.
 
 ## Repository structure
 
