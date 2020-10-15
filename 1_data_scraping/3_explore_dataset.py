@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import string
 from dateutil.parser import parse
 import argparse
+from tabulate import tabulate
 
 def prettify_domain(x):
     if x == 'nyt':
@@ -359,22 +360,24 @@ def create_data_report(dated_df):
 
     print('\nDistribution of article leanings:')
     stance_dict = {'anti':'R-leaning','pro':'L-leaning','between':'Center'}
-    print('\t{}'.format(dated_df.stance.apply(lambda x: stance_dict[x]).value_counts()))
+    print(tabulate(dated_df.stance.apply(lambda x: stance_dict[x]).value_counts()), headers='keys', tablefmt='psql'))
 
     print('\nDistribution of AP (True) vs. non-AP (False) articles:')
-    print('\t{}'.format(dated_df.is_AP.value_counts()))
+    print(tabulate(dated_df.is_AP.value_counts()))
 
     print('\nDistribution of article outlets:')
     dated_df['pretty_domain'] = dated_df['domain'].apply(prettify_domain)
-    dated_df['pretty_domain'].value_counts().plot.pie()
+    fig = dated_df['pretty_domain'].value_counts().plot.pie()
     plt.show()
+    fig.savefig('output/outlet_distribution.png')
 
     print('\nDistribution of articles over time:')
     dated_df['year'] = [d.to_pydatetime().year
                              for d in dated_df.date]
     dated_df['month'] = [d.to_pydatetime().month
                              for d in dated_df.date]
-    dated_df.loc[dated_df.year.isin(range(2000,2021))].year.plot.hist()
+    fig = dated_df.loc[dated_df.year.isin(range(2000,2021))].year.plot.hist()
+    fig.savefig('output/temporal_distribution.png')
 
     print('\nDistribution of article outlets over time:')
     top_domains = {'pro':set(dated_df.loc[dated_df.stance == 'pro'].\
@@ -417,15 +420,11 @@ def create_data_report(dated_df):
         [l.set_visible(False) for (i,l) in enumerate(ax.xaxis.get_ticklabels()) if i % n != 0]
     ax1.legend()
     handles, labels = ax1.get_legend_handles_labels()
-    print('Original order:',labels)
-    reorderLegend(ax1,['Washington Post','Vox','Common Dreams','Think Progress','New York Times',
-    'Star Tribune','Huffpost','Daily Kos','Mother Jones','other'],
+    reorderLegend(ax1,labels[:-1][::-1]+['other'],
                  title='Media outlet',fontsize=24,title_fontsize=26)
     ax2.legend()
     handles, labels = ax2.get_legend_handles_labels()
-    print('Original order:',labels)
-    reorderLegend(ax2,['Breitbart','Washington Times','Daily Caller','Washington Examiner',
-    'American Thinker','Newsmax','Market Watch','Forbes','Chicago Tribune','other'],
+    reorderLegend(ax2,labels[:-1][::-1]+['other'],
                  title='Media outlet',fontsize=24,title_fontsize=26)
 
     for n, ax in enumerate([ax1,ax2]):
@@ -433,7 +432,7 @@ def create_data_report(dated_df):
                 size=28, weight='bold')
     plt.tight_layout()
     plt.show()
-
+    fig.savefig('output/top_RL_LL_outlets_over_time.png')
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
