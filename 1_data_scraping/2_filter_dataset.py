@@ -39,10 +39,11 @@ if __name__ == "__main__":
     print('\tNew df shape:',dedup_df_ft.shape)
     print('Filtering to articles with non-empty fulltext...')
     dedup_df_nonempty_ft = dedup_df_ft.loc[dedup_df_ft.guid.apply(
-    lambda x: len(get_fulltext(x,args.url_text_dir,ft_set)) > 0)]
+        lambda x: len(get_fulltext(x,args.url_text_dir,ft_set)) > 0)]
     print('\tNew df shape:',dedup_df_nonempty_ft.shape)
     print('Filtering to articles with non-null publish date...')
     dedup_df_ft_date = dedup_df_nonempty_ft.loc[~pd.isnull(dedup_df_nonempty_ft.date)]
     print('\tFinal df shape:',dedup_df_ft_date.shape)
     print('Saving filtered df to {}'.format(os.path.join('output',args.output_df_filename)))
     dedup_df_ft_date.to_pickle(os.path.join('output',args.output_df_filename))
+    
