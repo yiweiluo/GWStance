@@ -67,7 +67,7 @@ Running the above writes a `.json` (using the naming convention `'url_no_{}.json
 `2_filter_quotes.py` applies the following criteria to filter extracted opinions and saves the output to a file called `keyword_filtered_comp_clauses.tsv` in the specified `--output_dir`:
 1. The extracted Predicate must be a Householder verb,
 2. The extracted Opinion cannot be an indirect question,
-3. The extracted Opinion must contain one of 71 climate change/global warming-related keywords. 
+3. The extracted Opinion must contain one of 73 climate change/global warming-related keywords. 
 
 Sample usage:
 ```
