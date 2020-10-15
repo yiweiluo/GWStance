@@ -367,8 +367,8 @@ def create_data_report(dated_df):
 
     print('\nDistribution of article outlets:')
     dated_df['pretty_domain'] = dated_df['domain'].apply(prettify_domain)
-    fig = dated_df['pretty_domain'].value_counts().plot.pie()
-    fig.get_figure().savefig('output/outlet_distribution.png')
+    fig = dated_df['pretty_domain'].value_counts().plot.pie().get_figure()
+    fig.savefig('output/outlet_distribution.png')
     plt.close(fig)
 
     print('\nDistribution of articles over time:')
@@ -376,8 +376,8 @@ def create_data_report(dated_df):
                              for d in dated_df.date]
     dated_df['month'] = [d.to_pydatetime().month
                              for d in dated_df.date]
-    fig2 = dated_df.loc[dated_df.year.isin(range(2000,2021))].year.plot.hist()
-    fig2.get_figure().savefig('output/temporal_distribution.png')
+    fig2 = dated_df.loc[dated_df.year.isin(range(2000,2021))].year.plot.hist().get_figure()
+    fig2.savefig('output/temporal_distribution.png')
 
     print('\nDistribution of article outlets over time:')
     top_domains = {'pro':set(dated_df.loc[dated_df.stance == 'pro'].\
