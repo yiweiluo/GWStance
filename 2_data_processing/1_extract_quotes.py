@@ -286,12 +286,8 @@ if __name__ == "__main__":
 
     start_time = time.time()
     for row_ix,row in df[:end_ix].iterrows():
-        print('row ix:',row_ix)
         guid = row['guid']
-        print('guid:',guid)
         text = get_fulltext(guid,args.fulltext_dir)
-        print('article text:',text)
-        #print(text)
         save_name = '{}.json'.format(guid)
         if len(text) > 0:
             if args.debug:
