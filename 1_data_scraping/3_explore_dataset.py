@@ -376,7 +376,8 @@ def create_data_report(dated_df):
                              for d in dated_df.date]
     dated_df['month'] = [d.to_pydatetime().month
                              for d in dated_df.date]
-    fig = dated_df.loc[dated_df.year.isin(range(2000,2021))].year.plot.hist() 
+    fig = dated_df.loc[dated_df.year.isin(range(2000,2021))].year.plot.hist()
+    plt.show()
     plt.savefig('output/temporal_distribution.png')
 
     print('\nDistribution of article outlets over time:')
