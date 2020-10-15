@@ -417,11 +417,13 @@ def create_data_report(dated_df):
         [l.set_visible(False) for (i,l) in enumerate(ax.xaxis.get_ticklabels()) if i % n != 0]
     ax1.legend()
     handles, labels = ax1.get_legend_handles_labels()
+    print('Original order:',labels)
     reorderLegend(ax1,['Washington Post','Vox','Common Dreams','Think Progress','New York Times',
     'Star Tribune','Huffpost','Daily Kos','Mother Jones','other'],
                  title='Media outlet',fontsize=24,title_fontsize=26)
     ax2.legend()
     handles, labels = ax2.get_legend_handles_labels()
+    print('Original order:',labels)
     reorderLegend(ax2,['Breitbart','Washington Times','Daily Caller','Washington Examiner',
     'American Thinker','Newsmax','Market Watch','Forbes','Chicago Tribune','other'],
                  title='Media outlet',fontsize=24,title_fontsize=26)
