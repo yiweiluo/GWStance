@@ -285,11 +285,12 @@ if __name__ == "__main__":
         os.makedirs(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'extracted_quotes_{}'.format(batch_no)))
 
     start_time = time.time()
-    for ix in range(end_ix):
-        row_ix = df.index[ix]
-        row = df.loc[row_ix]
+    for row_ix,row in df[:end_ix].iterrows():
+        print('row ix:',row_ix)
         guid = row['guid']
+        print('guid:',guid)
         text = get_fulltext(guid,args.fulltext_dir)
+        print('article text:',text)
         #print(text)
         save_name = '{}.json'.format(guid)
         if len(text) > 0:
@@ -309,11 +310,11 @@ if __name__ == "__main__":
 
         #shutil.rmtree(REMOTE_SCRAPE_DIR+'/url_texts/{}.txt'.format(guid))
 
-        if ix % 5000 == 0:
-            print(ix,guid)
+        if row_ix % 5000 == 0:
+            print(row_ix,guid)
             print('Elapsed time in minutes:',(time.time()-start_time)/60.)
 
             # Divide into batches of 5000
-            batch_no = ix
+            batch_no = row_ix
             if not os.path.exists(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'extracted_quotes_{}'.format(batch_no))):
                 os.mkdir(os.path.join(REMOTE_PREPRO_DIR,args.output_dir,'extracted_quotes_{}'.format(batch_no)))
