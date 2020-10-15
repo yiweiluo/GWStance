@@ -365,13 +365,13 @@ def create_data_report(dated_df):
     print('\nDistribution of AP (True) vs. non-AP (False) articles:')
     print(tabulate(dated_df.is_AP.value_counts().rename_axis('is AP').reset_index(name='count'), headers='keys', tablefmt='psql'))
 
-    print('\nDistribution of article outlets:')
+    print('\nSaving distribution of article outlets to {}.'.format('output/outlet_distribution.png'))
     dated_df['pretty_domain'] = dated_df['domain'].apply(prettify_domain)
     fig = dated_df['pretty_domain'].value_counts().plot.pie().get_figure()
     fig.savefig('output/outlet_distribution.png')
     plt.close(fig)
 
-    print('\nDistribution of articles over time:')
+    print('\nSaving distribution of articles over time to {}.'.format('output/temporal_distribution.png'))
     dated_df['year'] = [d.to_pydatetime().year
                              for d in dated_df.date]
     dated_df['month'] = [d.to_pydatetime().month
@@ -379,7 +379,7 @@ def create_data_report(dated_df):
     fig2 = dated_df.loc[dated_df.year.isin(range(2000,2021))].year.plot.hist().get_figure()
     fig2.savefig('output/temporal_distribution.png')
 
-    print('\nDistribution of article outlets over time:')
+    print('\nSaving distribution of top Rl/LL article outlets over time to {}.'.format('output/top_RL_LL_outlets_over_time.png'))
     top_domains = {'pro':set(dated_df.loc[dated_df.stance == 'pro'].\
     pretty_domain.value_counts().index[:9]),
                    'anti':set(dated_df.loc[dated_df.stance == 'anti'].\
