@@ -178,7 +178,7 @@ if __name__ == "__main__":
     args = arg_parser.parse_args()
 
     # Load data
-    df = pd.read_csv(args.path_to_df,sep='\t',header=0)
+    df = pd.read_pickle(args.path_to_df)
 
     if args.debug:
         end_ix = 2

@@ -71,7 +71,7 @@ Running the above writes a `.json` (using the naming convention `'url_no_{}.json
 
 Sample usage:
 ```
-python 1_dedup_tites.py \
+python 2_filter_quotes.py \
 	--path_to_df ../1_data_scraping/curr_dedup_df.tsv \	# where to read in dataframe of articles
 	--output_dir ./output \					# where to write filtered data
 	--quotes_dir ./new_extracted_quotes			# directory containing extracted Opinions
