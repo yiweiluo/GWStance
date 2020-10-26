@@ -100,8 +100,6 @@ if __name__=="__main__":
     orig = pd.read_csv('../2_data_processing/output/keyword_filtered_comp_clauses.tsv',
                       sep='\t',header=0,index_col=0)
     orig.reset_index(drop=True,inplace=True)
-    print(orig.columns)
-    print(orig.shape)
 
     print("Reading in batched BERT predictions...")
     PRED_DIR = "../3_cc_stance/2_Stance_model/model_preds"
@@ -132,7 +130,7 @@ if __name__=="__main__":
         pred_label = row['predicted']
         src_guid = row['src_guid']
         src_sent_no = str(row['src_sent_no'])
-        src_q_no = row['src_quote_no']
+        src_q_no = int(row['src_quote_no'])
 
         src_media_attrs = get_src_attrs(src_guid)
         stance,domain,pub_date,is_AP = src_media_attrs['stance'],src_media_attrs['domain'],\
