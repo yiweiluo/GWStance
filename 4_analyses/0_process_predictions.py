@@ -49,10 +49,6 @@ def get_inorder_text(context_indices,idx2text,idx2lemma,idx2coref):
 
 def get_context(src_guid,src_sent_no,src_q_no,q_dir):
     j = read_quote_json(src_guid,q_dir)
-
-    print("json keys:",j['quote_tags'].keys())
-    print(type(list(j['quote_tags']['1']['quotes'].keys())[0]))
-
     q_dict = j['quote_tags'][src_sent_no]['quotes'][src_q_no]
     context_indices = get_sorted_indices(q_dict)
     idx2text = j['quote_tags'][src_sent_no]['idx2text']
