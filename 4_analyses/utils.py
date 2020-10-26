@@ -95,7 +95,7 @@ def get_abs_stance_label(rel_label,media_bias):
 
 def get_pronouns():
     """Returns the set of pronouns."""
-    with open('/Users/yiweiluo/sci-debates-tester/scientific-debates/2_data_processing/pronouns.txt','r') as f:
+    with open('../2_data_processing/pronouns.txt','r') as f:
         PRONOUNS = set(f.read().splitlines())
     return PRONOUNS
 
