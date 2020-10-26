@@ -109,6 +109,8 @@ if __name__=="__main__":
     all_preds = pd.concat([x for x in all_preds],ignore_index=True)
     print('\tRead in {} predictions.'.format(len(all_preds)))
 
+    print("all_preds.columns:",all_preds.columns)
+
     print("Processing predictions...")
     all_preds['quote_text'] = orig['quote_text'].copy()
     all_preds['src_guid'] = orig['guid'].copy()
