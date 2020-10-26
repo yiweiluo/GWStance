@@ -101,6 +101,7 @@ if __name__=="__main__":
                       sep='\t',header=0,index_col=0)
     orig.reset_index(drop=True,inplace=True)
     print(orig.columns)
+    print(orig.shape)
 
     print("Reading in batched BERT predictions...")
     PRED_DIR = "../3_cc_stance/2_Stance_model/model_preds"
