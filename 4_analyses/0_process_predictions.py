@@ -112,13 +112,10 @@ if __name__=="__main__":
     print("Processing predictions...")
     all_preds['quote_text'] = orig['quote_text'].copy()
     all_preds['src_guid'] = orig['guid'].copy()
-
-    print('Count of guid data types:',orig['guid'].apply(lambda x: type(x)).value_counts())
-
     all_preds['src_sent_no'] = orig['sent_no'].copy().apply(lambda x: str(int(x)))
     all_preds['src_quote_no'] = orig['quote_no'].copy().apply(lambda x: str(int(x)))
     all_preds['quote_guid'] = all_preds['src_guid'].apply(lambda x: x+"_") + \
-                              all_preds['src_sent_no'].apply(lambda x: x+"_") + \
+                              all_preds['src_sent_no'].apply(lambda x: str(int(x))+"_") + \
                               all_preds['src_quote_no']
     all_preds['predicted_label'] = all_preds['predicted'].apply(int2str_label)
     all_preds['max_prob'] = all_preds[['0', '1','2']].max(axis=1)
