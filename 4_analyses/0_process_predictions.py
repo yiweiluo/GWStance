@@ -7,10 +7,6 @@ import nltk
 from nltk.tokenize import MWETokenizer
 
 from utils import int2str_label, get_rel_stance_label, get_pronouns, get_fulltext, read_quote_json, mv_files
-# curr_dir = os.getcwd()
-# os.chdir('../')
-# from local_processors import get_fulltext, read_quote_json, mv_files
-# os.chdir(curr_dir)
 
 PRONOUNS = get_pronouns()
 
@@ -106,7 +102,7 @@ if __name__=="__main__":
     orig.reset_index(drop=True,inplace=True)
 
     print("Reading in batched BERT predictions...")
-    PRED_DIR = "../3_cc_stance/2_Classifier/BERT_preds"
+    PRED_DIR = "../3_cc_stance/2_Stance_model/model_preds"
     pred_files = glob.glob(os.path.join(PRED_DIR,'batch_*_pred.tsv'))
     print('\tFound {} prediction files.'.format(len(pred_files)))
     all_preds = [pd.read_csv(pred_file,sep='\t',header=0) for pred_file in pred_files]

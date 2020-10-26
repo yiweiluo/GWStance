@@ -2,7 +2,7 @@
 
 Scripts and helper files for doing opinion-framing analyses as described in our *Findings* paper. The `lexicons` directory contains individual `.txt` files for affirming and doubting framing devices.
 
-Running `python 0_process_predictions.py` will gather the batched model prediction output with stance labels for each extracted quote, then annotate these quotes for information like the framing context (Source, Predicate, modals, negation) and the outlet context (media slant, media domain, publish date, etc.) to enable the analysis of patterns in opinion attribution. This repo contains the predicted output of our model in `3_cc_stance/2_Classifier/BERT_preds`, but you can also read in predictions for different data by changing the input path. 
+Running `python 0_process_predictions.py` will gather the batched model prediction output with stance labels for each extracted quote, then annotate these quotes for information like the framing context (Source, Predicate, modals, negation) and the outlet context (media slant, media domain, publish date, etc.) to enable the analysis of patterns in opinion attribution. This repo contains the predicted output of our model in `3_cc_stance/2_Stance_model/model_preds`, but you can also read in predictions for different data by changing the input path. 
 
 `1_opinion_framing.py` uses the output from `0_process_predictions.py` to generate plots and summaries of opinion-framing patterns.
 
