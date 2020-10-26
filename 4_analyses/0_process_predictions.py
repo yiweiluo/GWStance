@@ -129,7 +129,7 @@ if __name__=="__main__":
         quote_.append(row['quote_text'])
         pred_label = row['predicted']
         src_guid = row['src_guid']
-        src_sent_no = str(row['src_sent_no'])
+        src_sent_no = int(row['src_sent_no'])
         src_q_no = int(row['src_quote_no'])
 
         src_media_attrs = get_src_attrs(src_guid)
