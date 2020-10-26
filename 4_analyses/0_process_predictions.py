@@ -51,7 +51,7 @@ def get_context(src_guid,src_sent_no,src_q_no,q_dir):
     j = read_quote_json(src_guid,q_dir)
 
     print("json keys:",j['quote_tags'].keys())
-    print(type(list(j['quote_tags'].keys())[0]))
+    print(type(list(j['quote_tags']['1']['quotes'].keys())[0]))
 
     q_dict = j['quote_tags'][src_sent_no]['quotes'][src_q_no]
     context_indices = get_sorted_indices(q_dict)
@@ -133,7 +133,7 @@ if __name__=="__main__":
         quote_.append(row['quote_text'])
         pred_label = row['predicted']
         src_guid = row['src_guid']
-        src_sent_no = int(row['src_sent_no'])
+        src_sent_no = row['src_sent_no']
         src_q_no = int(row['src_quote_no'])
 
         src_media_attrs = get_src_attrs(src_guid)
