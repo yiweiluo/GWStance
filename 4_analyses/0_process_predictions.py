@@ -100,7 +100,7 @@ if __name__=="__main__":
     orig = pd.read_csv('../2_data_processing/output/keyword_filtered_comp_clauses.tsv',
                       sep='\t',header=0,index_col=0)
     orig.reset_index(drop=True,inplace=True)
-    print('orig shape:',orig.shape)
+    print(orig.columns)
 
     print("Reading in batched BERT predictions...")
     PRED_DIR = "../3_cc_stance/2_Stance_model/model_preds"
@@ -115,11 +115,6 @@ if __name__=="__main__":
     all_preds['src_guid'] = orig['guid'].copy()
     all_preds['src_sent_no'] = orig['sent_no'].copy().apply(lambda x: str(int(x)))
     all_preds['src_quote_no'] = orig['quote_no'].copy().apply(lambda x: str(int(x)))
-
-    print('value counts:',all_preds['src_sent_no'].apply(lambda x: type(x)).value_counts())
-    print('value counts:',all_preds['src_quote_no'].apply(lambda x: type(x)).value_counts())
-    print(all_preds.shape)
-
     all_preds['quote_guid'] = all_preds['src_guid'].apply(lambda x: x+"_") + \
                               all_preds['src_sent_no'].apply(lambda x: str(int(x))+"_") + \
                               all_preds['src_quote_no']
