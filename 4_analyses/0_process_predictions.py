@@ -109,14 +109,12 @@ if __name__=="__main__":
     all_preds = pd.concat([x for x in all_preds],ignore_index=True)
     print('\tRead in {} predictions.'.format(len(all_preds)))
 
-    print("all_preds.columns:",all_preds.columns)
-
     print("Processing predictions...")
     all_preds['quote_text'] = orig['quote_text'].copy()
     all_preds['src_guid'] = orig['guid'].copy()
     all_preds['src_sent_no'] = orig['sent_no'].copy()
     all_preds['src_quote_no'] = orig['quote_no'].copy()
-    all_preds['quote_guid'] = all_preds['src_guid'].apply(lambda x: x+"_") + \
+    all_preds['quote_guid'] = all_preds['src_guid'].apply(lambda x: str(x)+"_") + \
                               all_preds['src_sent_no'].apply(lambda x: str(x)+"_") + \
                               all_preds['src_quote_no'].apply(lambda x: str(x))
     all_preds['predicted_label'] = all_preds['predicted'].apply(int2str_label)
