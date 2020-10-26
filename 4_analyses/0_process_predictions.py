@@ -100,6 +100,7 @@ if __name__=="__main__":
     orig = pd.read_csv('../2_data_processing/output/keyword_filtered_comp_clauses.tsv',
                       sep='\t',header=0,index_col=0)
     orig.reset_index(drop=True,inplace=True)
+    print('orig shape:',orig.shape)
 
     print("Reading in batched BERT predictions...")
     PRED_DIR = "../3_cc_stance/2_Stance_model/model_preds"
