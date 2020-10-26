@@ -114,7 +114,7 @@ if __name__=="__main__":
     all_preds['src_guid'] = orig['guid'].copy()
     all_preds['src_sent_no'] = orig['sent_no'].copy().apply(lambda x: str(int(x)))
     all_preds['src_quote_no'] = orig['quote_no'].copy().apply(lambda x: str(int(x)))
-    all_preds['quote_guid'] = all_preds['src_guid'].apply(lambda x: str(int(x))+"_") + \
+    all_preds['quote_guid'] = all_preds['src_guid'].apply(lambda x: x+"_") + \
                               all_preds['src_sent_no'].apply(lambda x: x+"_") + \
                               all_preds['src_quote_no']
     all_preds['predicted_label'] = all_preds['predicted'].apply(int2str_label)
