@@ -148,7 +148,7 @@ if __name__=="__main__":
         src_q_no_.append(src_q_no)
 
         context = get_context(src_guid,src_sent_no,src_q_no,
-                              '../2_data_processing/new_extracted_quotes/')
+                              '../2_data_processing/url_quotes/')
         main_v_text = context['main_v'][0]
         verb_tense_.append(get_verb_tense(main_v_text))
 
