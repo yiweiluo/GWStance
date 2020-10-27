@@ -9,7 +9,7 @@ from scipy.special import expit
 
 # Multilevel logistic model with a single covariate
 single_var_model = """
-data { 
+data {
   int<lower=1> n_questions;
   int<lower=1> n_workers;
   int<lower=1> n_ratings;
@@ -27,21 +27,21 @@ parameters {
   real group_effect;
 
   ordered[2] agreement_offsets;
-} 
+}
 model {
   // Priors
   question_std ~ normal(0, 1);
   q_position ~ normal(0, question_std);
-  
+
   worker_offset_std ~ normal(0, 1);
 
   //group_effect ~ normal(0, 2);
-  
+
   for (w in 1:n_workers) {
     worker_offsets[w] ~ normal(group_effect * group[w], worker_offset_std);
-  }  
+  }
   for (r in 1:n_ratings) {
-    ratings[r] ~ ordered_logistic(q_position[question_for_rating[r]] + worker_offsets[worker_for_rating[r]], agreement_offsets);  
+    ratings[r] ~ ordered_logistic(q_position[question_for_rating[r]] + worker_offsets[worker_for_rating[r]], agreement_offsets);
   }
 }
 """
@@ -58,7 +58,8 @@ def main():
     #                  help='Divide data by issue: default=%default')
 
     (options, args) = parser.parse_args()
-
+    print('options:',options)
+    print('args':args)
     basedir = args[0]
 
     chains = options.chains
