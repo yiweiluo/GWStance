@@ -8,7 +8,7 @@ One script is provided here, along with data, to replicate the label inference f
 
 ### 2. Demographic Models
 
-Scripts are similarly provided to replicate the demographic analyses reported in the paper. These have the same requirements as above (numpy, scipy, pandas, pystan), and have been split into single variable models, and multivariate models. For the former, run `python run_demographic_single_var_model.py`. For the latter, run `python run_demograhpic_multi_var_model.py`. Both of these will take some time to run each model.
+Scripts are similarly provided to replicate the demographic analyses reported in the paper and save the output. These have the same requirements as above (numpy, scipy, pandas, pystan), and have been split into single variable models, and multivariate models. For the former, run `python run_demographic_single_var_model.py <OUTPUT_DIR>`. For the latter, run `python run_demograhpic_multi_var_model.py <OUTPUT_DIR>`. Both of these will take some time to run each model.
 
 
 ### 3. Applying trained stance model
