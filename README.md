@@ -13,14 +13,15 @@ This repository contains code and data for the paper:
 ```
 
 ## Getting started
-1. `pip install -r requirements.txt` (and make sure you are using Python 3.6)
-2. Re-install neuralcoref with the `--no-binary` option: 
+1. Create and activate a Python 3.6 environment.
+2. Run `pip install -r requirements.txt`.
+3. Re-install neuralcoref with the `--no-binary` option: 
 ```
 pip uninstall neuralcoref
 pip install neuralcoref --no-binary neuralcoref
 ```
-3. Download SpaCy's (small) English model: `python -m spacy download en`
-4. Update the `config.json` file.
+4. Download SpaCy's English model: `python -m spacy download en`
+5. Update the `config.json` file with your local OS variables.
 
 ## Repository structure
 
@@ -36,6 +37,3 @@ pip install neuralcoref --no-binary neuralcoref
 Note: The first 5 rows are the 5 screen sentences we use to make sure that annotators correctly understand the task, and thus do not have estimated probability distributions.
 * Our lexicons of framing devices are located in `4_analyses/lexicons`.
 * The sequence of code to replicate our results can be found in the individual READMEs of the numbered sub-directories.
-
-## Notes:
-* This repo 
