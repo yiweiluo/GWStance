@@ -1,6 +1,6 @@
 # Data collection
 
-This directory contains `curr_dedup_df.tsv`, the dataframe containing URLs and meta-data on the full set of unique articles (title, publish date, outlet source) that we use in our analysis. Out of copyright concerns, we do not make the full text of the corresponding URLs, nor the code for scraping the text of the URLs available. 
+This directory contains `output/dedup_combined_df_2000_1_1_to_2020_4_12.pkl`, the dataframe containing URLs and meta-data (title, publish date, outlet source) on the full set of unique articles that we use in our analysis. Out of copyright concerns, we do not make the full text of the corresponding URLs, nor the code for scraping the text of the URLs available. 
 
 We do provide scripts and helper files for obtaining and deduplicating additional article URLs, if you want to get your own data from different time ranges, using different keyword search terms, etc. 
 
@@ -40,7 +40,7 @@ Sample usage:
 ```
 python 1_dedup_tites.py \
 	--input_df_filename output/temp_combined_df_2000_1_1_to_2020_4_12.pkl \	# where to read in pre-deduplicated data
-	--output_df_filename dedup_combined_df_2000_1_1_to_2020_4_12.pkl	# where to save deduplicated data
+	--output_df_filename dedup_combined_df_2000_1_1_to_2020_4_12.pkl	# filename for deduplicated data
 ```
 
 ## Filtering articles
