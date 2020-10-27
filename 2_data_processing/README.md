@@ -77,6 +77,8 @@ python 2_filter_quotes.py \
 	--quotes_dir ./new_extracted_quotes			# directory containing extracted Opinions
 ```
 
+If you do not scrape the article fulltext (and hence do not have the extracted quotes), we also provide a cached tsv (`output/keyword_filtered_comp_clauses.tsv.zip`) for replication purposes.
+
 ## Preparing Opinion spans for stance classification
 
 Since our climate stance classifier was trained on Opinion spans transformed with white space removal, initial "that" removal, and acronym substitution, we use `3_prep_quotes_for_classif.py` to apply the same transformations to the extracted Opinion spans. The script also divides the transformed Opinion spans into batches for classification.
