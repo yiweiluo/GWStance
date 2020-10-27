@@ -3,7 +3,13 @@
 This repository contains code and data for the paper:
 > Luo, Y., Card, D. and Jurafsky, D. (2020). DeSMOG: Detecting Stance in Media On Global Warming. In *Findings of EMNLP*.
 ```
-
+@article { luo-et-al-2020,
+	   author = "Yiwei Luo, Dallas Card and Dan Jurafsky",
+	   title = "DeSMOG: Detecting Stance in Media On Global Warming",
+	   journal = Findings of EMNLP,
+	   year = 2020,
+	   pages = ,
+}
 ```
 
 ## Getting started
