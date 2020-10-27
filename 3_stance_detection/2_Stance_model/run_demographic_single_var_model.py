@@ -60,9 +60,9 @@ def main():
     #                  help='Divide data by issue: default=%default')
 
     (options, args) = parser.parse_args()
-    basedir = args[0]
     print('args:',args)
     print('options:',options)
+    basedir = args[0]
     chains = options.chains
     iterations = options.iter
 
