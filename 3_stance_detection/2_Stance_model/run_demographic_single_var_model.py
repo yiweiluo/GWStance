@@ -50,7 +50,7 @@ model {
 def main():
     usage = "%prog outdir"
     parser = OptionParser(usage=usage)
-    parser.add_argument('--base_dir', type=str, default="output",
+    parser.add_option('--base_dir', type=str, default="output",
                       help='Base directorys: default=%default')
     parser.add_option('--chains', type=int, default=5,
                       help='Number of chains: default=%default')
@@ -61,7 +61,8 @@ def main():
 
     (options, args) = parser.parse_args()
     basedir = args[0]
-
+    print('args:',args)
+    print('options:',options)
     chains = options.chains
     iterations = options.iter
 
