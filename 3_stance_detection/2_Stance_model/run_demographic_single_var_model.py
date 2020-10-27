@@ -59,7 +59,7 @@ def main():
 
     (options, args) = parser.parse_args()
     print('options:',options)
-    print('args':args)
+    print('args:',args)
     basedir = args[0]
 
     chains = options.chains
