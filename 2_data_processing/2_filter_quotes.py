@@ -26,6 +26,8 @@ ps = PorterStemmer()
 config = json.load(open('../config.json', 'r'))
 BASE_DIR = config["BASE_DIR"]
 
+print("Reading in Householder verbs, pronouns, and keywords for filtering...")
+householder_verbs = pd.read_pickle(open('householder_verbs.pkl','rb'))
 
 def mv_files(subdir_name,outerdir_name):
     """Moves contents of subdir_name (usually smaller batches) to outerdir_name."""
@@ -193,8 +195,7 @@ if __name__ == "__main__":
         mv_files(subdir_path.split('/')[-1],args.quotes_dir)
 
 
-    print("Reading in Householder verbs, pronouns, and keywords for filtering...")
-    householder_verbs = pd.read_pickle(open('householder_verbs.pkl','rb'))
+    print("Reading in pronouns and keywords for filtering...")
     with open('pronouns.txt','r') as f:
         PRONOUNS = set(f.read().splitlines())
     with open('filtering_keywords.txt','r') as f:
