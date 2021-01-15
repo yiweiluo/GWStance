@@ -1,5 +1,7 @@
 # **DeSMOG**: **De**tecting **S**tance in **M**edia **O**n **G**lobal warming
 
+NOTE: Not to be confused with DeSmog (https://www.desmogblog.com/).
+
 This repository contains code and data for the paper:
 > Luo, Y., Card, D. and Jurafsky, D. (2020). DeSMOG: Detecting Stance in Media On Global Warming. In *Findings of the Association for Computational Linguistics: EMNLP 2020*.
 ```
