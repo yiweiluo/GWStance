@@ -31,7 +31,7 @@ pip install neuralcoref --no-binary neuralcoref
 
 ## Repository structure
 
-* Our **dataset DeSMOG** itself can be accessed via `desmog.tsv` in the main directory. The dataset contains tab-separated fields for each of the following:
+* Our **dataset GWSD** itself can be accessed via `GWSD.tsv` in the main directory. The dataset contains tab-separated fields for each of the following:
 	1. `sentence`: the sentence 
 	2. `worker_0`, ..., `worker_7`: ratings from each of the 8 workers for the stance of the sentence
 	3. `disagree`: the probability that the sentence expresses disagreement with the target (that climate change/global warming is a serious concern), as estimated by our Bayesian model
