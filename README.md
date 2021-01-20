@@ -3,19 +3,7 @@
 This repository contains code and data for the paper:
 > Luo, Y., Card, D. and Jurafsky, D. (2020). Detecting Stance in Media on Global Warming. In *Findings of the Association for Computational Linguistics: EMNLP 2020*.
 ```
-@inproceedings{luo-etal-2020-desmog,
-    title = "Detecting Stance in Media on Global Warming",
-    author = "Luo, Yiwei  and
-      Card, Dallas  and
-      Jurafsky, Dan",
-    booktitle = "Findings of the Association for Computational Linguistics: EMNLP 2020",
-    month = nov,
-    year = "2020",
-    address = "Online",
-    publisher = "Association for Computational Linguistics",
-    url = "https://www.aclweb.org/anthology/2020.findings-emnlp.296",
-    pages = "3296--3315",
-}
+BibTex TBA
 ```
 
 ## Getting started
