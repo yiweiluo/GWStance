@@ -3,7 +3,21 @@
 This repository contains code and data for the paper:
 > Luo, Y., Card, D. and Jurafsky, D. (2020). Detecting Stance in Media on Global Warming. In *Findings of the Association for Computational Linguistics: EMNLP 2020*.
 ```
-BibTex TBA
+@inproceedings{luo-etal-2020-detecting,
+    title = "Detecting Stance in Media On Global Warming",
+    author = "Luo, Yiwei  and
+      Card, Dallas  and
+      Jurafsky, Dan",
+    booktitle = "Findings of the Association for Computational Linguistics: EMNLP 2020",
+    month = nov,
+    year = "2020",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2020.findings-emnlp.296",
+    doi = "10.18653/v1/2020.findings-emnlp.296",
+    pages = "3296--3315",
+    abstract = "Citing opinions is a powerful yet understudied strategy in argumentation. For example, an environmental activist might say, {``}Leading scientists agree that global warming is a serious concern,{''} framing a clause which affirms their own stance ({``}that global warming is serious{''}) as an opinion endorsed (''[scientists] agree{''}) by a reputable source ({``}leading{''}). In contrast, a global warming denier might frame the same clause as the opinion of an untrustworthy source with a predicate connoting doubt: {``}Mistaken scientists claim [...].'' Our work studies opinion-framing in the global warming (GW) debate, an increasingly partisan issue that has received little attention in NLP. We introduce DeSMOG, a dataset of stance-labeled GW sentences, and train a BERT classifier to study novel aspects of argumentation in how different sides of a debate represent their own and each other{'}s opinions. From 56K news articles, we find that similar linguistic devices for self-affirming and opponent-doubting discourse are used across GW-accepting and skeptic media, though GW-skeptical media shows more opponent-doubt. We also find that authors often characterize sources as hypocritical, by ascribing opinions expressing the author{'}s own view to source entities known to publicly endorse the opposing view. We release our stance dataset, model, and lexicons of framing devices for future work on opinion-framing and the automatic detection of GW stance.",
+}
 ```
 
 ## Getting started
